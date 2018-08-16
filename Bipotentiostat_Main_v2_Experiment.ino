@@ -556,9 +556,151 @@ void ADC2_int() {
 
 }
 
-/******************************/
-/*          Callbacks         */
-/******************************/
+/**************************************/
+/*          Callbacks Section         */
+/**************************************/
+
+////////////////////////////////////////
+//Linear Voltammetry related callbacks//
+////////////////////////////////////////
+
+static void porte_int0_lsv(void){
+	/*
+   * This callback is triggered by ADC DRDY pin (when a readout is ready) for Voltammetric readouts.
+   * 
+   * This does two things:
+   *  1. Read ADC data (Current data from T-I Amplifier), save it to data.result.
+   *  2. Estimate the applied  voltage from DAC (Remember, DAC is connected to a reconstruction filter) by averaging the TCC1 last two
+   *     values.
+   *  3. Store the value into the SD card. (TO BE DONE)
+	 */
+	struct
+	{
+		uint16_t index;                         //Stores the DAC values, final purpose is to send an average estimate from the counter
+		int32_t result;                         //Stores the ADC readout
+	} data;
+	
+ 	data.result = ADC1.read_fast24();	        //Read fast on demand
+	static uint16_t last_value = 0;			      //Static variable: will continously store the last value from counter
+	/*WARNING: BE CAREFUL WITH DATA SIZES OF CURRENT AND LAST VALUE*/
+  uint32_t current = TCC1.CNT;			        //Current DAC value...
+	data.index = (current+last_value)>>1; 	  //...and average them, to obtain an estimate
+  last_value = (uint16_t)current;			      //Store the current value as last value for the next DRDY interrupt
+
+  /*WARNING: TO BE SUBSTITUTED WITH SD*/
+	printf("B\n");
+	udi_cdc_write_buf(&data, 6);			        //TRANSFERENCIA: el dato por USB, 2 bytes de index, 4 bytes de result
+	printf("\n");
+	
+	return;
+}
+
+static void tcf0_ovf_callback(void){
+  /*
+   * This callback deals with timer0 overflow. If that happens, it is time to change the DAC voltage.
+   */
+  DAC1.set_voltage(TCC1.CNT);       //Change the voltage according to the voltage counter1.
+  return;
+}
+
+static void tce1_ovf_callback_lsv(void){
+	/*
+   * This callback deactivates interruptions from: int0/DRDY, Timer0 ovf, Timer1 ovf.
+   * Changes the "up" variable to 0 --> WARNING: DEFINIR QUE HACE
+   * Note: Timer1 Capture/Compare interrupt still standing up
+   */
+  PORTD.INTCTRL = PORT_INT0LVL_OFF_gc;								            //Interrupt INT0 desactivado
+	tc_set_overflow_interrupt_level(&TCC0, TC_OVFINTLVL_OFF_gc);		//Interrupt Timer0 overflow desactivado
+	tc_set_overflow_interrupt_level(&TCC1, TC_OVFINTLVL_OFF_gc);		//Interrupt Counter1 por overflow desactivado
+	up = 0;																                          //La dirección de barrido es cero (creo que esto detiene la voltametría)
+	return;
+}
+
+
+static void lsv_cca_callback(void){
+	/*Interrupción asignada en rutina LSV
+	Desactiva interrupcion por DRDY, Timer0 overflow y Counter1 Capture Compare. No desactiva Timer 1 overflow */
+	PORTD.INTCTRL = PORT_INT0LVL_OFF_gc;								//Interrupt ADC INT0 desactivado
+	tc_set_overflow_interrupt_level(&TCC0, TC_OVFINTLVL_OFF_gc);		//Interrupt timer0 overflow desactivado
+	tc_set_cca_interrupt_level(&TCC1, TC_INT_LVL_OFF);					//Interrupt counter capture/compare desactivado
+	up = 0;																//Dirección de barrido cero
+	return;
+}
+
+#if BOARD_VER_MAJOR == 1 && BOARD_VER_MINOR >= 2
+
+void pot_experiment(uint16_t time_seconds, uint8_t exp_type){
+	/**
+	 * Performs a potentiometry experiment.
+	 *
+	 * RTC.PER = Constantmente comparado vs CNT
+	 * RTC.CNT = Cuenta flancos positivos del reloj RTC
+	 * 
+	 * @param time_seconds Time until automatic stop. If 0, can only be canceled by abort signal.
+	 * @param exp_type Type of experiment, POT_OCP for OCP, POT_POTENT for potentiometry
+	 */
+	while (RTC.STATUS & RTC_SYNCBUSY_bm);			//Espera a que no esté ocupado por sincronizacion el RTC
+	RTC.PER = 999;									//Periodo de ~1 segundo
+	while (RTC.STATUS & RTC_SYNCBUSY_bm);
+	RTC.CTRL = RTC_PRESCALER_DIV1_gc; //1ms tick	//Por lo menos ya sé el periodo del reloj! 1 kHz!
+	RTC.CNT = 0;									//Reiniciar reloj
+	
+	EVSYS.CH0MUX = EVSYS_CHMUX_RTC_OVF_gc; //EV CH0 --EVENTO POR RTC OVERFLOW ES ACTICADO EN CANAL0
+	
+	portd_int0_callback = portd_int0_ca; //ADC interrupt	/
+	
+	tc_enable(&TCC0);
+	
+	ads1255_mux(ADS_MUX_POT);
+	ads1255_rdatac();
+	ads1255_wakeup();
+	
+	tc_write_period(&TCC0,0xffff);
+	tc_write_clock_source(&TCC0, TC_CLKSEL_EVCH0_gc);
+	tc_set_direction(&TCC0, TC_UP);
+	
+	up = 1;
+	if (time_seconds >= 1){ //only enable interrupt if non-zero timeout specified
+		tc_set_cca_interrupt_callback(&TCC0, ca_cca_callback);
+		tc_write_cc(&TCC0, TC_CCA, time_seconds-1);
+		tc_enable_cc_channels(&TCC0, TC_CCAEN);
+		tc_clear_cc_interrupt(&TCC0, TC_CCA);
+		tc_set_cca_interrupt_level(&TCC0, TC_INT_LVL_MED);
+	}
+	
+	if (exp_type == POT_OCP)
+	{
+		ocp_exp_start();
+	}
+	else if (exp_type == POT_POTENT)
+	{
+		pot_exp_start();
+	}
+		
+	RTC.CNT=0;
+	PORTD.INTCTRL = PORT_INT0LVL_LO_gc;
+	TCC0.CNT = 0;
+	
+	while (up !=0){
+		if (udi_cdc_is_rx_ready()){
+			if (getchar() == 'a'){
+				ca_cca_callback();
+				printf("##ABORT\n\r");
+				goto aborting;
+			}
+		}
+	}
+	
+	aborting:
+		tc_set_cca_interrupt_level(&TCC0, TC_INT_LVL_OFF);
+		tc_write_clock_source(&TCC0, TC_CLKSEL_OFF_gc);
+		tc_disable(&TCC0);
+		volt_exp_stop();
+		ads1255_standby();
+
+		return;
+}
+#endif
 
 
 /*Callbacks for Voltammetric methods*/
