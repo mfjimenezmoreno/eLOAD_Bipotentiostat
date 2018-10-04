@@ -8,6 +8,12 @@
 /********************************/
 /*          Definitions         */
 /********************************/
+#define NO_ERROR  1
+#define ERROR     0
+
+#define Normal_LSV    2
+#define First_Run_LSV 1
+
 #define Interrupt_ADC1    3
 #define Interrupt_ADC2    2
 
@@ -403,21 +409,28 @@ uint8_t lsv_experiment(int16_t start, int16_t stop, uint16_t slope, int8_t first
    *  2 = for normal LSV.
    *  1 = First run.
 	 * @return  ret       Returns an error, probable by abort.
-   *  0=error  
-   *  1=no error
+   *  ERROR or 0= error  
+   *  NO_ERROR or 1 = no error
 	 * 
 	 * Peripherals
 	 * 	TIMER 	0: Usado como cronómetro --> Para modificar el DAC
 	 * 	COUNTER	1: Usado como contador de voltaje --> Para determinar el índice de "polarización" del DAC, dado que DAC y ADC funcionan a frecuencias diferentes, esta estrategia permite trackear el "tiempo"/"instancia de voltaje"
 	 * 
-	 * Interrupts
-	 * 	TCC0 OVF:	Small priority 	--> Cambia el valor del DAC
-	 * 	TCC1 OVF:	 
-	 * 	TCC1 CCA:	High priority 	-->	Cada vez que TCC0 se desborda, Countador 1 incrementa
-	 * 	INT0: 		Medium priority --> ADS1255 DRDY, cada lectura completada activa esta interrupción
+   * ///////////////////////////////////////////////////////////////////////////////////////////////////////*
+   * //   Important   Important   Important   Important   Important   Important   Important   Important   //*
+   * ///////////////////////////////////////////////////////////////////////////////////////////////////////*
+	 * Interrupts                                                                                             *
+   *                                                                                                        *
+	 * 	TCC0 OVF:	Small priority 	--> TCC0 is a periodic counter to change DAC value according to what is     *
+   *                                specified in Counter1 (TCC1)                                            *
+	 * 	TCC1 OVF:	                --> Deactivates the other three interrupts, up = 0                          *
+	 * 	TCC1 CCA:	High priority 	-->	Deactivates the other three interrupts, up = 0                          *
+	 * 	INT0: 		Medium priority --> ADS1255 DRDY, get ADC data, get DAC data (TCC1), estimate a mean value  *
+   *                                of DAC from current to last value, send data                            *
+   * ///////////////////////////////////////////////////////////////////////////////////////////////////////*
 	 */
 	
-	uint8_t ret = 0;          //Return variable, by default no error.
+	uint8_t ret = ERROR;      //Return variable, by default error.
   uint32_t timer_period;    //Timer period
 	uint16_t temp_div;        //Variable used for preescaler determination
 
@@ -435,7 +448,7 @@ uint8_t lsv_experiment(int16_t start, int16_t stop, uint16_t slope, int8_t first
   DAC1.set_voltage(dacindex_start);
 	
 	/*If LSV is executed for the first time or is in LSV mode, then the next code block will prepare the cell polarization and timers*/
-	if (first_run == 1 || first_run == 2){
+	if (first_run == 1 || first_run == 2){                
 		volt_exp_start(Single_Mode);												//Connect cell: one WE
 		ADC1.rdatac();                                      //Continous acquisition mode
 		tc_enable(&TCC1);																		//Enable counter1 (Para almacenar voltaje DAc)
@@ -599,7 +612,7 @@ static void tcf0_ovf_callback(void){
   /*
    * This callback deals with timer0 overflow. If that happens, it is time to change the DAC voltage.
    */
-  DAC1.set_voltage(TCC1.CNT);       //Change the voltage according to the voltage counter1.
+  DAC1.set_voltage(TCC1.CNT);               //Change the voltage according to the voltage counter1.
   return;
 }
 
@@ -616,10 +629,12 @@ static void tce1_ovf_callback_lsv(void){
 	return;
 }
 
-
 static void lsv_cca_callback(void){
-	/*Interrupción asignada en rutina LSV
-	Desactiva interrupcion por DRDY, Timer0 overflow y Counter1 Capture Compare. No desactiva Timer 1 overflow */
+  /*
+   * This callback deactivates interruptions from: int0/DRDY, Timer0 ovf, Timer1 cca.
+   * Changes the "up" variable to 0 --> WARNING: DEFINIR QUE HACE
+   * Note: Timer1 OVF interrupt still standing up
+   */
 	PORTD.INTCTRL = PORT_INT0LVL_OFF_gc;								//Interrupt ADC INT0 desactivado
 	tc_set_overflow_interrupt_level(&TCC0, TC_OVFINTLVL_OFF_gc);		//Interrupt timer0 overflow desactivado
 	tc_set_cca_interrupt_level(&TCC1, TC_INT_LVL_OFF);					//Interrupt counter capture/compare desactivado
