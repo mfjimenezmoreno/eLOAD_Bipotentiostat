@@ -12,7 +12,7 @@
 #define ERROR     0
 
 #define Normal_LSV    2
-#define First_Run_LSV 1
+#define First_LSV 1
 
 #define Interrupt_ADC1    3
 #define Interrupt_ADC2    2
@@ -448,27 +448,29 @@ uint8_t lsv_experiment(int16_t start, int16_t stop, uint16_t slope, int8_t first
   DAC1.set_voltage(dacindex_start);
 	
 	/*If LSV is executed for the first time or is in LSV mode, then the next code block will prepare the cell polarization and timers*/
-	if (first_run == 1 || first_run == 2){                
+	if (first_run == First_LSV || first_run == Normal_LSV){   
+    /*Setup the ADC, Timer0, Counter1, Interrupt callbacks{DRDY int, Counter1 OVF CCA, Timer0 OVF}*/             
 		volt_exp_start(Single_Mode);												//Connect cell: one WE
 		ADC1.rdatac();                                      //Continous acquisition mode
-		tc_enable(&TCC1);																		//Enable counter1 (Para almacenar voltaje DAc)
+		tc_enable(&TCC1);																		//Enable counter1 (Para almacenar voltaje DAC)
 		ADC1.sync();																			  //ADC sync
 		tc_enable(&TCC0);																		//Enable timer0
-		tc_set_overflow_interrupt_callback(&TCC0, tcf0_ovf_callback);							//Asignación del Interrupt por overflow timer0 -> asigns TCC1.CTR as DAC voltage...????
-		tc_set_overflow_interrupt_callback(&TCC1, tce1_ovf_callback_lsv);						//Asignación del Interrupt por overflow timer1 -> Deshabilita interrupts por timers y PORTD
-		tc_set_cca_interrupt_callback(&TCC1, lsv_cca_callback);									//Asignación del Interrupt por capture/compare timer1, LSV solamente usa esta interrupción
-		portd_int0_callback = porte_int0_lsv; 	//ADC read										La ISR de ADS1255, le asigna la funcion porte_int0_lsv
-												//Propósito: Leer ADC y mean timer(promedio) y transferir por USB
-		//set EVCH0 event
+		tc_set_overflow_interrupt_callback(&TCC0, tcf0_ovf_callback);							  //Assign the proper callback for TCC0 OVF for LSV
+		tc_set_overflow_interrupt_callback(&TCC1, tce1_ovf_callback_lsv);						//Assign the proper callback for TCC1 OVF for LSV
+		tc_set_cca_interrupt_callback(&TCC1, lsv_cca_callback);									    //Assign the proper callback for TCC1 CCA for LSV
+		portd_int0_callback = porte_int0_lsv;                                       //Callback assignement, will be invoked at ISR subroutine: reads ADC on demand, estimates a DAC value, sends serial data
+		
+    //set EVCH0 event "TCC0 se convierte el trigger para el cambio en el DAC, asociando CH0 con TCC0 OVF, los siguientes comentarios se pueden borrar después"
 		/*EVENT ROUTING NETWORK
 		8 canales idénticos, cada canal con un multiplexor y lógica de control y filtro(este es para los pines, cuantos ciclos de reloj para considerar evento)
 		*/
-		EVSYS.CH0MUX = EVSYS_CHMUX_TCC0_OVF_gc;	//Configura el mux0 como Timer/counter 0 overflow (event system, an interesting approach free of interrupt)
-		EVSYS.CH0CTRL = 0;						//Acepta el cambio desde el primer muestreo
+		//EVSYS.CH0MUX = EVSYS_CHMUX_TCC0_OVF_gc;	//Configura el mux0 como Timer/counter 0 overflow (event system, an interesting approach free of interrupt)
+		//EVSYS.CH0CTRL = 0;						//Acepta el cambio desde el primer muestreo
 	
 		
 		//Configuracion del Internal clock source para TCC0 en función del slope y FCLK_IO
-		timer_period = ceil(1/((double)slope/(3000./65536))*(F_CPU)); //Timer period, depends on slope and CPU Frequency. 3000 I think its a normalization factor between -1500 and 1499
+		//timer_period = ceil(1/((double)slope/(3000./65536))*(F_CPU)); //Timer period, depends on slope and CPU Frequency.
+    timer_period = ceil((F_CPU)*3000./((double)slope*65536.));    //Adimensionalization of Sweep Voltage (Slope) and multiplication to CPU frequency (without preescaler).
 		//Definición del preescaler: ¿Cuantas veces los "ticks" caben en 2^16?
 		temp_div = ceil(timer_period/65536.);						//This calculation sets the prescaler, so everytime it fills the timer, it triggers interrupt
 		
