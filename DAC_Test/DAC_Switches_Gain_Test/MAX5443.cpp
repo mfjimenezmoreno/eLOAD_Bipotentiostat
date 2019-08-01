@@ -3,7 +3,7 @@
 /*///////////////////////////////////////*/
 
 #include <Arduino.h>
-#include <C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\MAX5443.h>
+#include <C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\DAC_Test\DAC_Switches_Gain_Test\MAX5443.h>
 #include <SPI.h>
 
 //SPI Object, 24 MHz, MSB, Mode 0
@@ -11,6 +11,7 @@ SPISettings SPI_max5443(25000000, MSBFIRST, SPI_MODE0);
 
 max5443::max5443(int Chip_Select){
   _pin = Chip_Select;
+  SPI.begin();
 }
 
 void max5443::pins_init(){
@@ -45,10 +46,15 @@ void max5443::set_voltage(uint16_t Voltage_index) {
   _DAC_buffer.ui16 = Voltage_index;
 
   //Transfer two bytes to selected DAC
-  SPI.beginTransaction(SPI_max5443);
   digitalWrite(_pin, LOW);
+  SPI.beginTransaction(SPI_max5443);
   SPI.transfer(_DAC_buffer.ui8[1]);
   SPI.transfer(_DAC_buffer.ui8[0]);
   digitalWrite(_pin, HIGH);
   SPI.endTransaction();
+}
+
+void max5443::debug()
+{
+  digitalWrite(_pin, digitalRead(_pin)^1);
 }

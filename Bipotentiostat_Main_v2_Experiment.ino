@@ -194,7 +194,7 @@ void pot_init(void) {
    * Analog_Switch_WE1  (MAX4737)   A1    WE1 switch      LOW   |
    * Analog_Switch_WE2  (MAX4737)   A0    WE2 switch      LOW  /
    * MUX_A_Gain         (MAX4617)   4     A               HIGH \
-   * MUX_B_Gain         (MAX4617)   12    B               HIGH  |--Sets up transimpedance gain as 100 ohms
+   * MUX_B_Gain         (MAX4617)   12    B               HIGH  |--This combination sets up transimpedance gain as 100 ohms
    * MUX_C_Gain         (MAX4617)   6     C               HIGH /
    * 
    * @return Nothing.
@@ -206,12 +206,13 @@ void pot_init(void) {
   digitalWrite(MUX_A_Gain, HIGH);
   digitalWrite(MUX_B_Gain, HIGH);
   digitalWrite(MUX_C_Gain, HIGH);
-  /*Analog switches*/
+  /*Analog switches as digital outputs...*/
   pinMode(Analog_Switch_VIN, OUTPUT);
   pinMode(Analog_Switch_CERE, OUTPUT);
   pinMode(Analog_Switch_CE, OUTPUT);
   pinMode(Analog_Switch_WE1, OUTPUT);
   pinMode(Analog_Switch_WE2, OUTPUT);
+  /*... and set their initial state*/
   digitalWrite(Analog_Switch_VIN, LOW);
   digitalWrite(Analog_Switch_CERE, HIGH);
   digitalWrite(Analog_Switch_CE, LOW);

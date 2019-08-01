@@ -1,0 +1,6 @@
+{
+    "port": "COM11",
+    "board": "arduino:avr:micro",
+    "programmer": "Arduino as ISP",
+    "sketch": "Timer1_Test_CTC.ino"
+}

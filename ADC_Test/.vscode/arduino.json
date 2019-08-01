@@ -1,0 +1,5 @@
+{
+    "board": "arduino:avr:micro",
+    "sketch": "Library_Test\\ADC_Test\\ADC_Test.ino",
+    "port": "COM13"
+}

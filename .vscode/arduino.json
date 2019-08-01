@@ -1,0 +1,7 @@
+{
+    "programmer": "ArduinoISP",
+    "board": "arduino:avr:micro",
+    "port": "COM11",
+    "sketch": "ADC_Test\\Library_Test\\ADC_Test\\ADC_Test.ino",
+    "output": "build"
+}

@@ -3,7 +3,7 @@
 /*///////////////////////////////////////*/
 
 #include <Arduino.h>
-#include <C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v1\ADS1255.h>
+#include <C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\ADC_Test\Library_Test\ADC_Test\ADS1255.h>
 #include <SPI.h>
 
 SPISettings SPI_ADS1255(19000000,MSBFIRST,SPI_MODE1);
@@ -16,6 +16,7 @@ ads1255::ads1255(int Chip_Select, int DRDY){
   */
   _CS_pin = Chip_Select;
   _DRDY_pin = DRDY;
+  SPI.begin();
 }
 
 void ads1255::pins_init() {
@@ -30,8 +31,8 @@ void ads1255::sync() {
   /*
      Purpose: Synchronizes the A/D conversion. Command should be followed by Wakeup command. Synchronization will happen on the first CLKIN rising edge.
   */
-  SPI.beginTransaction(SPI_ADS1255);
   digitalWrite(_CS_pin, LOW);
+  SPI.beginTransaction(SPI_ADS1255);
   SPI.transfer(ADS_SYNC);
   digitalWrite(_CS_pin, HIGH);
   SPI.endTransaction();
@@ -52,8 +53,8 @@ void ads1255::reg_read(uint8_t address) {
   _ADC_buffer.ui8[1] = 4;
   
   //Send read register command to ADC
-  SPI.beginTransaction(SPI_ADS1255);
   digitalWrite(_CS_pin, LOW);
+  SPI.beginTransaction(SPI_ADS1255);
   while(digitalRead(_DRDY_pin) == HIGH);  //Hold on, until DRDY pin is LOW. Note: make sure the interrupt is deactivated.
   SPI.transfer(_ADC_buffer.ui8[0]);
   SPI.transfer(_ADC_buffer.ui8[1]);
@@ -72,8 +73,8 @@ void ads1255::reset() {
    * Purpose: Software reset. Registers are initialized to their default state except for CLK0 and CLK1 bits in ADCON register (controls
    * D0/CLKOUT pin). Self-calibration is always performed after reset.
    */
-  SPI.beginTransaction(SPI_ADS1255);
   digitalWrite(_CS_pin, LOW);
+  SPI.beginTransaction(SPI_ADS1255);
   //while(digitalRead(_DRDY_pin) == HIGH);  //Hold on, until DRDY pin is LOW. I don't think this is necessary at all from original source code.
   SPI.transfer(ADS_RESET);
   digitalWrite(_CS_pin, HIGH);
@@ -82,7 +83,7 @@ void ads1255::reset() {
 
 void ads1255::setup_reg(uint8_t buff, uint8_t rate, uint8_t pga) {
   /*
-   * Purpose: Setup 4 registers, user inputs the desired STATUS, ADCON and DRATE Register. The method firs send two bytes that commands the ADS1255
+   * Purpose: Setup 4 registers, user inputs the desired STATUS, ADCON and DRATE Register. The method first sends two bytes that commands the ADS1255
    * to edit 4 registers starting from STATUS (register 0x00). This function has the main purpose of enabling or disabling analog input buffer (buff),
    * the data rate (rate) and the proggramable gain amplifier (pga). Performs gain, offset calibration at the end while synchronizing A/D conversion
    * with CLKIN as well.
@@ -156,9 +157,9 @@ void ads1255::setup_reg(uint8_t buff, uint8_t rate, uint8_t pga) {
       sample_delay_ms_100div = 25;
       break;
   }
-  
-  SPI.beginTransaction(SPI_ADS1255);
+
   digitalWrite(_CS_pin, LOW);
+  SPI.beginTransaction(SPI_ADS1255);
   //while(digitalRead(_DRDY_pin) == HIGH);  //Hold on, until DRDY pin is LOW. I don't think this is necessary at all from original source code.
   for(uint8_t n=0; n<=5; n++) {
     SPI.transfer(_command_buffer[n]);       //Send the 2 write command packets and 4 registers.
@@ -194,9 +195,9 @@ void ads1255::mux(uint8_t channel) {
   _command_buffer[0] = 0x51;                //Write only the MUX register,
   _command_buffer[1] = 0x00;
   _command_buffer[2] = channel;
-  
-  SPI.beginTransaction(SPI_ADS1255);
+
   digitalWrite(_CS_pin, LOW);
+  SPI.beginTransaction(SPI_ADS1255);
   SPI.transfer(ADS_SDATAC);                 //Stop read data continously
   for(uint8_t n=0; n<=2; n++) {
     SPI.transfer(_command_buffer[n]);       //Send the 2 write command packets and 4 registers.
@@ -213,8 +214,8 @@ void ads1255::standby(void){
   /*
    * Purpose: Puts device into low power mode. Make sure not to send clock cycles if CS pin is low. Use WAKEUP command to exit mode.
    */
-  SPI.beginTransaction(SPI_ADS1255);
   digitalWrite(_CS_pin, LOW);
+  SPI.beginTransaction(SPI_ADS1255);
   SPI.transfer(ADS_STANDBY);                //Commands ADS1255 into Standby mode
   digitalWrite(_CS_pin, HIGH);
   SPI.endTransaction();
@@ -224,8 +225,8 @@ void ads1255::wakeup(void){
   /*
    * Purpose: Command to exit Standby mode.
    */
-  SPI.beginTransaction(SPI_ADS1255);
   digitalWrite(_CS_pin, LOW);
+  SPI.beginTransaction(SPI_ADS1255);
   SPI.transfer(ADS_WAKEUP);                //Commands ADS1255 to exit Standby mode
   digitalWrite(_CS_pin, HIGH);
   SPI.endTransaction();
@@ -233,11 +234,11 @@ void ads1255::wakeup(void){
 
 void ads1255::rdatac(void){
   /*
-   * Purpose: Enables continous output of data. After 24 bits have been read, ~DRDY~ goes low. It is not necessary to read the 24 bits.
+   * Purpose: Enables continous output of data. After 24 bits have been read, ~DRDY~ goes low. It is not necessary to read the whole 24 bits.
    * ~DRDY~ will not go high unless there is new data being updated. This mode can be stopped by SDATAC or RESET commands
    */
-  SPI.beginTransaction(SPI_ADS1255);
   digitalWrite(_CS_pin, LOW);
+  SPI.beginTransaction(SPI_ADS1255);
   SPI.transfer(ADS_RDATAC);                   //Enter into continous data generation 
   //while(digitalRead(_DRDY_pin) == HIGH);    //Hold on. Until it is ready. I don't think it's necessary to add this.
   digitalWrite(_CS_pin, HIGH);
@@ -256,7 +257,7 @@ int16_t ads1255::read_fast(void){
    *  |----> Note: two buffers for reception (but only one is accessed), reading clears the buffer. If reading is not performed, a byte will be shifted out/lost.
    *  |----> Note: Writing to SPDR initiates transmission. Reading it causes the shift register to be read.
    *  
-   * SPCR (0x2C): SPI Control Register (I suggest not this register, it is handled by Arduino code!)
+   * SPCR (0x2C): SPI Control Register (I do not suggest to use this register, it is handled by Arduino code!)
    *  |----> SPIE (bit 7): SPI Interrupt Enable
    *  |----> SPE  (bit 6): SPI Enable
    *  |----> DORD (bit 5): 0 = LSB 1 = MSB
@@ -272,18 +273,18 @@ int16_t ads1255::read_fast(void){
    *  |----> SPI2X(bit 0): Double SPI Speed bit. I suggest not touching this.
    */
   _Input_buffer.ui16 = 0;                           //Initialize the data that shall be returned
-  SPI.beginTransaction(SPI_ADS1255);
   digitalWrite(_CS_pin, LOW);
+  SPI.beginTransaction(SPI_ADS1255);
 
   for(int i = 1; i >= 0; --i) {
-    while (!(SPSR & (1 << SPIF)));                  //Wait for any pending transmission/reception to complete (Stops only if SPIF is set), maybe not required with the SPI library, Mr.Dryden seem to use USART
+     //while (!bitRead(SPSR, SPIF));                //Wait for any pending transmission/reception to complete (Stops only if SPIF is set), maybe not required with the SPI library, Mr.Dryden seem to use USART
     _Input_buffer.ui8[i] = SPI.transfer(0x00);      //Read SPDR register, start from MSB, consider changing to assembly code if this doesn't work.
   }
 
   digitalWrite(_CS_pin, HIGH);
   SPI.endTransaction();
   
-  return _Input_buffer.ui16;                        //Regresar dato en entero de 16 bits
+  return _Input_buffer.ui16;                        //Return the whole 16 bit integer
 }
 
 int16_t ads1255::read_fast_single(void){
@@ -292,23 +293,23 @@ int16_t ads1255::read_fast_single(void){
    * 
    */
   _Input_buffer.ui16 = 0;                          //Initialize the data that shall be returned
-  SPI.beginTransaction(SPI_ADS1255);
   digitalWrite(_CS_pin, LOW);
+  SPI.beginTransaction(SPI_ADS1255);
   SPI.transfer(ADS_RDATA);                          //Read a single conversion result
   delayMicroseconds(6.5);                           //Mandatory to wait 50 times 1/CLKin, theoretically doesn't use timer0 so interrupt should be safe
 
   for(int i = 1; i >= 0; --i) {
-    while (!(SPSR & (1 << SPIF)));                  //Wait for any pending transmission/reception to complete (Stops only if SPIF is set), maybe not required with the SPI library, Mr.Dryden seem to use USART
+    //while (!bitRead(SPSR, SPIF));                 //Wait for any pending transmission/reception to complete (Stops only if SPIF is set), maybe not required with the SPI library, Mr.Dryden seem to use USART
     _Input_buffer.ui8[i] = SPI.transfer(0x00);      //Read SPDR register, consider changing to assembly code if this doesn't work.
   }
   
   digitalWrite(_CS_pin, HIGH);
   SPI.endTransaction();
-  ads1255::standby();                               //Issue a standby mode. 
+  standby();                                        //Issue a standby mode. 
   return _Input_buffer.ui16;                        //Return a 16 bit data.
 }
 
-int32_t ads1255::read_fast24(void){
+uint32_t ads1255::read_fast24(void){
   /*
    * Purpose: Performs an ADC readout of 24 bits while halting and reactivating interrupts.
    * Returns: 4 bytes buffer
@@ -320,11 +321,11 @@ int32_t ads1255::read_fast24(void){
 
   _Input_buffer_24.ui32 = 0;                        //Initialize variable.
   noInterrupts();                                   //Time critical operation
-  SPI.beginTransaction(SPI_ADS1255);
   digitalWrite(_CS_pin, LOW);
+  SPI.beginTransaction(SPI_ADS1255);
 
   for(int i = 2; i >= 0; --i) {
-    while (!(SPSR & (1 << SPIF)));                  //Wait for any pending transmission/reception to complete (Stops only if SPIF is set), maybe not required with the SPI library, Mr.Dryden seem to use USART
+    //while (!bitRead(SPSR, SPIF));                 //Wait for any pending transmission/reception to complete (Stops only if SPIF is set), maybe not required with the SPI library, Mr.Dryden seem to use USART
     _Input_buffer_24.ui8[i] = SPI.transfer(0x00);   //Read SPDR register, consider changing to assembly code if this doesn't work.
   }
 
@@ -340,20 +341,20 @@ int32_t ads1255::read_fast24(void){
   return _Input_buffer_24.ui32;                     //Buffer Format = Exceeding Full scale flag (either 00 or FF)|MSB (up to 7F)|Middle Byte|LSB Data
 }
 
-int32_t ads1255::read_single24(void){
+uint32_t ads1255::read_single24(void){
   /*
    * Purpose: Same as  read_fast24, but sends an RDATA request for non-continous on-demand operation.
    */
 
    _Input_buffer_24.ui32 = 0;                        //Initialize variable.
   noInterrupts();                                   //Time critical operation
-  SPI.beginTransaction(SPI_ADS1255);
   digitalWrite(_CS_pin, LOW);
+  SPI.beginTransaction(SPI_ADS1255);
   SPI.transfer(ADS_RDATA);                          //Read a single conversion result
   delayMicroseconds(6.5);                           //Mandatory to wait 50 times 1/CLKin, theoretically doesn't use timer0 so interrupt should be safe
 
   for(int i = 2; i >= 0; --i) {
-    while (!(SPSR & (1 << SPIF)));                  //Wait for any pending transmission/reception to complete (Stops only if SPIF is set), maybe not required with the SPI library, Mr.Dryden seem to use USART
+    //while (!(SPSR & (1 << SPIF)));                  //Wait for any pending transmission/reception to complete (Stops only if SPIF is set), maybe not required with the SPI library, Mr.Dryden seem to use USART
     _Input_buffer_24.ui8[i] = SPI.transfer(0x00);   //Read SPDR register, consider changing to assembly code if this doesn't work.
   }
 
