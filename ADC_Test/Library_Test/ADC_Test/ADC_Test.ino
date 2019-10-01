@@ -126,18 +126,7 @@ void setup()
     noInterrupts();
     T1_Frequency(20);                                            //Setup CTC registers for 2 Hz
     T1_EN_IntCTC();                                             //Activate register for CTC interrupt
-    /*
-    TCCR1A = 0;                                                 //Normal operation of OCRA pin, WGM 0 and 1 are left in LOW
-    TCCR1B = 0;                                                 //Ensure get rid of default settings.
-    //TCCR1B |= (1 << WGM12) | (1 << CS12);                       //WGM 2 is set HIGH --> CTC mode, Preescaler to 1024 (1 Hz)
-    TCCR1B |= (1 << WGM12) | (1 << CS12);                       //CTC mode, Preescaler to 256 (100 Hz)
-    TCNT1 = 0;                                                  //Initialize Timer
     
-    //OCR1A = 15624;                                              //Setup the timer ceiling/TOP (1 Hz)
-    OCR1A = 624;                                                //Setup the timer TOP (100 Hz)
-    TIFR1 = (1 << OCF1A);                                       //Clear the compare flag (Might be redundant)
-    TIMSK1 |= (1 << OCIE1A);                                    //Enable interrupt by compare match
-    */
     /*  INSTRUCTIONS: How Set_Voltage works
     The parameter is specified in index value from 0 to 65535, which corresponds an absolute voltage of [0, 3) volts respectively.
     However, TAKE NOTE that the analog circuitry is referred to 1.5 volts, meaning that the applied Working electrode voltage
