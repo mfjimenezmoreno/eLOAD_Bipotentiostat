@@ -1,9 +1,10 @@
 from bokeh.io import curdoc
 from bokeh.plotting import figure, show
 from bokeh.models import CustomJS, ColumnDataSource
-from bokeh.models.widgets import Select, Button, Slider, Paragraph, TextInput
+from bokeh.models.widgets import Select, Button, Slider, Paragraph, TextInput, TableColumn, DataTable, TableColumn, Toggle
 from bokeh.layouts import gridplot, column, row
 from bokeh.events import ButtonClick
+from bokeh.driving import count
 import numpy as np
 
 #----------------------#
@@ -22,14 +23,24 @@ Comm_Status_Message = Paragraph(text="Status: Not connected")
 Port_input = TextInput(title='Port:', value='COM13')
 Save = Button(label='Save', button_type='success')
 
+
 #---------------------#
 #    Figure Config    #
 #---------------------#
 """Dataframe structure"""
-transferData = {'time':[i for i in range(100)],
-                'raw_data':[2*i for i in range(100)]}
+transferData = {'time':[],
+                'raw_data':[],
+                #'current':[]
+                }
 
 source = ColumnDataSource(data=transferData)
+
+"""Table for data visualization"""
+columns = [
+    TableColumn(field='time', title='X'),
+    TableColumn(field='raw_data', title='Y')
+]
+Table = DataTable(source=source, columns=columns, width=400, height=280)
 
 """Plot related"""
 plot_raw = figure(title='Raw Data',
@@ -52,15 +63,21 @@ plot_current.x_range.range_padding = 0
 #    Callbacks    #
 #-----------------#
 """Callback section"""
-callback_status = CustomJS(args=dict(Port=Port_input, Message=Comm_Status_Message), code="""
-
+callback_status = CustomJS(args=dict(Port=Port_input, Message=Comm_Status_Message, conStatus = eLoad_Connection), 
+                                     code="""
+    
+    alert((conStatus));
+    
     if(Message.text.split(': ')[1]=="Not connected"){
         Message.text = "Status: Connected";
+        conStatus = true;
     }
     else{
         Message.text = "Status: Not connected";
+        conStatus = false;
     }
     
+    conStatus.change.emit();
 """)
 
 callback_Save = CustomJS(args=dict(source=source), code="""
@@ -100,26 +117,38 @@ callback_Save = CustomJS(args=dict(source=source), code="""
     }
 """)
 
+def callback_Start(new):
+    global eLoad_Connection
+    global Start
+    if eLoad_Connection is False:
+        print("eLoaD not connected")
+        Start.label = "Start"           #Overkill
+        pass
+    Start.label = "Stop"
+    
+    
+
 """Callback Assignments"""
 Connect.js_on_click(callback_status)
 Save.js_on_click(callback_Save)
+Start.on_click(callback_Start)
 
-def update():
-    s = slice(10)
-    new_x = source.data['time'][s] + np.random.uniform(-0.1, 0.1, size=10)
-    new_y = source.data['raw_data'][s] + np.random.uniform(-1, 1, size=10)
-    source.patch({'time': [(s, new_x)], 'raw_data': [(s, new_y)]})
+@count()
+def update(t):
+    new_x = np.random.uniform(-1, 1, size=5)
+    new_y = np.random.uniform(-10, 10, size=5)
+    source.stream({'time': new_x, 'raw_data': new_y}, 200)
 
 #-----------#
 #    GUI    #
 #-----------#
 """Front End"""
 Comm_Panel = row(Port_input, Comm_Status_Message)
-Panel = row(column(Comm_Panel, Connect, Gain, Voltage, Start, Save),plot_raw,plot_current)
+Panel = row(column(Comm_Panel, Connect, Gain, Voltage, Start, Save),plot_raw,plot_current, Table)
 
 #Show is the classical way, curdoc is the server one
 #show(Panel)
-curdoc().add_periodic_callback(update,500)
+curdoc().add_periodic_callback(update,100)
 curdoc().add_root(Panel)
 """
 Lists of things to do now:
