@@ -184,20 +184,21 @@ def acquire_data(t):
     global acquiredData
     new_x = np.random.uniform(-1, 1, size=5)
     new_y = np.random.uniform(-10, 10, size=5)
-    new=dict(time=[new_x],raw_data=[new_y])       #Format to roll into azquiredData dictionary
-    rollDict(new, acquiredData, 1000)   #Roll new data into acquiredData, rollover of 1000
+    new=dict(timestamp=new_x,raw_data=new_y)       #Format to roll into azquiredData dictionary
+    rollDict(new, acquiredData, 200)   #Roll new data into acquiredData, rollover of 1000
     print("Acquire data")
-    print(acquiredData)
+    print(len(acquiredData['timestamp']))
+    #print(acquiredData)
 #Plotting has no priority, also slower
 #@gen.coroutine
 #@without_document_lock
 @count()
 def update_plot(t):
     global acquiredData
-    source.stream(time=acquiredData['timestamp'],raw_data=acquiredData['raw_data'], rollover=500)
+    source.stream({'time':acquiredData['timestamp'],'raw_data':acquiredData['raw_data']}, 500)
     clearDict(acquiredData)
     print("Update plot")
-    
+    print(len(transferData['time']))
 
 #-----------#
 #    GUI    #
@@ -207,8 +208,8 @@ Comm_Panel = row(Port_input, Comm_Status_Message)
 Panel = row(column(Comm_Panel, Connect, Gain, Voltage, Start, Save, Random_test),plot_raw,plot_current, Table)
 
 
-curdoc().add_periodic_callback(update_plot(),3000)
-curdoc().add_periodic_callback(acquire_data(),1000)
+curdoc().add_periodic_callback(update_plot,3000)
+curdoc().add_periodic_callback(acquire_data,1000)
 curdoc().add_root(Panel)
 """
 Lists of things to do now:
