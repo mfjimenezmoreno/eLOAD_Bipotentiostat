@@ -3,10 +3,13 @@ import time
 
 from concurrent.futures import ThreadPoolExecutor
 from tornado import gen
+import logging
 
 from bokeh.document import without_document_lock
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import curdoc, figure
+
+
 
 source = ColumnDataSource(data=dict(x=[0], y=[0], color=["blue"]))
 
@@ -17,7 +20,9 @@ doc = curdoc()
 executor = ThreadPoolExecutor(max_workers=2)
 
 def blocking_task(i):
+   
     time.sleep(1)
+    
     return i
 
 # the unlocked callback uses this locked callback to safely update
@@ -33,7 +38,7 @@ def unlocked_task():
     global i
     i += 1
     res = yield executor.submit(blocking_task, i)
-    doc.add_next_tick_callback(partial(locked_update, i=res))
+    doc.add_next_tick_callback(partial(locked_update, i=res)) #locked_update doesn't work until blocking task finishes?
 
 @gen.coroutine
 def update():

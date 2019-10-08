@@ -50,4 +50,4 @@ main_thread = threading.main_thread()
 for t in threading.enumerate():
     if t is not main_thread:
         t.join()
-loggin.debug('Counter: %d', counter.value)
+logging.debug('Counter: %d', counter.value)

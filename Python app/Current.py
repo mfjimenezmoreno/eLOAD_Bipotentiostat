@@ -5,7 +5,11 @@ from bokeh.models.widgets import Select, Button, Slider, Paragraph, TextInput, T
 from bokeh.layouts import gridplot, column, row
 from bokeh.events import ButtonClick
 from bokeh.driving import count
+from bokeh.document import without_document_lock
 import numpy as np
+from concurrent.futures import ThreadPoolExecutor
+from tornado import gen
+from eLoaD_functions import rollDict, clearDict
 
 #----------------------#
 #    Initialization    #
@@ -17,12 +21,15 @@ eLoad_COM = 'COM13'
 """Widgets configuration"""
 Gain = Select(title="Gain", options=['100', '3k', '30k', '300k', '3M', '30M'], value='30k')
 Connect = Button(label='Connect')
+Random_test = Button(label='Random',button_type='warning')
 Start = Button(label='Start', button_type='success')
 Voltage = Slider(start=-1.5, end=1.5, value=1, step=0.01, title='Voltage')
 Comm_Status_Message = Paragraph(text="Status: Not connected")
 Port_input = TextInput(title='Port:', value='COM13')
 Save = Button(label='Save', button_type='success')
 
+"""Max threadpool executors"""
+executor = ThreadPoolExecutor(max_workers=2)
 
 #---------------------#
 #    Figure Config    #
@@ -32,6 +39,8 @@ transferData = {'time':[],
                 'raw_data':[],
                 #'current':[]
                 }
+acquiredData = {'timestamp':[],
+                'raw_data':[]}
 
 source = ColumnDataSource(data=transferData)
 
@@ -59,14 +68,33 @@ plot_current.x_range.follow = 'end'
 plot_current.x_range.follow_interval = 100
 plot_current.x_range.range_padding = 0
 
-#-----------------#
-#    Callbacks    #
-#-----------------#
-"""Callback section"""
+
+#-------------------------------#
+#    Callbacks (Python side)    #
+#-------------------------------#
+#Callbacks address which data is sent to Bokeh server
+
+def callback_Connect_to_eLoaD():
+    """Still requires modification, to verify the port"""
+    global eLoad_Connection
+    global eLoad_COM
+
+    if eLoad_Connection is True:
+        Comm_Status_Message.text = "Status: Not connected"
+        eLoad_Connection = False
+    else:
+        Comm_Status_Message.text = "Status: Connected"
+        eLoad_Connection = True
+    print(eLoad_Connection)
+
+#------------------------------#
+#    Callbacks (Server Side)   #
+#------------------------------#
+#Server react to data as sent by Python, defined by JS code.
+
+#Deprecated
 callback_status = CustomJS(args=dict(Port=Port_input, Message=Comm_Status_Message, conStatus = eLoad_Connection), 
                                      code="""
-    
-    alert((conStatus));
     
     if(Message.text.split(': ')[1]=="Not connected"){
         Message.text = "Status: Connected";
@@ -80,8 +108,12 @@ callback_status = CustomJS(args=dict(Port=Port_input, Message=Comm_Status_Messag
     conStatus.change.emit();
 """)
 
+
+
 callback_Save = CustomJS(args=dict(source=source), code="""
     //Function acquires converts the source to a csv
+
+
 
     function table_to_csv(source){
         const columns = Object.keys(source.data);   //Acquire number of keywords!
@@ -123,32 +155,60 @@ def callback_Start(new):
     if eLoad_Connection is False:
         print("eLoaD not connected")
         Start.label = "Start"           #Overkill
-        pass
-    Start.label = "Stop"
+    else:
+        print("eLoad is connected")
+        Start.label = "Stop"
     
+
+def callback_Random():
+    global eLoad_Connection
     
+    if eLoad_Connection is True:
+        Comm_Status_Message.text = "Status: Not connected"
+        eLoad_Connection = False
+    else:
+        Comm_Status_Message.text = "Status: Connected"
+        eLoad_Connection = True
+    print(eLoad_Connection)
 
 """Callback Assignments"""
-Connect.js_on_click(callback_status)
+Connect.on_click(callback_Connect_to_eLoaD)
 Save.js_on_click(callback_Save)
 Start.on_click(callback_Start)
+Random_test.on_click(callback_Random)
 
+#This has priority, locked task
+#@gen.coroutine
 @count()
-def update(t):
+def acquire_data(t):
+    global acquiredData
     new_x = np.random.uniform(-1, 1, size=5)
     new_y = np.random.uniform(-10, 10, size=5)
-    source.stream({'time': new_x, 'raw_data': new_y}, 200)
+    new=dict(time=[new_x],raw_data=[new_y])       #Format to roll into azquiredData dictionary
+    rollDict(new, acquiredData, 1000)   #Roll new data into acquiredData, rollover of 1000
+    print("Acquire data")
+    print(acquiredData)
+#Plotting has no priority, also slower
+#@gen.coroutine
+#@without_document_lock
+@count()
+def update_plot(t):
+    global acquiredData
+    source.stream(time=acquiredData['timestamp'],raw_data=acquiredData['raw_data'], rollover=500)
+    clearDict(acquiredData)
+    print("Update plot")
+    
 
 #-----------#
 #    GUI    #
 #-----------#
 """Front End"""
 Comm_Panel = row(Port_input, Comm_Status_Message)
-Panel = row(column(Comm_Panel, Connect, Gain, Voltage, Start, Save),plot_raw,plot_current, Table)
+Panel = row(column(Comm_Panel, Connect, Gain, Voltage, Start, Save, Random_test),plot_raw,plot_current, Table)
 
-#Show is the classical way, curdoc is the server one
-#show(Panel)
-curdoc().add_periodic_callback(update,100)
+
+curdoc().add_periodic_callback(update_plot(),3000)
+curdoc().add_periodic_callback(acquire_data(),1000)
 curdoc().add_root(Panel)
 """
 Lists of things to do now:
