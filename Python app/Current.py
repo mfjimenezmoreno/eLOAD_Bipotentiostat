@@ -9,14 +9,22 @@ from bokeh.document import without_document_lock
 import numpy as np
 from concurrent.futures import ThreadPoolExecutor
 from tornado import gen
+import serial
+import time
 from eLoaD_functions import rollDict, clearDict
 
 #----------------------#
 #    Initialization    #
 #----------------------#
 """Global Variables"""
-eLoad_Connection = False
-eLoad_COM = 'COM13'
+eLoaD_Connection = False    #Used as a global flag, act according eLoaD connection
+eLoaD_COM = 'COM13'         #Stores the serial port
+eLoaD = serial.Serial()
+eLoaD.baudrate = 9600
+eLoaD.timeout = 1
+MUX_Gain = 3E3      #For storing transimpedance gain as chosen by MUX
+pga_value = 2.0     #The gain as specified by ADC's datasheet
+v_ref = 1.5         #The reference voltage
 
 """Widgets configuration"""
 Gain = Select(title="Gain", options=['100', '3k', '30k', '300k', '3M', '30M'], value='30k')
@@ -76,16 +84,50 @@ plot_current.x_range.range_padding = 0
 
 def callback_Connect_to_eLoaD():
     """Still requires modification, to verify the port"""
-    global eLoad_Connection
-    global eLoad_COM
+    global eLoaD_Connection
+    global eLoaD_COM
 
-    if eLoad_Connection is True:
-        Comm_Status_Message.text = "Status: Not connected"
-        eLoad_Connection = False
-    else:
+    eLoaD.port = Port_input.value
+    if eLoaD.isOpen() == False:     #If not connected, try to connect
+        try:
+            eLoaD.open()
+        except:
+            print("Port not found")
+    
+    eLoaD_Connection = eLoaD.isOpen()   #This flag stores the status of connectivity...
+    
+    #...and change GUI message
+    if eLoaD_Connection is True:
         Comm_Status_Message.text = "Status: Connected"
-        eLoad_Connection = True
-    print(eLoad_Connection)
+    else:
+        Comm_Status_Message.text = "Status: Port not found"
+
+#This has priority, locked task
+@gen.coroutine
+@count()
+def acquire_data_fake(t):
+    global acquiredData
+    new_x = np.random.uniform(-1, 1, size=5)
+    new_y = np.random.uniform(-10, 10, size=5)
+    # Format to roll into azquiredData dictionary
+    new = dict(timestamp=new_x, raw_data=new_y)
+    # Roll new data into acquiredData, rollover of 1000
+    rollDict(new, acquiredData, 200)
+
+
+@gen.coroutine
+@count()
+def acquire_data(t):
+    global acquiredData
+    str(e)
+    new_x = np.random.uniform(-1, 1, size=5)
+    new_y = np.random.uniform(-10, 10, size=5)
+    # Format to roll into azquiredData dictionary
+    new = dict(timestamp=new_x, raw_data=new_y)
+    # Roll new data into acquiredData, rollover of 1000
+    rollDict(new, acquiredData, 200)
+    print("Acquire data")
+    print(len(acquiredData['timestamp']))
 
 #------------------------------#
 #    Callbacks (Server Side)   #
@@ -93,7 +135,7 @@ def callback_Connect_to_eLoaD():
 #Server react to data as sent by Python, defined by JS code.
 
 #Deprecated
-callback_status = CustomJS(args=dict(Port=Port_input, Message=Comm_Status_Message, conStatus = eLoad_Connection), 
+callback_status = CustomJS(args=dict(Port=Port_input, Message=Comm_Status_Message, conStatus = eLoaD_Connection), 
                                      code="""
     
     if(Message.text.split(': ')[1]=="Not connected"){
@@ -150,26 +192,28 @@ callback_Save = CustomJS(args=dict(source=source), code="""
 """)
 
 def callback_Start(new):
-    global eLoad_Connection
+    """This callback should start experiment"""
+    global eLoaD_Connection
     global Start
-    if eLoad_Connection is False:
+    if eLoaD_Connection is False:
         print("eLoaD not connected")
-        Start.label = "Start"           #Overkill
+        Start.label = "Start"
     else:
         print("eLoad is connected")
         Start.label = "Stop"
     
 
 def callback_Random():
-    global eLoad_Connection
+    """For random stuff"""
+    global eLoaD_Connection
     
-    if eLoad_Connection is True:
+    if eLoaD_Connection is True:
         Comm_Status_Message.text = "Status: Not connected"
-        eLoad_Connection = False
+        eLoaD_Connection = False
     else:
         Comm_Status_Message.text = "Status: Connected"
-        eLoad_Connection = True
-    print(eLoad_Connection)
+        eLoaD_Connection = True
+    print(eLoaD_Connection)
 
 """Callback Assignments"""
 Connect.on_click(callback_Connect_to_eLoaD)
@@ -177,20 +221,9 @@ Save.js_on_click(callback_Save)
 Start.on_click(callback_Start)
 Random_test.on_click(callback_Random)
 
-#This has priority, locked task
-#@gen.coroutine
-@count()
-def acquire_data(t):
-    global acquiredData
-    new_x = np.random.uniform(-1, 1, size=5)
-    new_y = np.random.uniform(-10, 10, size=5)
-    new=dict(timestamp=new_x,raw_data=new_y)       #Format to roll into azquiredData dictionary
-    rollDict(new, acquiredData, 200)   #Roll new data into acquiredData, rollover of 1000
-    print("Acquire data")
-    print(len(acquiredData['timestamp']))
-    #print(acquiredData)
+
 #Plotting has no priority, also slower
-#@gen.coroutine
+@gen.coroutine
 #@without_document_lock
 @count()
 def update_plot(t):
@@ -209,12 +242,18 @@ Panel = row(column(Comm_Panel, Connect, Gain, Voltage, Start, Save, Random_test)
 
 
 curdoc().add_periodic_callback(update_plot,3000)
-curdoc().add_periodic_callback(acquire_data,1000)
+curdoc().add_periodic_callback(acquire_data_fake,200)
 curdoc().add_root(Panel)
 """
 Lists of things to do now:
-    -Generate random data, plot it
-    -Make sure it plots only recent data for the mean time
-    -Solve multithreading strategy
+    Done - Generate random data, plot it
+    Done Make sure it plots only recent data for the mean time
+    Done Solve multithreading strategy
+    Done Solved callback for eLoaD connectivity
+    - Now update dictionaries to contain an extra column for current calulation
     -Acquire data form eLoaD
+        -Tranfer Knowledge from previous work
+        -Make it somewhat interactive with interface
+        -Plot current...
+        -Start working with th eLoaD!
 """
