@@ -48,8 +48,8 @@
 #include <C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\ADC_Test\Library_Test\ADC_Test\MAX4617.h>
 #include <C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\ADC_Test\Library_Test\ADC_Test\MAX4737.h>
 #include <C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\ADC_Test\Library_Test\ADC_Test\ADS1255.h>
-#include <C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\ADC_Test\Library_Test\ADC_Test\eLoadTimer1.h>
 #include <SPI.h>
+#include <C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\ADC_Test\Library_Test\ADC_Test\eLoadTimer1.h>
 
 SPISettings SPI_Holi(19000000, MSBFIRST, SPI_MODE1);
 /*Chip Selects*/
@@ -77,28 +77,23 @@ SPISettings SPI_Holi(19000000, MSBFIRST, SPI_MODE1);
 /*Others*/
 #define Anodic              true
 #define Cathodic            false
-const float iVoltage = 500;            //In milivolts vs. 1.5 vref
-const float iVoltage2 = 0;
-const float V_Res = 178.8E-9; //Resolution with a ADS_PGA_2
+const float iVoltage = 500;             //In milivolts vs. 1.5 vref
+const float iVoltage_2 = 0;             //In milivolts vs. 1.5 vref
+const float V_Res = 178.8E-9;           //Resolution with a ADS_PGA_2
 
 ////////////////////////////////////
 //         Declarations           //
 ////////////////////////////////////
-
-//The following variables are for general testing purposes
-union Buffer {
+union Buffer{
     uint8_t ui8[4];
     uint32_t ui32;
 };
 
-union Buffer x;
+union Buffer x;                         //This is used for data transfer
 
-volatile boolean    bUpdate = false;        //An ISR updated flag for testing purposes
+volatile boolean    bUpdate = false;        //An ISR updated flag
 volatile boolean    Ramp = Anodic;
 uint16_t            iIndex  = ceil(iVoltage*(65536/(double)3000)+32768);            //Voltage index
-uint16_t            iIndex2 = ceil(iVoltage2 * (65536 / (double)3000) + 32768);
-
-//Object declarations
 max5443 DAC1(Chip_Select_DAC1);
 max5443 DAC2(Chip_Select_DAC2);
 max4617 Gain(pin_MUX_A, pin_MUX_B, pin_MUX_C);
@@ -124,7 +119,7 @@ void setup()
     digitalWrite(LED_BUILTIN, LOW);
     /*Let's setup a 0.5 Hz CTC timer, the idea is to change voltage with every interrupt call*/
     noInterrupts();
-    T1_Frequency(20);                                            //Setup CTC registers for 2 Hz
+    T1_Frequency(20);                                           //Setup CTC registers for 2Hz
     T1_EN_IntCTC();                                             //Activate register for CTC interrupt
     
     /*  INSTRUCTIONS: How Set_Voltage works
@@ -158,28 +153,71 @@ ISR(TIMER1_COMPA_vect)
 
     bUpdate = false;                                             //Flag update
     digitalWrite(LED_BUILTIN, digitalRead(LED_BUILTIN)^1);
-    //x.ui32 = ADC1.read_single24();
-
+    x.ui32 = ADC1.read_single24();
+    /*ADC1.wakeup();
+    
+    x.ui16 = 0; //Initialize the data that shall be returned
+    digitalWrite(Chip_Select_ADC1, LOW);
+    SPI.beginTransaction(SPI_Holi);
+    SPI.transfer(ADS_RDATA); //Read a single conversion result
+    delayMicroseconds(6.5);  //Mandatory to wait 50 times 1/CLKin, theoretically doesn't use timer0 so interrupt should be safe
+    
+    for (int i = 1; i >= 0; --i)
+    {
+        //while(!bitRead(SPSR, SPIF));     //Wait for any pending transmission/reception to complete (Stops only if SPIF is set), maybe not required with the SPI library, Mr.Dryden seem to use USART
+        x.ui8[i] = SPI.transfer(0x00); //Read SPDR register, consider changing to assembly code if this doesn't work.
+    }
+    
+    digitalWrite(Chip_Select_ADC1, HIGH);
+    SPI.endTransaction();
+    //ADC1.standby();                 //Issue a standby mode.
+*/
 }
 
 void loop()
 {
     if(Serial){
+        int32_t y = (V_Res * (~(x.ui32 - 1) & 0x00FFFFFF));
+        y = y;
+        Serial.println("--------");
+        Serial.println(V_Res,DEC);
+        Serial.print(iVoltage,DEC);
+        Serial.println(" mV");
+        Serial.print("iVoltage = ");
+        Serial.println(iIndex);
+        /*So, how does data transfer work? We send a signed int data, despite ADS1255 working with signed 24 bit mode
+        What do we do? Well, first we have a take a look on the ADS1255 full scale
         
-        
-         /* We receive a 32 bit readout from an 24-bit ADC, how does it work? We just added an FF as the 4th byte in the case
-        that the number is negative, here are examples to illustrate why adding them does not hurt:
-                            ADS1225     Signed Int      eLOAD           Signed Int
-        + Full Scale        7F FFFF     8,388,607       007F FFFF       IDEM
-        + LSB               00 0001     1               0000 0001       IDEM
-        Zero                00 0000     0               0000 0000       0
-        - LSB               FF FFFF     -1              FFFF FFFF       -1              
-        - Full Scale        80 0000     -8,388,608      FF80 0000       -8,388,608
+                                24 bit value    32 bit value        signed DEC
+        Positive full scale     7F FFFF         007F FFFF           8,388,607/IDEM
+        Zero                    00 0000         0000 0000           
+        Negative full scale     80 0000         FF80 0000           /-8,388,608
         */
-        Serial.print("!");
-        Serial.println(x.ui32, HEX);
 
-        
+        if(x.ui8[3] == 0xFF){
+            
+            Serial.print("!");
+            Serial.println(x.ui32, HEX);                                //True data
+            Serial.print("0x");
+            Serial.println(x.ui32 & 0x00FFFFFF, HEX);                   //A useless filtered version
+            Serial.println(~(x.ui32 - 1) & 0x00FFFFFF, HEX);
+            Serial.print("-");
+            Serial.println(~(x.ui32 - 1) & 0x00FFFFFF, DEC);
+            Serial.print("-");
+            Serial.print(V_Res * (~(x.ui32 - 1) & 0x00FFFFFF), DEC);
+            Serial.println(" V");
+            Serial.print(y, 8);
+            Serial.println(" V");
+        }
+        else{
+            Serial.print("!");
+            Serial.println(x.ui32, HEX);
+            Serial.print("+");
+            Serial.println(x.ui32, DEC);
+            Serial.print("+");
+            Serial.print(V_Res * x.ui32, DEC);
+            Serial.println(" V");
+        }
     }
     if(bUpdate == true)                                         //Only executed when Timer1 matches OCR1A
     {

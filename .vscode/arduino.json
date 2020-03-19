@@ -1,7 +1,7 @@
 {
     "programmer": "ArduinoISP",
-    "board": "arduino:avr:micro",
-    "port": "COM11",
-    "sketch": "ADC_Test\\Library_Test\\ADC_Test\\ADC_Test.ino",
+    "board": "arduino:avr:uno",
+    "port": "COM19",
+    "sketch": "Test_1_Constant_Voltage.ino",
     "output": "build"
 }

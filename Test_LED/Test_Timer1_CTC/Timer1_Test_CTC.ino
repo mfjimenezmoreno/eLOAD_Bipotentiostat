@@ -72,7 +72,7 @@ ISR(TIMER1_COMPA_vect)
 void loop()
 {
     /*El error que cometí estaba relacioando con correr setup en cada iteración!*/
-    Serial.print("Reloj: ");
+    /*Serial.print("Reloj: ");
     Serial.println(TCNT1,DEC);
     Serial.print("ISR: ");
     Serial.println(x,DEC);
@@ -80,5 +80,5 @@ void loop()
     //Serial.println(TIFR1 & (1 << OCF1A), BIN);
     Serial.println(bitRead(TIFR1, OCF1A), BIN);
     Serial.print("Overflow FLAG: ");
-    Serial.println(bitRead(TIFR1, TOV1), BIN);
+    Serial.println(bitRead(TIFR1, TOV1), BIN);*/
 }
