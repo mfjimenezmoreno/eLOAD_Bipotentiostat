@@ -3,7 +3,6 @@ import time
 
 from concurrent.futures import ThreadPoolExecutor
 from tornado import gen
-import logging
 
 from bokeh.document import without_document_lock
 from bokeh.models import ColumnDataSource
@@ -12,20 +11,24 @@ from bokeh.plotting import curdoc, figure
 source = ColumnDataSource(data=dict(x=[0], y=[0], color=["blue"]))
 
 i = 0
+
 doc = curdoc()
+
 executor = ThreadPoolExecutor(max_workers=2)
 
+#Not a thread by the way! Because it comes from an unlocked thread, it is interrupted
 def blocking_task(i):
-    print("blocking_pre")
-    time.sleep(1)
-    print("blocking_post")
+    print("block")
+    time.sleep(1.5)
+    print("unblock")
     return i
 
-# The unlocked callback uses this locked callback to safely update
+# the unlocked callback uses this locked callback to safely update
+#Safe update from an unlocked callback!
 @gen.coroutine
 def locked_update(i):
+    print("Happening")
     source.stream(dict(x=[source.data['x'][-1]+1], y=[i], color=["blue"]))
-    print("Bobs")
 
 # this unlocked callback will not prevent other session callbacks from
 # executing while it is in flight
@@ -34,16 +37,21 @@ def locked_update(i):
 def unlocked_task():
     global i
     i += 1
+    print("pre")
     res = yield executor.submit(blocking_task, i)
-    print("without lock")
-    print(i)
-    doc.add_next_tick_callback(partial(locked_update, i=res)) #locked_update doesn't work until blocking task finishes?
+    print(res)
+    print("pre2")
+    doc.add_next_tick_callback(partial(locked_update, i=res))
+    print("post")
+
 
 @gen.coroutine
 def update():
     source.stream(dict(x=[source.data['x'][-1]+1], y=[i], color=["red"]))
+    print("Just streamed")
 
-p = figure(x_range=[0, 100], y_range=[0,20])
+
+p = figure(x_range=[0, 100], y_range=[0, 20])
 l = p.circle(x='x', y='y', color='color', source=source)
 
 doc.add_periodic_callback(unlocked_task, 1000)

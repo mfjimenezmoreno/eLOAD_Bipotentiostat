@@ -12,9 +12,9 @@ import pandas as pd
 
 lista = ['FFFFFFFF','00000000','00000001','7FFFFFFF','80000000']
 
-Nane.rawHexString_to_int('FFFFFFFF', bits=24)
-Nane.raw_to_Volts('FFFFFFFF', pga=2, v_ref=1.5)
-Nane.raw_to_current('002AAAAA', pga=2, muxGain=3000, v_ref=1.5)
+Nane.rawHexString_to_int('FFFFFF', bits=24)
+Nane.raw_to_Volts('FFFFFF', pga=2, v_ref=1.5)
+Nane.raw_to_Current('FFFFFD', pga=2, muxGain=3000, v_ref=1.5)
 
 CV = pd.read_csv(r'Cap.csv')
 CV.columns = ['Voltage', 'Current']

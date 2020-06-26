@@ -1,11 +1,12 @@
-def rollDict(data, object, rollover):
-    for key in object.keys():
+#WARNING: Obsolete function
+def rollDict(new_data, object, rollover):
+    for key in new_data.keys():
         #Let' make sure that the code factors in more than one element insertion
-        for element in data[key]:
+        for element in new_data[key]:
             object[key].insert(0, element)
         while len(object[key]) > rollover:
             object[key].pop()
-
+#WARNING: Obsolete function
 def clearDict(object):
     """Clears the dictionary items, preserves the keys"""
     for key in object.keys():
@@ -15,7 +16,7 @@ def rawHexString_to_int(data='', bits=24):
     """Converts the as-received string into a number"""
     
     hexCharacters = int(bits/4)
-    #If received hex string is bigger than bit size, get the least significant bytes
+    #If received hex string is bigger than bit size, slice MSB
     if(data.__len__() > hexCharacters):
         data = data[-hexCharacters:]
     
