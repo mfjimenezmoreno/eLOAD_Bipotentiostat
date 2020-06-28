@@ -7,7 +7,7 @@ def rollDict(new_data, object, rollover):
         while len(object[key]) > rollover:
             object[key].pop()
 #WARNING: Obsolete function
-def clearDict(object):
+def clear_dict(object):
     """Clears the dictionary items, preserves the keys"""
     for key in object.keys():
         object[key].clear()

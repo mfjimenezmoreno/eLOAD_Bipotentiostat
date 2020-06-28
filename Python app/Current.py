@@ -1,6 +1,6 @@
 from bokeh.io import curdoc
 from bokeh.plotting import figure, show
-from bokeh.models import CustomJS, ColumnDataSource, DataRange1d
+from bokeh.models import CustomJS, ColumnDataSource, DataRange1d, LinearAxis, BasicTickFormatter
 from bokeh.models.widgets import Select, Button, Slider, Paragraph, TextInput, TableColumn, DataTable, TableColumn, Toggle
 from bokeh.layouts import gridplot, column, row
 from bokeh.events import ButtonClick
@@ -14,7 +14,7 @@ from tornado import gen
 from functools import partial
 import serial
 import time
-from eLoaD_functions import rollDict, clearDict
+from eLoaD_functions import clear_dict
 
 #----------------------#
 #    Initialization    #
@@ -32,7 +32,7 @@ eLoaD_COM = 'COM13'         #Stores the serial port
 eLoaD = serial.Serial()
 eLoaD.baudrate = 9600
 eLoaD.timeout = 1
-MUX_Gain = 3E3      #For storing transimpedance gain as chosen by MUX
+mux_gain = 3E3      #For storing transimpedance gain as chosen by MUX
 pga_value = 2.0     #The gain as specified by ADC's datasheet
 v_ref = 1.5         #The reference voltage
 
@@ -58,9 +58,9 @@ Port_input = TextInput(title='Port:', value='COM13')
 Save = Button(label='Save', button_type='warning')
 
 
-#---------------------#
-#    Figure Config    #
-#---------------------#
+#----------------------------#
+#    Figure Configuration    #
+#----------------------------#
 """Dataframe structure"""
 #NOTE AS of now, I will only receive raw data.
 transferData = {'time':[],
@@ -89,7 +89,25 @@ plot_raw.x_range.follow = 'end'
 plot_raw.x_range.follow_interval = 100
 plot_raw.x_range.range_padding = 0.1
 plot_raw.xaxis.axis_label = "Voltage (Volts)"
+plot_raw.xaxis.axis_label_text_font_size = '12pt'
+plot_raw.xaxis.axis_label_text_font_style = "bold"
+plot_raw.xaxis.axis_line_width = 2
+plot_raw.xaxis.major_label_text_font_size = "10pt"
 plot_raw.yaxis.axis_label = "Current (Amperes)"
+plot_raw.yaxis.axis_label_text_font_size = '12pt'
+plot_raw.yaxis.axis_label_text_font_style = "bold"
+plot_raw.yaxis.axis_line_width = 2
+plot_raw.yaxis.major_label_text_font_size = "10pt"
+plot_raw.yaxis.formatter = BasicTickFormatter(precision=1, use_scientific=True)
+plot_raw.grid.grid_line_dash = 'dashed'
+plot_raw.title.align = 'center'
+plot_raw.title.text_font = 'arial'
+plot_raw.title.text_font_style = 'bold'
+plot_raw.title.text_font_size = '15px'
+#plot_raw.add_layout(LinearAxis(axis_label="LayoutRight"), place='right')
+plot_raw.axis.major_tick_line_width = 1.5
+plot_raw.axis.major_tick_out = 6
+plot_raw.axis.major_tick_in = 0
 
 #FIXME The reason why circle is plotted instead of line, is that 
 #information bits are getting "delayed". Solve this.
@@ -114,9 +132,9 @@ plot_current.line(source=source, x='time', y='raw_data', alpha=0.2,
               line_width=3, color='navy')
 
 #-------------------------------#
-#    Callbacks (Python side)    #
+#    Callbacks (GUI related)    #
 #-------------------------------#
-#Callbacks address which data is sent to Bokeh server
+#Callbacks related to buttons
 
 def callback_Connect_to_eLoaD():
     """Connects to eLoaD. Check the Written port and attempts to connect"""
@@ -145,6 +163,7 @@ def callback_Connect_to_eLoaD():
         Comm_Status_Message.text = "Status: Port not found"
         return False
 
+
 #This has priority, locked task
 @gen.coroutine
 @count()
@@ -161,19 +180,12 @@ def acquire_data_fake_2(t):
     for key, value in new.items():
         acquiredData[key].extend(value)
 
+
 #TODO Adjust this code for eLoaD generated data
 @gen.coroutine
 @count()
 def acquire_data(t):
-    global acquiredData
-    new_x = np.random.uniform(-1, 1, size=5)
-    new_y = np.random.uniform(-10, 10, size=5)
-    # Format to roll into azquiredData dictionary
-    new = dict(timestamp=new_x, raw_data=new_y)
-    # Roll new data into acquiredData, rollover of 1000
-    rollDict(new, acquiredData, 200)
-    print("Acquire data")
-    print(len(acquiredData['timestamp']))
+    pass
 
 #------------------------------#
 #    Callbacks (Server Side)   #
@@ -267,27 +279,26 @@ Save.js_on_click(callback_Save)
 Start.on_click(callback_Start)
 Random_test.on_click(callback_Random)
 
-
+#---------------------------#
+#    Callbacks (Threads)    #
+#---------------------------#
 #Plotting has no priority, also slower
-@count()
-#@gen.coroutine
-#@without_document_lock
-
-def update_plot(t):
-    global acquiredData
-    #print(len(acquiredData))
-    #print(acquiredData)
-    source.stream(
-        {'time': acquiredData['timestamp'], 'raw_data': acquiredData['raw_data']})
-    #source.stream(
-    #    {'time': acquiredData['timestamp'], 'raw_data': acquiredData['raw_data']})
-    #print("update_number: "+ str(t))
-    #print(source.data)
-    clearDict(acquiredData)
 
 @gen.coroutine
-def update_plot_test():
-    curdoc().add_next_tick_callback(update_plot)
+#It seems that we cannot make streaming unlocked
+def stream():
+    global acquiredData
+    source.stream(
+        {'time': acquiredData['timestamp'], 'raw_data': acquiredData['raw_data']})
+    clear_dict(acquiredData)
+
+
+@gen.coroutine
+def update_plot():
+    #Safely add a thread for plot update
+    #NOTE: This is a safe way to update the plot, but might be removed if not necessary
+    doc.add_next_tick_callback(stream)
+
 
 #-----------#
 #    GUI    #
@@ -300,8 +311,8 @@ Panel = row(column(Comm_Panel, Connect, Gain, Voltage, Start,
                    Save, Random_test), plot_raw, plot_current, Table)
 
 
-doc.add_periodic_callback(update_plot_test,3000)
-doc.add_periodic_callback(acquire_data_fake_2,500)
+doc.add_periodic_callback(update_plot,1000)
+doc.add_periodic_callback(acquire_data_fake_2,100)
 doc.add_root(Panel)
 
 
