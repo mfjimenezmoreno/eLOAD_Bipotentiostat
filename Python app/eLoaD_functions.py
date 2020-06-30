@@ -1,3 +1,22 @@
+class BipotSettings(object):
+    #Constants
+    GAIN_100, GAIN_3k, GAIN_30k, GAIN_300k, GAIN_3M, GAIN_30M = '100', '3k', '30k', '300k', '3M', '30M'
+    CV, CA = 'Voltammetry', 'Chronoamperometry'
+    SINGLE, DUAL = 'Single Mode', 'Dual Mode'
+    #Attributes
+    gain = GAIN_30k
+    v1_start, v1_floor, v1_ceiling = 0.2, 0.1, 0.3
+    v2_start = 0.2
+    technique = CV
+    mode = SINGLE
+    
+    def __init__(self):
+        super().__init__()
+    
+    def transfer_data(self):
+        pass
+pass
+
 #WARNING: Obsolete function
 def rollDict(new_data, object, rollover):
     for key in new_data.keys():
@@ -6,7 +25,7 @@ def rollDict(new_data, object, rollover):
             object[key].insert(0, element)
         while len(object[key]) > rollover:
             object[key].pop()
-#WARNING: Obsolete function
+#WARNING: Perhaps sbsolete function
 def clear_dict(object):
     """Clears the dictionary items, preserves the keys"""
     for key in object.keys():
@@ -66,3 +85,22 @@ rawHexString_to_int('800000', bits=24)
 raw_to_Volts('800000', pga=2, v_ref=1.5)
 raw_to_Current('800001', pga=2, muxGain=3E3, v_ref=1.5)
 raw_to_Current('7FFFFF', pga=2, muxGain=3E3, v_ref=1.5)
+current_to_raw(0.0005, pga=2, muxGain=3000, v_ref=1.5)
+
+
+#-----------------------------#
+#   Not so useful functions   #
+#-----------------------------#
+#These functions don't have practical value. Tools for debugging mostly.
+
+def volts_to_raw(volts, pga, v_ref):
+    """Convert ADC readout to HEX(24-bit)"""
+    #Conversion credits to Rob from stackoverflows topic Convert hex string to int and back
+    i = int((volts*pga*(2**23-1))/(2*v_ref))
+    return '%06x' % ((i+2**24) % 2**24)
+
+def current_to_raw(current, pga=2, muxGain=3000, v_ref=1.5):
+    """Converts raw data into transimpedance amplifier current values (amperes)."""
+    volts = current * muxGain
+    return volts_to_raw(volts, pga, v_ref), volts
+

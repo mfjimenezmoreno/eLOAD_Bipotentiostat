@@ -57,7 +57,6 @@ Comm_Status_Message = Paragraph(text="Status: Connected")
 Port_input = TextInput(title='Port:', value='COM13')
 Save = Button(label='Save', button_type='warning')
 
-
 #----------------------------#
 #    Figure Configuration    #
 #----------------------------#
@@ -317,11 +316,12 @@ doc.add_root(Panel)
 
 
 #Lists of things TODO now:
-    #DONE - Generate random data, plot it
+    #DONE Generate random data, plot it
     #DONE Make sure it plots only recent data for the mean time
     #DONE Solve multithreading strategy
     #DONE Solved callback for eLoaD connectivity
     #DONE Plot corruption was due to duplicate streamming
+    #DONE Make plot cute
     
     #RESEARCH I THINK that the reason eLoaD doesn't read correctly, is because i don't assign ALNn to
     #the  AINCOM (1.5), don't forget this is a differential readout.
