@@ -42,18 +42,22 @@ def unlocked_task():
     print(res)
     print("pre2")
     doc.add_next_tick_callback(partial(locked_update, i=res))
-    print("post")
+    print("post" + str(i))
+    if i > 4:
+        print("Executing")
+        doc.remove_periodic_callback(callback_unlocked_task)
+        doc.remove_periodic_callback(callbakc_update)
 
 
 @gen.coroutine
 def update():
     source.stream(dict(x=[source.data['x'][-1]+1], y=[i], color=["red"]))
-    print("Just streamed")
+    #print("Just streamed")
 
 
 p = figure(x_range=[0, 100], y_range=[0, 20])
 l = p.circle(x='x', y='y', color='color', source=source)
 
-doc.add_periodic_callback(unlocked_task, 1000)
-doc.add_periodic_callback(update, 200)
+callback_unlocked_task = doc.add_periodic_callback(unlocked_task, 1000)
+callbakc_update = doc.add_periodic_callback(update, 200)
 doc.add_root(p)

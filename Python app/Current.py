@@ -177,16 +177,25 @@ def callback_Connect_to_eLoaD():
 def acquire_data_fake_2(t):
     global acquiredData
     data = acquiredData
-    print(str(t) + " " + str(0+5*t) + " " + str(4+5*t))
+    index_low = 0 + 5*t
+    index_high = 4 + 5*t
+    print(str(t) + " " + str(index_low) + " " + str(index_high))
+    print(str(4+5*t) +" "+ str(len(CV['Current'])))
     x, y = [], []
-    for i in range(0+5*t, 4+5*t):
-        x.append(CV['Voltage'].iloc[i])
-        y.append(CV['Current'].iloc[i])
-    new = dict(timestamp=x, raw_data=y)
-    #We extend the new data into our acquiredData variable
-    for key, value in new.items():
-        acquiredData[key].extend(value)
-
+    try:
+        for i in range(0+5*t, 4+5*t):
+            x.append(CV['Voltage'].iloc[i])
+            y.append(CV['Current'].iloc[i])
+        new = dict(timestamp=x, raw_data=y)
+        #We extend the new data into our acquiredData variable
+        for key, value in new.items():
+            acquiredData[key].extend(value)
+    
+    except Exception:
+        #Stop this stream if our appended fake data got all information from CV
+        if index_high >= len(CV['Current']):
+            doc.remove_periodic_callback(callback_acquire_data_fake)
+            doc.remove_periodic_callback(callback_update_plot)
 
 #TODO Adjust this code for eLoaD generated data
 @gen.coroutine
@@ -319,8 +328,8 @@ Panel = row(column(Comm_Panel, Connect, Voltage, Start,
                    Save, Random_test), plot_raw, plot_current, Table)
 
 
-doc.add_periodic_callback(update_plot,1000)
-doc.add_periodic_callback(acquire_data_fake_2,100)
+callback_update_plot = doc.add_periodic_callback(update_plot,1000)
+callback_acquire_data_fake = doc.add_periodic_callback(acquire_data_fake_2,100)
 doc.add_root(Panel)
 
 
