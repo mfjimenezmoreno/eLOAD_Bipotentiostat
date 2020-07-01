@@ -1,7 +1,7 @@
 from bokeh.io import curdoc
 from bokeh.plotting import figure, show
 from bokeh.models import CustomJS, ColumnDataSource, DataRange1d, LinearAxis, BasicTickFormatter
-from bokeh.models.widgets import Select, Button, Slider, Paragraph, TextInput, TableColumn, DataTable, TableColumn, Toggle
+from bokeh.models.widgets import Select, Button, Slider, Paragraph, TextInput, TableColumn, DataTable, TableColumn, Toggle, RangeSlider, RadioButtonGroup, PreText
 from bokeh.layouts import gridplot, column, row
 from bokeh.events import ButtonClick
 from bokeh.driving import count
@@ -14,7 +14,7 @@ from tornado import gen
 from functools import partial
 import serial
 import time
-from eLoaD_functions import clear_dict
+from eLoaD_functions import clear_dict, BipotSettings, UnacceptedParameter
 
 #----------------------#
 #    Initialization    #
@@ -27,6 +27,7 @@ doc = curdoc()
 executor = ThreadPoolExecutor(max_workers=3)
 
 """Global Variables"""
+bipot = BipotSettings()
 eLoaD_Connection = False    #Used as a global flag, act according eLoaD connection
 eLoaD_COM = 'COM13'         #Stores the serial port
 eLoaD = serial.Serial()
@@ -43,20 +44,25 @@ source = ColumnDataSource(data=CV)
 
 """Widgets configuration"""
 Gain = Select(title="Gain", options=['100', '3k', '30k', '300k', '3M', '30M'],
-              value='30k')
-Connect = Button(label='Connect')
-Random_test = Button(label='Random',button_type='warning')
-Start = Button(label='Start', button_type='success')
+              value='30k', max_width=160)
+Connect = Button(label='Connect', width=320)
+Random_test = Button(label='Random', button_type='warning', width=320)
+Start = Button(label='Start', button_type='success', width=320)
+Voltage_Window = RangeSlider(start=-1.5, end=1.5, value=(0.1,0.3),
+                             step=0.01, title="Voltage Window", bar_color='#f44336')
 Voltage_Start = Slider(start=-1.5, end=1.5, value=0.2,
                        step=0.01, title='Voltage Start')
-Voltage_Floor = Slider(start=-1.5, end=1.5, value=0.1,
-                       step=0.01, title='Voltage Floor')
-Voltage_Ceiling = Slider(start=-1.5, end=1.5, value=0.3,
-                       step=0.01, title='Voltage Ceiling')
-Comm_Status_Message = Paragraph(text="Status: Connected")
-Port_input = TextInput(title='Port:', value='COM13')
-Save = Button(label='Save', button_type='warning')
-
+Sweep_direction = RadioButtonGroup(name='Sweep Direction',
+                                   labels=['Cathodic', 'Anodic'], active=0)
+Segments = TextInput(title='Sweep Segments:', value='3', max_width=160)
+Comm_Status_Message = Paragraph(text="Status: Connected", width=160)
+Port_input = TextInput(title='Port:', value='COM13', width=160)
+Save = Button(label='Save', button_type='warning', width=320)
+Message_Output = PreText(width=320, height = 200, text="Cyclic Voltammetry GUI",
+                         background='#CFD8DC',
+                         style={'color': '#212121', 'font-family': 'Arial', 'padding': '20px',
+                                'font-weight':'300','word-break':'break-word',
+                                'border':'border: 4px outset #1C6EA4','border-radius':'6px'})
 #----------------------------#
 #    Figure Configuration    #
 #----------------------------#
@@ -134,6 +140,8 @@ plot_current.line(source=source, x='time', y='raw_data', alpha=0.2,
 #    Callbacks (GUI related)    #
 #-------------------------------#
 #Callbacks related to buttons
+
+
 
 def callback_Connect_to_eLoaD():
     """Connects to eLoaD. Check the Written port and attempts to connect"""
@@ -304,9 +312,10 @@ def update_plot():
 #-----------#
 """Front End"""
 Comm_Panel = row(Port_input, Comm_Status_Message)
-Voltage = column(Voltage_Start, Voltage_Floor, Voltage_Ceiling)
+GainandSegment = row(Gain, Segments)
+Voltage = column(GainandSegment, Voltage_Start, Voltage_Window, Sweep_direction, Message_Output )
 #Panel = row(column(Comm_Panel, Connect, Gain, Voltage, Start, Save),plot_raw)
-Panel = row(column(Comm_Panel, Connect, Gain, Voltage, Start,
+Panel = row(column(Comm_Panel, Connect, Voltage, Start,
                    Save, Random_test), plot_raw, plot_current, Table)
 
 

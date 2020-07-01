@@ -1,20 +1,46 @@
-class BipotSettings(object):
+class UnacceptedParameter(Exception):
+    """Exception to handle non-legal parameters"""
+    def __init__(self, data):
+        self.data = data
+    
+    def __str__(self):
+        return repr(self.data)
+
+class BipotSettings:
     #Constants
     GAIN_100, GAIN_3k, GAIN_30k, GAIN_300k, GAIN_3M, GAIN_30M = '100', '3k', '30k', '300k', '3M', '30M'
     CV, CA = 'Voltammetry', 'Chronoamperometry'
     SINGLE, DUAL = 'Single Mode', 'Dual Mode'
+    CATHODIC, ANODIC = 'cathodic', 'anodic'
     #Attributes
     gain = GAIN_30k
     v1_start, v1_floor, v1_ceiling = 0.2, 0.1, 0.3
     v2_start = 0.2
     technique = CV
+    sweep = CATHODIC
     mode = SINGLE
+    segments = 3
     
     def __init__(self):
-        super().__init__()
-    
-    def transfer_data(self):
         pass
+    
+    def __conditions_error_handling(self):
+
+        if self.v1_floor > self.v1_ceiling:
+            raise UnacceptedParameter('Voltage Floor should be lower than ceiling')
+        
+        if self.v1_start >= self.v1_ceiling and self.sweep is self.ANODIC:
+            raise UnacceptedParameter('Anodic sweep will not meet bounds')
+        
+        if BipotSettings.v1_start <= BipotSettings.v1_floor and sweep is self.CATHODIC:
+            raise UnacceptedParameter('Cathodic sweep will not meet bounds')
+        
+        if int(self.segments) < 1:
+            raise UnacceptedParameter('Number of segments needs to be bigger than zero')
+        
+    
+    def validate_conditions(self):
+        self.__conditions_error_handling()
 pass
 
 #WARNING: Obsolete function
@@ -85,7 +111,6 @@ rawHexString_to_int('800000', bits=24)
 raw_to_Volts('800000', pga=2, v_ref=1.5)
 raw_to_Current('800001', pga=2, muxGain=3E3, v_ref=1.5)
 raw_to_Current('7FFFFF', pga=2, muxGain=3E3, v_ref=1.5)
-current_to_raw(0.0005, pga=2, muxGain=3000, v_ref=1.5)
 
 
 #-----------------------------#
@@ -104,3 +129,5 @@ def current_to_raw(current, pga=2, muxGain=3000, v_ref=1.5):
     volts = current * muxGain
     return volts_to_raw(volts, pga, v_ref), volts
 
+
+current_to_raw(0.0005, pga=2, muxGain=3000, v_ref=1.5)
