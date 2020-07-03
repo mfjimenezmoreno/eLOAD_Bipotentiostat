@@ -13,6 +13,7 @@ class BipotSettings:
     SINGLE, DUAL = 'Single Mode', 'Dual Mode'
     CATHODIC, ANODIC = 'cathodic', 'anodic'
     #Attributes
+    running = False
     gain = GAIN_30k
     v1_start, v1_floor, v1_ceiling = 0.2, 0.1, 0.3
     v2_start = 0.2
@@ -20,6 +21,7 @@ class BipotSettings:
     sweep = CATHODIC
     mode = SINGLE
     segments = 3
+    scan_rate = 100
     
     def __init__(self):
         pass
@@ -41,6 +43,33 @@ class BipotSettings:
     
     def validate_conditions(self):
         self.__conditions_error_handling()
+        
+    
+    def return_cell_conditions(self):
+        """Returns a message with cel conditions and estimated experimental time"""
+        message = str()
+        experiment_time = 0
+        time = str()
+        
+        experiment_time = (self.segments-1) * 1000*(self.v1_ceiling-self.v1_floor)/self.scan_rate
+        if self.sweep is self.ANODIC:
+            experiment_time += 1000 * (self.v1_ceiling-self.v1_start)/self.scan_rate
+        else:
+            experiment_time += 1000 * (self.v1_start-self.v1_floor)/self.scan_rate
+        
+        if experiment_time > 300:
+            time = str(experiment_time/60) + ' minutes'
+        else:
+            time = str(experiment_time) + ' seconds'
+        
+        message += "Cyclic Volametry: " + self.mode + "\n"
+        message += "Voltage Window: " + str(self.v1_floor) + " - " + str(self.v1_ceiling) + " volts\n"
+        message += "Voltage Start: " + str(self.v1_start) + " volts\n"
+        message += "Scan start: " + str(self.sweep) + " direction\n"
+        message += "Voltage scan: " + str(self.scan_rate) + "mV/s\n"
+        message += "Segments: " + str(self.segments) + "\n"
+        message += "Estimated time: " + time + "\n"
+        return message
 pass
 
 #WARNING: Obsolete function

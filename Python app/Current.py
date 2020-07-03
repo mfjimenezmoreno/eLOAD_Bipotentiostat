@@ -40,11 +40,11 @@ v_ref = 1.5         #The reference voltage
 """Test data"""
 CV = pd.read_csv(r'Cap.csv')
 CV.columns = ['Voltage', 'Current']
-source = ColumnDataSource(data=CV)
+#source = ColumnDataSource(data=CV)
 
 """Widgets configuration"""
 Gain = Select(title="Gain", options=['100', '3k', '30k', '300k', '3M', '30M'],
-              value='30k', max_width=160)
+              value='30k', max_width=105)
 Connect = Button(label='Connect', width=320)
 Random_test = Button(label='Random', button_type='warning', width=320)
 Start = Button(label='Start', button_type='success', width=320)
@@ -54,7 +54,8 @@ Voltage_Start = Slider(start=-1.5, end=1.5, value=0.2,
                        step=0.01, title='Voltage Start')
 Sweep_direction = RadioButtonGroup(name='Sweep Direction',
                                    labels=['Cathodic', 'Anodic'], active=0)
-Segments = TextInput(title='Sweep Segments:', value='3', max_width=160)
+Scan_rate = TextInput(title='Scan rate (mV/s):', value='100', max_width=105)
+Segments = TextInput(title='Sweep Segments:', value='3', max_width=105)
 Comm_Status_Message = Paragraph(text="Status: Connected", width=160)
 Port_input = TextInput(title='Port:', value='COM13', width=160)
 Save = Button(label='Save', button_type='warning', width=320)
@@ -122,8 +123,6 @@ plot_raw.axis.major_tick_in = 0
 plot_raw.circle(source=source, x='time', y='raw_data', alpha=0.2, size=10,
                 line_width=3, color='#FF0000')
 
-#NOTE Standard plotting.
-#TODO Beautify in the future
 #TODO Consider exportig this file into an HTML, which may be edditable as standalone
 
 plot_current = figure(title='Current',
@@ -196,6 +195,8 @@ def acquire_data_fake_2(t):
         if index_high >= len(CV['Current']):
             doc.remove_periodic_callback(callback_acquire_data_fake)
             doc.remove_periodic_callback(callback_update_plot)
+            bipot.running = False
+            
 
 #TODO Adjust this code for eLoaD generated data
 @gen.coroutine
@@ -236,9 +237,9 @@ callback_Save = CustomJS(args=dict(source=source), code="""
         const nrows = source.get_length();          //How to obtain length...of data I guess
         const lines = [columns.join(',')];
 
-        for(let i = 0; i < nrows; i++){
+        for(let i = 0; i <br nrows; i++){
             let row = [];
-            for(let j = 0; j < columns.length; j++){
+            for(let j = 0; j <br columns.length; j++){
                 const column = columns[j];
                 row.push(source.data[column][i].toString());
             }
@@ -275,10 +276,11 @@ def callback_Start(new):
     else:
         print("eLoad is connected")
         Start.label = "Stop"
+    update_message_output(bipot.return_cell_conditions())
     
 
-def callback_Random():
-    """For random stuff"""
+def callback_Random_1():
+    """For random stuff: Invert Status"""
     global eLoaD_Connection
     
     if eLoaD_Connection is True:
@@ -289,11 +291,48 @@ def callback_Random():
         eLoaD_Connection = True
     print(eLoaD_Connection)
 
+def callback_Random_2():
+    global callback_update_plot
+    global callback_acquire_data_fake
+    #Clean plot
+    
+    if bipot.running is False:
+        reset_plot()
+        callback_update_plot = doc.add_periodic_callback(update_plot, 1000)
+        callback_acquire_data_fake = doc.add_periodic_callback(
+            acquire_data_fake_2, 100)
+        bipot.running = True
+        
+    else:
+        doc.remove_periodic_callback(callback_update_plot)
+        doc.remove_periodic_callback(callback_acquire_data_fake)
+        bipot.running = False
+
+
+def callback_Random_3():
+    update_message_output('Martin','Roberto','Braulio')
+
+def reset_plot():
+    source.data = {'time':[], 'raw_data':[]}
+
+
+def update_message_output(*args):
+    """Updates message output panel with information of interest as passed by args.
+    Such panel will provide information as errors, cell conditions, etc."""
+    message = str()
+    for text in args:
+        message += text
+        message += '\n'
+    Message_Output.text = message
+
+
 """Callback Assignments"""
+callback_update_plot = None
+callback_acquire_data_fake = None
 Connect.on_click(callback_Connect_to_eLoaD)
 Save.js_on_click(callback_Save)
 Start.on_click(callback_Start)
-Random_test.on_click(callback_Random)
+Random_test.on_click(callback_Random_3)
 
 #---------------------------#
 #    Callbacks (Threads)    #
@@ -321,15 +360,16 @@ def update_plot():
 #-----------#
 """Front End"""
 Comm_Panel = row(Port_input, Comm_Status_Message)
-GainandSegment = row(Gain, Segments)
+GainandSegment = row(Gain, Segments, Scan_rate)
 Voltage = column(GainandSegment, Voltage_Start, Voltage_Window, Sweep_direction, Message_Output )
 #Panel = row(column(Comm_Panel, Connect, Gain, Voltage, Start, Save),plot_raw)
 Panel = row(column(Comm_Panel, Connect, Voltage, Start,
                    Save, Random_test), plot_raw, plot_current, Table)
 
+#callback_update_plot = doc.add_periodic_callback(update_plot, 1000)
+#callback_acquire_data_fake = doc.add_periodic_callback(
+#    acquire_data_fake_2, 100)
 
-callback_update_plot = doc.add_periodic_callback(update_plot,1000)
-callback_acquire_data_fake = doc.add_periodic_callback(acquire_data_fake_2,100)
 doc.add_root(Panel)
 
 
@@ -340,6 +380,7 @@ doc.add_root(Panel)
     #DONE Solved callback for eLoaD connectivity
     #DONE Plot corruption was due to duplicate streamming
     #DONE Make plot cute
+    #DONE Learned how to appropiately remove callbacks
     
     #RESEARCH I THINK that the reason eLoaD doesn't read correctly, is because i don't assign ALNn to
     #the  AINCOM (1.5), don't forget this is a differential readout.
