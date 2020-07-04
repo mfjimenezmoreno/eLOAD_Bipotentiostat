@@ -326,6 +326,33 @@ def update_message_output(*args):
     Message_Output.text = message
 
 
+def update_gain(attr, old, new):
+    bipot.gain = new
+
+
+def update_scan_rate(attr, old, new):
+    bipot.scan_rate = int(new)
+
+
+def update_segments(attr, old, new):
+    bipot.segments = int(new)
+
+def update_v1_start(attr, old, new):
+    bipot.v1_start = float(new)
+
+
+def update_v1_window(attr, old, new):
+    bipot.v1_floor= round(float(new[0]), 2)
+    bipot.v1_ceiling = round(float(new[1]), 2)
+
+
+def update_sweep(attr, old, new):
+    if new is 0:
+        bipot.sweep = "cathodic"
+    elif new is 1:
+        bipot.sweep = "anodic"
+
+
 """Callback Assignments"""
 callback_update_plot = None
 callback_acquire_data_fake = None
@@ -333,6 +360,12 @@ Connect.on_click(callback_Connect_to_eLoaD)
 Save.js_on_click(callback_Save)
 Start.on_click(callback_Start)
 Random_test.on_click(callback_Random_3)
+Gain.on_change('value', update_gain)
+Scan_rate.on_change('value', update_scan_rate)
+Segments.on_change('value', update_segments)
+Voltage_Start.on_change('value', update_v1_start)
+Voltage_Window.on_change('value', update_v1_window)
+Sweep_direction.on_change('active', update_sweep)
 
 #---------------------------#
 #    Callbacks (Threads)    #

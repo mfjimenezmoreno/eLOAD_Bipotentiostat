@@ -11,7 +11,7 @@ class BipotSettings:
     GAIN_100, GAIN_3k, GAIN_30k, GAIN_300k, GAIN_3M, GAIN_30M = '100', '3k', '30k', '300k', '3M', '30M'
     CV, CA = 'Voltammetry', 'Chronoamperometry'
     SINGLE, DUAL = 'Single Mode', 'Dual Mode'
-    CATHODIC, ANODIC = 'cathodic', 'anodic'
+    CATHODIC, ANODIC = 'Cathodic', 'Anodic'
     #Attributes
     running = False
     gain = GAIN_30k
@@ -58,15 +58,15 @@ class BipotSettings:
             experiment_time += 1000 * (self.v1_start-self.v1_floor)/self.scan_rate
         
         if experiment_time > 300:
-            time = str(experiment_time/60) + ' minutes'
+            time = str(round(experiment_time/60, 2)) + ' minutes'
         else:
-            time = str(experiment_time) + ' seconds'
+            time = str(round(experiment_time)) + ' seconds'
         
         message += "Cyclic Volametry: " + self.mode + "\n"
         message += "Voltage Window: " + str(self.v1_floor) + " - " + str(self.v1_ceiling) + " volts\n"
         message += "Voltage Start: " + str(self.v1_start) + " volts\n"
         message += "Scan start: " + str(self.sweep) + " direction\n"
-        message += "Voltage scan: " + str(self.scan_rate) + "mV/s\n"
+        message += "Voltage scan: " + str(self.scan_rate) + " mV/s\n"
         message += "Segments: " + str(self.segments) + "\n"
         message += "Estimated time: " + time + "\n"
         return message
