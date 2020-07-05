@@ -13,28 +13,30 @@ class BipotSettings:
     SINGLE, DUAL = 'Single Mode', 'Dual Mode'
     CATHODIC, ANODIC = 'Cathodic', 'Anodic'
     #Attributes
-    running = False
-    gain = GAIN_30k
-    v1_start, v1_floor, v1_ceiling = 0.2, 0.1, 0.3
-    v2_start = 0.2
-    technique = CV
-    sweep = CATHODIC
-    mode = SINGLE
-    segments = 3
-    scan_rate = 100
+
     
     def __init__(self):
-        pass
+        self.running = False
+        self.gain = self.GAIN_30k
+        self.v1_start, self.v1_floor, self.v1_ceiling = 0.2, 0.1, 0.3
+        self.v2_start = 0.2
+        self.technique = self.CV
+        self.sweep = self.CATHODIC
+        self.mode = self.SINGLE
+        self.segments = 3
+        self.scan_rate = 100
     
     def __conditions_error_handling(self):
-
-        if self.v1_floor > self.v1_ceiling:
-            raise UnacceptedParameter('Voltage Floor should be lower than ceiling')
         
-        if self.v1_start >= self.v1_ceiling and self.sweep is self.ANODIC:
+        if self.v1_floor > self.v1_ceiling:
+            raise UnacceptedParameter(
+                'Voltage Floor should be lower than ceiling')
+        
+        if self.v1_start >= self.v1_ceiling and self.sweep == self.ANODIC:
+            print("HOLA")
             raise UnacceptedParameter('Anodic sweep will not meet bounds')
         
-        if BipotSettings.v1_start <= BipotSettings.v1_floor and sweep is self.CATHODIC:
+        if self.v1_start <= self.v1_floor and self.sweep == self.CATHODIC:
             raise UnacceptedParameter('Cathodic sweep will not meet bounds')
         
         if int(self.segments) < 1:
@@ -61,14 +63,19 @@ class BipotSettings:
             time = str(round(experiment_time/60, 2)) + ' minutes'
         else:
             time = str(round(experiment_time)) + ' seconds'
-        
-        message += "Cyclic Volametry: " + self.mode + "\n"
-        message += "Voltage Window: " + str(self.v1_floor) + " - " + str(self.v1_ceiling) + " volts\n"
-        message += "Voltage Start: " + str(self.v1_start) + " volts\n"
-        message += "Scan start: " + str(self.sweep) + " direction\n"
-        message += "Voltage scan: " + str(self.scan_rate) + " mV/s\n"
-        message += "Segments: " + str(self.segments) + "\n"
-        message += "Estimated time: " + time + "\n"
+
+        message += "<b style='color:#ff1744'>Cyclic Voltametry: </b>" + self.mode + "</br>"
+        message += '<b style="color:#000000">Voltage Window: </b>' + \
+            str(self.v1_floor) + " - " + str(self.v1_ceiling) + " volts</br>"
+        message += "<b style='color:#000000'>Voltage Start: </b>" + \
+            str(self.v1_start) + " volts</br>"
+        message += "<b style='color:#000000'>Scan start: </b>" + \
+            str(self.sweep) + " direction</br>"
+        message += "<b style='color:#000000'>Voltage scan: </b>" + \
+            str(self.scan_rate) + " mV/s</br>"
+        message += "<b style='color:#000000'>Segments: </b>" + \
+            str(self.segments) + "</br>"
+        message += "<b style='color:#000000'>Estimated time: </b>" + time + "</br>"
         return message
 pass
 
