@@ -19,7 +19,7 @@ class BipotSettings:
         self.running = False
         self.gain = self.GAIN_30k
         self.v1_start, self.v1_floor, self.v1_ceiling = 0.2, 0.1, 0.3
-        self.v2_start = 0.2
+        self.v2 = 0.2
         self.technique = self.CV
         self.sweep = self.CATHODIC
         self.mode = self.SINGLE
@@ -34,14 +34,20 @@ class BipotSettings:
         
         if self.v1_start >= self.v1_ceiling and self.sweep == self.ANODIC:
             print("HOLA")
-            raise UnacceptedParameter('Anodic sweep will not meet bounds')
+            raise UnacceptedParameter(
+                'Anodic sweep will not meet bounds')
         
         if self.v1_start <= self.v1_floor and self.sweep == self.CATHODIC:
-            raise UnacceptedParameter('Cathodic sweep will not meet bounds')
+            raise UnacceptedParameter(
+                'Cathodic sweep will not meet bounds')
         
         if int(self.segments) < 1:
-            raise UnacceptedParameter('Number of segments needs to be bigger than zero')
+            raise UnacceptedParameter(
+                'Number of segments needs to be bigger than zero')
         
+        if int(self.scan_rate) <= 0:
+            raise UnacceptedParameter(
+                'Scan rate should be bigger than zero')
     
     def validate_conditions(self):
         self.__conditions_error_handling()

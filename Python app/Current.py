@@ -27,6 +27,8 @@ doc = curdoc()
 executor = ThreadPoolExecutor(max_workers=3)
 
 """Global Variables"""
+#NOTE: Might require to delete some of these, as now bipot oject handles cell parameters
+
 bipot = BipotSettings()
 eLoaD_Connection = False    #Used as a global flag, act according eLoaD connection
 eLoaD_COM = 'COM13'         #Stores the serial port
@@ -52,18 +54,22 @@ Voltage_Window = RangeSlider(start=-1.5, end=1.5, value=(0.1,0.3),
                              step=0.01, title="Voltage Window", bar_color='#f44336')
 Voltage_Start = Slider(start=-1.5, end=1.5, value=0.2,
                        step=0.01, title='Voltage Start')
+Voltage_WE2 = Slider(start=-1.5, end=1.5, value=0.2,
+                       step=0.01, title='Voltage Working Electrode 2', visible=False)
 Sweep_direction = RadioButtonGroup(name='Sweep Direction',
                                    labels=['Cathodic', 'Anodic'], active=0)
+Voltammetry_Mode = RadioButtonGroup(name='CV Mode',
+                                    labels=['Single Mode', 'Dual Mode'], active=0)
 Scan_rate = TextInput(title='Scan rate (mV/s):', value='100', max_width=105)
 Segments = TextInput(title='Sweep Segments:', value='3', max_width=105)
 Comm_Status_Message = Paragraph(text="Status: Connected", width=160)
 Port_input = TextInput(title='Port:', value='COM13', width=160)
 Save = Button(label='Save', button_type='warning', width=320)
-Message_Output = Div(width=320, height = 200, text="Cyclic Voltammetry GUI",
+Message_Output = Div(width=320, height = 160, text="Cyclic Voltammetry GUI",
                      background='#eceff1', css_classes=["Style.css"],
                      style={'color': '#263238', 'font-family': 'Arial', 'padding': '20px',
                                 'font-weight':'300','word-break':'break-word',
-                                'border': 'border: 4px outset #263238', 'border-radius': '6px',
+                                'border': 'border: 4px solid #263238', 'border-radius': '6px',
                                 'word-break': 'break-word'})
 #----------------------------#
 #    Figure Configuration    #
@@ -140,8 +146,6 @@ plot_current.line(source=source, x='time', y='raw_data', alpha=0.2,
 #    Callbacks (GUI related)    #
 #-------------------------------#
 #Callbacks related to buttons
-
-
 
 def callback_Connect_to_eLoaD():
     """Connects to eLoaD. Check the Written port and attempts to connect"""
@@ -283,7 +287,9 @@ def callback_Start(new):
         bipot.validate_conditions()
     except UnacceptedParameter as error:
         print(error)
-        update_message_output(str(error)[1:-1])
+        update_message_output(
+            '<b style="color:#ff1744">Cell parameter error: </b>',
+            str(error)[1:-1])
     else:
         update_message_output(bipot.return_cell_conditions())
     
@@ -346,8 +352,13 @@ def update_scan_rate(attr, old, new):
 def update_segments(attr, old, new):
     bipot.segments = int(new)
 
+
 def update_v1_start(attr, old, new):
     bipot.v1_start = round(float(new), 2)
+
+
+def update_v2(attr, old, new):
+    bipot.v2 = round(float(new), 2)
 
 
 def update_v1_window(attr, old, new):
@@ -362,6 +373,14 @@ def update_sweep(attr, old, new):
         bipot.sweep = "Anodic"
 
 
+def update_voltammetry_mode(attr, old, new):
+    if new is 0:
+        bipot.mode = bipot.SINGLE
+        Voltage_WE2.visible = False
+    elif new is 1:
+        bipot.mode = bipot.DUAL
+        Voltage_WE2.visible = True
+
 """Callback Assignments"""
 callback_update_plot = None
 callback_acquire_data_fake = None
@@ -373,8 +392,10 @@ Gain.on_change('value', update_gain)
 Scan_rate.on_change('value', update_scan_rate)
 Segments.on_change('value', update_segments)
 Voltage_Start.on_change('value', update_v1_start)
+Voltage_WE2.on_change('value', update_v2)
 Voltage_Window.on_change('value', update_v1_window)
 Sweep_direction.on_change('active', update_sweep)
+Voltammetry_Mode.on_change('active', update_voltammetry_mode)
 
 #---------------------------#
 #    Callbacks (Threads)    #
@@ -403,9 +424,10 @@ def update_plot():
 """Front End"""
 Comm_Panel = row(Port_input, Comm_Status_Message)
 GainandSegment = row(Gain, Segments, Scan_rate)
-Voltage = column(GainandSegment, Voltage_Start, Voltage_Window, Sweep_direction, Message_Output )
+Voltage = column(GainandSegment, Voltage_Start, Voltage_WE2, Voltage_Window,
+                 Sweep_direction, Message_Output )
 #Panel = row(column(Comm_Panel, Connect, Gain, Voltage, Start, Save),plot_raw)
-Panel = row(column(Comm_Panel, Connect, Voltage, Start,
+Panel = row(column(Comm_Panel, Connect, Voltammetry_Mode ,Voltage, Start,
                    Save, Random_test), plot_raw, plot_current, Table)
 
 #callback_update_plot = doc.add_periodic_callback(update_plot, 1000)
@@ -423,6 +445,9 @@ doc.add_root(Panel)
     #DONE Plot corruption was due to duplicate streamming
     #DONE Make plot cute
     #DONE Learned how to appropiately remove callbacks
+    #DONE Error handling: check if cell parameters are right
+    #DONE Estimate cell experimental time
+    #DONE Cell information is printed
     
     #RESEARCH I THINK that the reason eLoaD doesn't read correctly, is because i don't assign ALNn to
     #the  AINCOM (1.5), don't forget this is a differential readout.
