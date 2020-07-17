@@ -1,12 +1,18 @@
-# 1 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bluetooth_Test\\Test 2\\Arduino_BLE_test.ino"
-# 1 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bluetooth_Test\\Test 2\\Arduino_BLE_test.ino"
+#include <Arduino.h>
+#line 1 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bluetooth_Test\\Test 2\\Arduino_BLE_test.ino"
+#line 1 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bluetooth_Test\\Test 2\\Arduino_BLE_test.ino"
 //USB serial mirror
 //String class management
 
+#line 4 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bluetooth_Test\\Test 2\\Arduino_BLE_test.ino"
+void setup();
+#line 18 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bluetooth_Test\\Test 2\\Arduino_BLE_test.ino"
+void loop();
+#line 4 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bluetooth_Test\\Test 2\\Arduino_BLE_test.ino"
 void setup()
 {
     // initialize digital pin LED_BUILTIN as an output.
-    pinMode(13, 0x1);
+    pinMode(LED_BUILTIN, OUTPUT);
     //Serial.begin(9600);
     Serial1.begin(9600);
     Serial1.setTimeout(1000);
@@ -19,65 +25,36 @@ uint8_t x = 0;
 // the loop function runs over and over again forever
 void loop()
 {/*
-
     if(Serial.available()){
-
         digitalWrite(LED_BUILTIN, HIGH);
-
         readout = Serial.read();
-
         if(readout == 0x0A){            //When dot is read, data is sent and reset
-
             message.concat(readout);    //Concatenate end of line character
-
             Serial.print(message);
-
             Serial1.print((message));
-
             message = "";
-
         }
-
         else{
-
             message.concat(readout);
-
         }
-
     }
-
-
 
     if(Serial1.available())
-
     {
-
         readout1 = Serial1.read();
-
         if (readout1 == 0x0A)
-
         {                            //When dot is read, data is sent and reset
-
             message.concat(readout1); //Concatenate end of line character
-
             Serial.print((message1));
-
             message1 = "";
-
         }
-
         else
-
         {
-
             message.concat(readout1);
-
         }
-
     }
-
     digitalWrite(LED_BUILTIN, LOW);*/
-# 50 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bluetooth_Test\\Test 2\\Arduino_BLE_test.ino"
+
     if(Serial1.available()){
         //readout1 = Serial1.read();
         x++;
@@ -85,3 +62,4 @@ void loop()
         Serial1.println(x);
     }
 }
+

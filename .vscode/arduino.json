@@ -1,7 +1,7 @@
 {
     "programmer": "ArduinoISP",
-    "board": "arduino:avr:uno",
-    "port": "COM19",
-    "sketch": "Test_1_Constant_Voltage.ino",
+    "board": "arduino:avr:micro",
+    "port": "COM13",
+    "sketch": "Bluetooth_Test\\Test 2\\Arduino_BLE_test.ino",
     "output": "build"
 }

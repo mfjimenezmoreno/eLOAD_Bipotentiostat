@@ -1,0 +1,5 @@
+{
+    "sketch": "BareMinimum.ino",
+    "port": "COM12",
+    "board": "arduino:avr:micro"
+}

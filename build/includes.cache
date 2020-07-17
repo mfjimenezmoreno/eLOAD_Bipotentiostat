@@ -7,60 +7,10 @@
   {
     "Sourcefile": "",
     "Include": "",
-    "Includepath": "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\variants\\standard"
+    "Includepath": "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\variants\\micro"
   },
   {
-    "Sourcefile": "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\build\\sketch\\Bipotentiostat_Main_v2.ino.cpp",
-    "Include": "SPI.h",
-    "Includepath": "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\libraries\\SPI\\src"
-  },
-  {
-    "Sourcefile": "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\build\\sketch\\Bipotentiostat_Main_v2.ino.cpp",
-    "Include": "SD.h",
-    "Includepath": "C:\\Program Files (x86)\\Arduino\\libraries\\SD\\src"
-  },
-  {
-    "Sourcefile": "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\build\\sketch\\Bipotentiostat_Main_v2.ino.cpp",
-    "Include": "",
-    "Includepath": ""
-  },
-  {
-    "Sourcefile": "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\build\\sketch\\ADS1255.cpp",
-    "Include": "",
-    "Includepath": ""
-  },
-  {
-    "Sourcefile": "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\build\\sketch\\MAX5443.cpp",
-    "Include": "",
-    "Includepath": ""
-  },
-  {
-    "Sourcefile": "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\libraries\\SPI\\src\\SPI.cpp",
-    "Include": "",
-    "Includepath": ""
-  },
-  {
-    "Sourcefile": "C:\\Program Files (x86)\\Arduino\\libraries\\SD\\src\\File.cpp",
-    "Include": "",
-    "Includepath": ""
-  },
-  {
-    "Sourcefile": "C:\\Program Files (x86)\\Arduino\\libraries\\SD\\src\\SD.cpp",
-    "Include": "",
-    "Includepath": ""
-  },
-  {
-    "Sourcefile": "C:\\Program Files (x86)\\Arduino\\libraries\\SD\\src\\utility\\Sd2Card.cpp",
-    "Include": "",
-    "Includepath": ""
-  },
-  {
-    "Sourcefile": "C:\\Program Files (x86)\\Arduino\\libraries\\SD\\src\\utility\\SdFile.cpp",
-    "Include": "",
-    "Includepath": ""
-  },
-  {
-    "Sourcefile": "C:\\Program Files (x86)\\Arduino\\libraries\\SD\\src\\utility\\SdVolume.cpp",
+    "Sourcefile": "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\build\\sketch\\Arduino_BLE_test.ino.cpp",
     "Include": "",
     "Includepath": ""
   }

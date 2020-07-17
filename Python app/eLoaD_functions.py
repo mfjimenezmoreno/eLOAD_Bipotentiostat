@@ -6,7 +6,10 @@ class UnacceptedParameter(Exception):
     def __str__(self):
         return repr(self.data)
 
-class BipotSettings:
+from importlib import import_module
+
+class BipotSettings(object):
+    
     #Constants
     GAIN_100, GAIN_3k, GAIN_30k, GAIN_300k, GAIN_3M, GAIN_30M = '100', '3k', '30k', '300k', '3M', '30M'
     CV, CA = 'Voltammetry', 'Chronoamperometry'
@@ -25,6 +28,12 @@ class BipotSettings:
         self.mode = self.SINGLE
         self.segments = 3
         self.scan_rate = 100
+        self.serial = import_module('serial')
+        self.eload = self.serial.Serial()
+        self.eload_connected = False    #A flag to state connectivity status
+        self.eload_port = None  #The port (e.g. "COM13")
+        self.eload.baudrate = 9600
+        self.eload.timeout = 1
     
     def __conditions_error_handling(self):
         
@@ -83,6 +92,38 @@ class BipotSettings:
             str(self.segments) + "</br>"
         message += "<b style='color:#000000'>Estimated time: </b>" + time + "</br>"
         return message
+    
+    def serial_connect(self, port="COM13"):
+        self.eload_port = port
+        #try:
+            #self.eload.serial.
+        pass
+    
+    
+    def transfer_settings(self):
+        """GUI cell settings are sent to the eLoaD
+        To know the string structure, check the attribute and constant sections"""
+        
+        #WARNING Maybe I should put this into the error handler?
+        #Check if eLOAD is connected, then send information regarding technique
+        if self.serial_connect() == False:
+            raise IOError("Not connected to eLOAD")
+            return
+        
+        message = []
+        message.append("T" + self.technique)
+        message.append("M" + self.mode)
+        if self.mode == self.DUAL:
+            message.append("V2" + str(self.v2))
+        message.append("VL" + str(self.v1_floor))
+        message.append("VH" + str(self.v1_ceiling))
+        message.append("VS" + str(self.v1_start))
+        message.append("SD" + self.sweep)
+        message.append("VL" + str(self.v1_ceiling))
+        message.append("SR" + str(self.scan_rate))
+        message.append("SE" + str(self.segments))
+        #Trnafer Data
+    
 pass
 
 #WARNING: Obsolete function
