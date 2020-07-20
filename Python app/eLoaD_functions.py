@@ -8,7 +8,13 @@ class UnacceptedParameter(Exception):
 
 from importlib import import_module
 
+import pygatt
+import time
+
 class BipotSettings(object):
+    
+    from binascii import hexlify
+    import pygatt
     
     #Constants
     GAIN_100, GAIN_3k, GAIN_30k, GAIN_300k, GAIN_3M, GAIN_30M = '100', '3k', '30k', '300k', '3M', '30M'
@@ -122,9 +128,38 @@ class BipotSettings(object):
         message.append("VL" + str(self.v1_ceiling))
         message.append("SR" + str(self.scan_rate))
         message.append("SE" + str(self.segments))
-        #Trnafer Data
+        #Transfer Data
     
-pass
+class BLE(object):
+    """
+    Handles Bluetooth LE related tasks
+    """
+    def __init__(self, port):
+        self.port = port
+        self.dongle = self.pygatt.BGAPIBackend(serial_port=self.port)
+    
+    def bt_connect(self):
+        pass
+
+#class BLE2(pygatt.BGAPIBackend):
+#    def _init_(self):
+#        super()._init_()
+#    
+#    def connect_eLoaD(self, serialport, MAC_address):
+#        self.port = serialport
+#        try:
+#            super().start()
+#            time.sleep(5)
+#            self.device = super().connect(MAC_address)
+#            time.sleep(5)
+#    
+#    def disconnect_eLoaD(self):
+#        self.device.disconnect()
+#        time.sleep(5)
+#        super().stop()
+#    
+#    pass
+
 
 #WARNING: Obsolete function
 def rollDict(new_data, object, rollover):

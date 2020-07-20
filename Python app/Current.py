@@ -16,6 +16,10 @@ import serial
 import time
 from eLoaD_functions import clear_dict, BipotSettings, UnacceptedParameter
 
+from binascii import hexlify
+import pygatt
+import time
+#import logging
 #----------------------#
 #    Initialization    #
 #----------------------#
@@ -31,13 +35,17 @@ executor = ThreadPoolExecutor(max_workers=3)
 
 bipot = BipotSettings()
 eLoaD_Connection = False    #Used as a global flag, act according eLoaD connection
-eLoaD_COM = 'COM13'         #Stores the serial port
-eLoaD = serial.Serial()
-eLoaD.baudrate = 9600
-eLoaD.timeout = 1
+eLoaD_COM = 'COM15'         #Stores the serial port
+#eLoaD = serial.Serial()
+#eLoaD.baudrate = 9600
+#eLoaD.timeout = 1
+BLEdongle = None    #Reserved to BLE dongle
+eLoaD = None        #Reserved to open BLE port
 mux_gain = 3E3      #For storing transimpedance gain as chosen by MUX
 pga_value = 2.0     #The gain as specified by ADC's datasheet
 v_ref = 1.5         #The reference voltage
+MACADDRESS = "7c:ec:79:69:62:f8"  #HMSoft address
+SERVICE = "0000ffe1-0000-1000-8000-00805f9b34fb" #Custom UUID
 
 """Test data"""
 CV = pd.read_csv(r'Cap.csv')
@@ -62,8 +70,8 @@ Voltammetry_Mode = RadioButtonGroup(name='CV Mode',
                                     labels=['Single Mode', 'Dual Mode'], active=0)
 Scan_rate = TextInput(title='Scan rate (mV/s):', value='100', max_width=105)
 Segments = TextInput(title='Sweep Segments:', value='3', max_width=105)
-Comm_Status_Message = Paragraph(text="Status: Connected", width=160)
-Port_input = TextInput(title='Port:', value='COM13', width=160)
+Comm_Status_Message = Paragraph(text="Status: Not connected", width=160)
+Port_input = TextInput(title='Port:', value='COM15', width=160)
 Save = Button(label='Save', button_type='warning', width=320)
 Message_Output = Div(width=320, height = 160, text="Cyclic Voltammetry GUI",
                      background='#eceff1', css_classes=["Style.css"],
@@ -174,6 +182,43 @@ def callback_Connect_to_eLoaD():
         Comm_Status_Message.text = "Status: Port not found"
         return False
 
+
+def callback_Connect_eLoaD_BLE():
+    """Connects to dongle and BLE"""
+    #NOTE: If eLoaD BLE is not found, disconnects automatically from dongle.
+    #However, it may fail to reconnect to the dongle. It is advised to
+    # restart app again.
+    
+    global dongle
+    global eLoaD
+    global eLoaD_Connection
+    
+    
+    if eLoaD_Connection == False:
+        dongle = pygatt.BGAPIBackend(serial_port=Port_input.value)
+        try:
+            dongle.start()
+            time.sleep(1)
+            eLoaD = dongle.connect(MACADDRESS)
+            time.sleep(1)
+        except:
+            update_message_output(
+                '<b style="color:#ff1744">Error to perform BLE connection </b>')
+            message = "Status: Not connected"
+            dongle.stop()
+            eLoaD_Connection = False
+        else:
+            update_message_output(
+                '<b style="color:#03A9F4">Succesful BLE connection </b>')
+            message = "Status: Not connected"
+            message = "Status: Connected"
+            eLoaD_Connection = True
+        finally:
+            Comm_Status_Message.text = message
+    elif eLoaD_Connection == True:
+        #Do nothing
+        pass
+        
 
 #This has priority, locked task
 @gen.coroutine
@@ -384,7 +429,7 @@ def update_voltammetry_mode(attr, old, new):
 """Callback Assignments"""
 callback_update_plot = None
 callback_acquire_data_fake = None
-Connect.on_click(callback_Connect_to_eLoaD)
+Connect.on_click(callback_Connect_eLoaD_BLE)
 Save.js_on_click(callback_Save)
 Start.on_click(callback_Start)
 Random_test.on_click(callback_Random_3)
