@@ -80,8 +80,8 @@ void loop()
     for (int i = 0; i < elements; i++)
     {
         t[i] = i * incr_rad;
-        x[i] = uint8_t(round(100.0 * (cos(t[i]) + 1.0)));
-        y[i] = uint8_t(round(100.0 * (sin(t[i]) + 1.0)));
+        x[i] = uint8_t(round(100.0 * (cos(2*t[i]) + 1.0)));
+        y[i] = uint8_t(round(100.0 * (sin(3*t[i]) + 1.0)));
     }
     uint8_t iterator = 0;
 

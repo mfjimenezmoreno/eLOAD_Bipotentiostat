@@ -175,6 +175,26 @@ def clear_dict(object):
     for key in object.keys():
         object[key].clear()
 
+
+def byte2int(handle, bytevalue):
+    """
+    handle -- integer, characteristic read handle the data was received on
+    value -- bytearray, the data returned in the notification
+    returns -- list of integers
+    """
+    from binascii import hexlify
+    
+    data = hexlify(bytevalue)
+    #Stores the number of bytes sent by user...
+    databytes = len(bytevalue)
+    #...and use this info to slice and obtain decoded information
+    intvalue = []
+    for i in range(databytes):
+        x = int(data[2*i: 2*(i+1)], 16)
+        intvalue.append(x)
+    print(intvalue)
+    return intvalue
+
 def rawHexString_to_int(data='', bits=24):
     """Converts the as-received string into a number"""
     

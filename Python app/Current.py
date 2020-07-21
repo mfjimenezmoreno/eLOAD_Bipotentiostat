@@ -14,7 +14,7 @@ from tornado import gen
 from functools import partial
 import serial
 import time
-from eLoaD_functions import clear_dict, BipotSettings, UnacceptedParameter
+from eLoaD_functions import clear_dict, BipotSettings, UnacceptedParameter, byte2int
 
 from binascii import hexlify
 import pygatt
@@ -36,6 +36,7 @@ executor = ThreadPoolExecutor(max_workers=3)
 bipot = BipotSettings()
 eLoaD_Connection = False    #Used as a global flag, act according eLoaD connection
 eLoaD_COM = 'COM15'         #Stores the serial port
+ongoing_exp = False    #Stores if experiment is in process
 #eLoaD = serial.Serial()
 #eLoaD.baudrate = 9600
 #eLoaD.timeout = 1
@@ -45,7 +46,7 @@ mux_gain = 3E3      #For storing transimpedance gain as chosen by MUX
 pga_value = 2.0     #The gain as specified by ADC's datasheet
 v_ref = 1.5         #The reference voltage
 MACADDRESS = "7c:ec:79:69:62:f8"  #HMSoft address
-SERVICE = "0000ffe1-0000-1000-8000-00805f9b34fb" #Custom UUID
+SERVICE = "0000ffe1-0000-1000-8000-00805f9b34fb"  # Custom UUID
 
 """Test data"""
 CV = pd.read_csv(r'Cap.csv')
@@ -157,7 +158,7 @@ plot_current.line(source=source, x='time', y='raw_data', alpha=0.2,
 
 def callback_Connect_to_eLoaD():
     """Connects to eLoaD. Check the Written port and attempts to connect"""
-    #DONE Must verify port status, does it exist?
+    #WARNING: Deprecated. Now use callback_Connect_eLoaD_BLE
     
     global eLoaD_Connection
     global eLoaD_COM
@@ -218,7 +219,49 @@ def callback_Connect_eLoaD_BLE():
     elif eLoaD_Connection == True:
         #Do nothing
         pass
+
+
+
+def acquire_data_fake_4(handle, bytevalue):
+    """
+    handle -- integer, characteristic read handle the data was received on
+    value -- bytearray, the data returned in the notification
+    returns -- list of integers
+    """
+    data = hexlify(bytevalue)
+    #Stores the number of bytes sent by user...
+    databytes = len(bytevalue)
+    #...and use this info to slice and obtain decoded information
+    intvalue = []
+    for i in range(databytes):
+        temporary = int(data[2*i: 2*(i+1)], 16)
+        intvalue.append(temporary)
+    print(intvalue)
+    
+    global acquiredData
+    data = acquiredData
+
+    x, y = [intvalue[1]/100], [intvalue[2]/100]
+    
+    new = dict(timestamp=x, raw_data=y)
+    #We extend the new data into our acquiredData variable
+    for key, value in new.items():
+        acquiredData[key].extend(value)
+
         
+@gen.coroutine
+def acquire_data_fake_3(t):
+    """Testing routine: Acquires 3 byte array from eLoaD and plot"""
+    if ongoing_exp == False:
+        try:
+            eLoaD.subscribe(SERVICE, callback=byte2int)
+            ongoing_exp == True
+        except:
+            update_message_output(
+                '<b style="color:#ff1744">Subscription failed </b>')
+    else:
+        eLoaD.unsubscribe()
+        ongoing_exp == False
 
 #This has priority, locked task
 @gen.coroutine
@@ -239,14 +282,13 @@ def acquire_data_fake_2(t):
         #We extend the new data into our acquiredData variable
         for key, value in new.items():
             acquiredData[key].extend(value)
-    
+            
     except Exception:
         #Stop this stream if our appended fake data got all information from CV
         if index_high >= len(CV['Current']):
             doc.remove_periodic_callback(callback_acquire_data_fake)
             doc.remove_periodic_callback(callback_update_plot)
             bipot.running = False
-            
 
 #TODO Adjust this code for eLoaD generated data
 @gen.coroutine
@@ -341,6 +383,7 @@ def callback_Start(new):
 
 def callback_Random_1():
     """For random stuff: Invert Status"""
+    #WARNING: Deprecated
     global eLoaD_Connection
     
     if eLoaD_Connection is True:
@@ -372,6 +415,30 @@ def callback_Random_2():
 def callback_Random_3():
     update_message_output('Martin','Roberto','Braulio')
 
+
+def callback_Random_4():
+    """Testing routine: Acquires 3 byte array from eLoaD and plot"""
+    
+    global callback_update_plot
+    
+    if bipot.running == False:
+        try:
+            reset_plot()
+            callback_update_plot = doc.add_periodic_callback(update_plot, 1000)
+            eLoaD.subscribe(SERVICE, callback=acquire_data_fake_4)
+            print('Me he ejecutado, suscribe no congela esto')
+            bipot.running = True
+        except Exception as error:
+            update_message_output(
+                '<b style="color:#ff1744">Subscription failed: </b>', 
+                str(error)[1:-1])
+            
+    elif bipot.running == True:
+        eLoaD.unsubscribe(SERVICE)
+        doc.remove_periodic_callback(callback_update_plot)
+        bipot.running = False
+    print(bipot.running)
+    
 def reset_plot():
     source.data = {'time':[], 'raw_data':[]}
 
@@ -432,7 +499,7 @@ callback_acquire_data_fake = None
 Connect.on_click(callback_Connect_eLoaD_BLE)
 Save.js_on_click(callback_Save)
 Start.on_click(callback_Start)
-Random_test.on_click(callback_Random_3)
+Random_test.on_click(callback_Random_4)
 Gain.on_change('value', update_gain)
 Scan_rate.on_change('value', update_scan_rate)
 Segments.on_change('value', update_segments)
