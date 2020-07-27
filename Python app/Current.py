@@ -233,6 +233,7 @@ def acquire_data_fake_4(handle, bytevalue):
     databytes = len(bytevalue)
     #...and use this info to slice and obtain decoded information
     intvalue = []
+    #FIXME What is the length of data?
     for i in range(databytes):
         temporary = int(data[2*i: 2*(i+1)], 16)
         intvalue.append(temporary)
@@ -426,7 +427,6 @@ def callback_Random_4():
             reset_plot()
             callback_update_plot = doc.add_periodic_callback(update_plot, 1000)
             eLoaD.subscribe(SERVICE, callback=acquire_data_fake_4)
-            print('Me he ejecutado, suscribe no congela esto')
             bipot.running = True
         except Exception as error:
             update_message_output(
@@ -437,8 +437,34 @@ def callback_Random_4():
         eLoaD.unsubscribe(SERVICE)
         doc.remove_periodic_callback(callback_update_plot)
         bipot.running = False
-    print(bipot.running)
+
+def callback_acquire_single_CV():
+    """
+    Acquires cyclic voltammetry data from eLoaD in real time.
+    Data bytearray structure: Time, Voltage, Current (Hexadecimal)
+    """
+
+    #This is where the callback is stored, allowing to be removed out of current scope
+    global callback_update_plot
     
+    #Fresh start case: clean plot, add update callback, subscribe to BLE, signal
+    #experiment start, and change status
+    if bipot.running == False:
+        try:
+            reset_plot()
+            callback_update_plot = doc.add_periodic_callback(update_plot, 500)
+            eLoaD.subscribe(SERVICE, callback=acquire_single_mode_data)
+            bipot.running = True
+        except Exception as error:
+            update_message_output(
+                '<b style="color:#ff1744">Subscription failed: </b>',
+                str(error)[1:-1])
+
+    elif bipot.running == True:
+        eLoaD.unsubscribe(SERVICE)
+        doc.remove_periodic_callback(callback_update_plot)
+        bipot.running = False
+
 def reset_plot():
     source.data = {'time':[], 'raw_data':[]}
 

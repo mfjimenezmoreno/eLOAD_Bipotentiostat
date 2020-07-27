@@ -42,7 +42,7 @@
 
 const float Arduino_Frequency = 16E6;
 
-void T1_Frequency(float Frequency)
+void T1_Frequency(double Frequency)
 {   
     //Select the preescaler according to the expected Frequency
     //Considering the discrete nature of 16 bit timer, must be careful with the frequency selection
@@ -85,7 +85,6 @@ void T1_Frequency(float Frequency)
     //Determine the value of CTC register according to Preescaler
     CTC = int(round(Arduino_Frequency/Preescaler/Frequency));
     
-    
     /*Let's setup a 2 Hz timer*/
     TCNT1 = 0;                              //Initialize Timer
     OCR1A = CTC;                            //Set the compare register
@@ -93,13 +92,13 @@ void T1_Frequency(float Frequency)
     
 }
 
-T1_EN_IntCTC(void)
+void T1_EN_IntCTC(void)
 {
     //Enables the register: interrupt by compare match
     bitSet(TIMSK1, OCIE1A); //Enable interrupt by compare match
 }
 
-T1_DIS_IntCTC(void)
+void T1_DIS_IntCTC(void)
 {
     //Disables the register: interrupt by compare match
     bitClear(TIMSK1, OCIE1A); //Enable interrupt by compare match

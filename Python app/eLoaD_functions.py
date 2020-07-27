@@ -34,6 +34,7 @@ class BipotSettings(object):
         self.mode = self.SINGLE
         self.segments = 3
         self.scan_rate = 100
+        self.gain = self.GAIN_30k
         self.serial = import_module('serial')
         self.eload = self.serial.Serial()
         self.eload_connected = False    #A flag to state connectivity status
@@ -117,8 +118,8 @@ class BipotSettings(object):
             return
         
         message = []
-        message.append("T" + self.technique)
-        message.append("M" + self.mode)
+        message.append("TE" + self.technique)
+        message.append("MO" + self.mode)
         if self.mode == self.DUAL:
             message.append("V2" + str(self.v2))
         message.append("VL" + str(self.v1_floor))
@@ -128,6 +129,8 @@ class BipotSettings(object):
         message.append("VL" + str(self.v1_ceiling))
         message.append("SR" + str(self.scan_rate))
         message.append("SE" + str(self.segments))
+        #FIXME Handle gain as string, not number
+        message.append("GA" + str(self.gain))
         #Transfer Data
     
 class BLE(object):

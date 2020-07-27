@@ -49,16 +49,21 @@ void setup()
     digitalWrite(LED_BUILTIN, LOW);
     noInterrupts();
     /*Set up CTC mode by setting WGM bits in TCCR1X registers*/
+    /*
     TCCR1A = 0;                             //Normal operation of OCRA pin, WGM 0 and 1 are left in LOW
     TCCR1B = 0;                             //Ensure get rid of default settings.
     TCCR1B |= (1 << WGM12)|(1 << CS12);     //WGM 2 is set HIGH --> CTC mode, Preescaler to 256
+    */
     /*Let's setup a 2 Hz timer*/
+    /*
     TCNT1 = 0;                              //Initialize Timer
     OCR1A = 15624;
     TIFR1 = (1 << OCF1A);                    //Clear the compare flag
     TIMSK1 |= (1 << OCIE1A);                //Enable interrupt by compare match
-    interrupts();                           //Activate Global Interrupts
-    
+    */
+    T1_Frequency(20);
+    T1_EN_IntCTC();
+    interrupts(); //Activate Global Interrupts
 }
 
 ISR(TIMER1_COMPA_vect)

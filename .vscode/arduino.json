@@ -2,6 +2,6 @@
     "programmer": "ArduinoISP",
     "board": "arduino:avr:micro",
     "port": "COM13",
-    "sketch": "Bluetooth_Test\\Test 2\\Arduino_BLE_test.ino",
+    "sketch": "Bipot_Main_v01\\Bipotentiostat_Main_v2.ino",
     "output": "build"
 }
