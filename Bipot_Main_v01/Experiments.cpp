@@ -7,6 +7,161 @@
 /*************************/
 /*         Code          */
 /*************************/
+void update_parameters(cell_parameters &cell)
+{
+    /*
+    *cell: struct that contains cell parameters, to be updated by the function
+    returns: N/A
+    Updates the struct according to what is read from HM-11 (Serial1 port)
+    */
+    String buffer = Serial1.readStringUntil(',');
+    String attribute = buffer.substring(0, 2);
+    String parameter = buffer.substring(2);
+
+    if (attribute == "TE")
+    {
+        if (parameter == "CV")
+            cell.technique = Voltammetry;
+        else if (parameter == "CA")
+            cell.technique = Chronoamperometry;
+        else if (parameter == "?")
+        {
+            //If we didn't get parameter, return saved option
+            Serial1.print("Tech:");
+            Serial1.println(cell.technique);
+        }
+    }
+
+    else if (attribute == "MO")
+    {
+        if (parameter == "Single")
+            cell.mode = Single_Mode;
+        else if (parameter == "Dual")
+            cell.mode = Dual_Mode;
+        else if (parameter == "?")
+        {
+            //If we didn't get parameter, return saved option
+            Serial1.print("Mode:");
+            Serial1.println(cell.mode);
+        }
+    }
+
+    else if (attribute == "V2")
+    {
+        if (parameter == "?") {
+            Serial1.print("v2:");
+            Serial1.println(cell.v2);
+        }
+        else if (parameter.length() > 0)
+            cell.v2 = parameter.toInt();
+    }
+
+    else if (attribute == "VL")
+    {
+        if (parameter == "?") {
+            Serial1.print("vl:");
+            Serial1.println(cell.vl);
+        }
+        else if (parameter.length() > 0)
+            cell.vl = parameter.toInt();
+    }
+
+    else if (attribute == "VH")
+    {
+        if (parameter == "?") {
+            Serial1.print("vh:");
+            Serial1.println(cell.vh);
+        }
+        else if (parameter.length() > 0)
+            cell.vh = parameter.toInt();
+    }
+
+    else if (attribute == "VS")
+    {
+        if (parameter == "?") {
+            Serial1.print("vs:");
+            Serial1.println(cell.vs);
+        }
+        else if (parameter.length() > 0)
+            cell.vs = parameter.toInt();
+    }
+
+    else if (attribute == "SD")
+    {
+        if (parameter == "Anodic")
+            cell.sd = Anodic;
+        else if (parameter == "Cathodic")
+            cell.sd = Cathodic;
+        else if (parameter == "?")
+        {
+            //If we didn't get parameter, return saved option
+            Serial1.print("SDir:");
+            Serial1.println(cell.sd);
+        }
+    }
+
+    else if (attribute == "SR")
+    {
+        if (parameter == "?") {
+            Serial1.print("SRate:");
+            Serial1.println(cell.sr);
+        }
+        else if (parameter.length() > 0) {
+            cell.sr = parameter.toInt();
+            if(cell.sr <= 0){
+                cell.sr = 1;
+            }
+        }
+    }
+
+    else if (attribute == "SE")
+    {
+        if (parameter == "?") {
+            Serial1.print("Seg:");
+            Serial1.println(cell.se);
+        }
+        else if(parameter.length() > 0) {
+            cell.se = parameter.toInt();
+            if (cell.se == 0)
+            {
+                cell.se = 1;
+            }
+        }
+    }
+
+    else if (attribute == "GA")
+    {
+        if (parameter == "?")
+        {
+            Serial1.print("Gain:");
+            Serial1.println(cell.ga);
+        }
+        else if (parameter.length() > 0)
+        {
+            if (parameter == "0")
+                cell.ga = POT_GAIN_0;
+            else if (parameter == "100")
+                cell.ga = POT_GAIN_100;
+            else if (parameter == "3k")
+                cell.ga = POT_GAIN_3k;
+            else if (parameter == "30k")
+                cell.ga = POT_GAIN_30k;
+            else if (parameter == "300k")
+                cell.ga = POT_GAIN_300k;
+            else if (parameter == "3M")
+                cell.ga = POT_GAIN_3M;
+            else if (parameter == "30M")
+                cell.ga = POT_GAIN_30M;
+            else
+                cell.ga = POT_GAIN_0;
+        }
+    }
+
+    else
+    {
+        Serial1.print("Unrecognized");
+    }
+}
 
 void set_timer1_frequency(double Frequency)
 {

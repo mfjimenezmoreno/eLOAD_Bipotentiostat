@@ -122,7 +122,7 @@ void interrupt_ADC1_rdy();
 void interrupt_ADC2_rdy();
 #line 125 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
 void setup();
-#line 160 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
+#line 159 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
 void loop();
 #line 117 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
       sample_delay_ms_100div = 10022;
@@ -477,7 +477,6 @@ int32_t ads1255::read_single24(void){
 #define Interrupt_ADC1    3
 #define Interrupt_ADC2    2
 
-#define POT_GAIN_30k  3
 /*////////////////////////////////////////*/
 /*            Global Variables            */
 /*////////////////////////////////////////*/
@@ -493,6 +492,7 @@ max5443 DAC1(Chip_Select_DAC1);
 max5443 DAC2(Chip_Select_DAC2);
 ads1255 ADC1(Chip_Select_ADC1, Interrupt_ADC1);
 ads1255 ADC2(Chip_Select_ADC2, Interrupt_ADC2);
+cell_parameters sensor;
 
 /*////////////////////////////////////////////*/
 /*                    Main                    */
@@ -526,13 +526,12 @@ void setup() {
   
   /*Setting up ADC interrupts
   Configuration:
-    1 Timer1 CTC compare: 100 kHz interrupt, changes values of DAC
-    2 External Interrupt pins: ADC reports when it is ready for transmission
+    1. Timer1 CTC compare: 100 kHz interrupt, changes values of DAC
+    2. External Interrupt pins: ADC reports when it is ready for transmission
   */
-
+  set_timer1_frequency(100E3);
   attachInterrupt(digitalPinToInterrupt(Interrupt_ADC1), &interrupt_ADC1_rdy, FALLING);
   attachInterrupt(digitalPinToInterrupt(Interrupt_ADC2), &interrupt_ADC2_rdy, FALLING);
-  set_timer1_frequency(100E3);
   
 }
 
@@ -544,9 +543,19 @@ ISR(TIMER1_COMPA_vect) {
 void loop() {
   //Look for BLE commands from PC (e.g. parameters, experiments)
   while(Serial1.available()){
-    buffer = Serial1.readStringUntil(",");
-    Serial1.print(buffer.substring(0, 1));
+    //This doesn't seem to work?
+    /*buffer = Serial1.readStringUntil(",");
+    //Serial1.write("Martin");
+    if(buffer.substring(0,2) == "TX") {
+      Serial1.print(buffer.substring(2));
+    }
+    else {
+      Serial1.print("Nothing but garbage");
+    }
+    delay(500);*/
+  update_parameters(sensor);
   }
+
 }
 
 

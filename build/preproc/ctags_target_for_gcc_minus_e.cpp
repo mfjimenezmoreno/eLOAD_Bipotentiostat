@@ -447,7 +447,7 @@ int32_t ads1255::read_single24(void){
  /* 
  * Defines are the same as in "Mapping" section
  */
-# 97 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
+# 96 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
 /*////////////////////////////////////////*/
 /*            Global Variables            */
 /*////////////////////////////////////////*/
@@ -463,6 +463,7 @@ max5443 DAC1(10);
 max5443 DAC2(5);
 ads1255 ADC1(8, 3);
 ads1255 ADC2(9, 2);
+cell_parameters sensor;
 
 /*////////////////////////////////////////////*/
 /*                    Main                    */
@@ -496,13 +497,12 @@ void setup() {
 
   /*Setting up ADC interrupts
   Configuration:
-    1 Timer1 CTC compare: 100 kHz interrupt, changes values of DAC
-    2 External Interrupt pins: ADC reports when it is ready for transmission
+    1. Timer1 CTC compare: 100 kHz interrupt, changes values of DAC
+    2. External Interrupt pins: ADC reports when it is ready for transmission
   */
-
+  set_timer1_frequency(100E3);
   attachInterrupt(((3) == 0 ? 2 : ((3) == 1 ? 3 : ((3) == 2 ? 1 : ((3) == 3 ? 0 : ((3) == 7 ? 4 : -1))))), &interrupt_ADC1_rdy, 2);
   attachInterrupt(((2) == 0 ? 2 : ((2) == 1 ? 3 : ((2) == 2 ? 1 : ((2) == 3 ? 0 : ((2) == 7 ? 4 : -1))))), &interrupt_ADC2_rdy, 2);
-  set_timer1_frequency(100E3);
 
 }
 
@@ -514,7 +514,17 @@ extern "C" void __vector_17 /* Timer/Counter1 Compare Match A */ (void) __attrib
 void loop() {
   //Look for BLE commands from PC (e.g. parameters, experiments)
   while(Serial1.available()){
-    buffer = Serial1.readStringUntil(",");
-    Serial1.print(buffer.substring(0, 1));
+    //This doesn't seem to work?
+    /*buffer = Serial1.readStringUntil(",");
+    //Serial1.write("Martin");
+    if(buffer.substring(0,2) == "TX") {
+      Serial1.print(buffer.substring(2));
+    }
+    else {
+      Serial1.print("Nothing but garbage");
+    }
+    delay(500);*/
+  update_parameters(sensor);
   }
+
 }

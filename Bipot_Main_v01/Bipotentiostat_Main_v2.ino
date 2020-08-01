@@ -108,6 +108,7 @@ max5443 DAC1(Chip_Select_DAC1);
 max5443 DAC2(Chip_Select_DAC2);
 ads1255 ADC1(Chip_Select_ADC1, Interrupt_ADC1);
 ads1255 ADC2(Chip_Select_ADC2, Interrupt_ADC2);
+cell_parameters sensor;
 
 /*////////////////////////////////////////////*/
 /*                    Main                    */
@@ -158,8 +159,18 @@ ISR(TIMER1_COMPA_vect) {
 void loop() {
   //Look for BLE commands from PC (e.g. parameters, experiments)
   while(Serial1.available()){
-    buffer = Serial1.readStringUntil(",");
-    Serial1.print(buffer.substring(0, 1));
+    //This doesn't seem to work?
+    /*buffer = Serial1.readStringUntil(",");
+    //Serial1.write("Martin");
+    if(buffer.substring(0,2) == "TX") {
+      Serial1.print(buffer.substring(2));
+    }
+    else {
+      Serial1.print("Nothing but garbage");
+    }
+    delay(500);*/
+  update_parameters(sensor);
   }
+
 }
 

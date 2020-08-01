@@ -18,8 +18,8 @@ class BipotSettings(object):
     
     #Constants
     GAIN_100, GAIN_3k, GAIN_30k, GAIN_300k, GAIN_3M, GAIN_30M = '100', '3k', '30k', '300k', '3M', '30M'
-    CV, CA = 'Voltammetry', 'Chronoamperometry'
-    SINGLE, DUAL = 'Single Mode', 'Dual Mode'
+    CV, CA = 'CV', 'CA'
+    SINGLE, DUAL = 'Single', 'Dual'
     CATHODIC, ANODIC = 'Cathodic', 'Anodic'
     #Attributes
 
@@ -115,7 +115,6 @@ class BipotSettings(object):
         #Check if eLOAD is connected, then send information regarding technique
         if self.serial_connect() == False:
             raise IOError("Not connected to eLOAD")
-            return
         
         message = []
         message.append("TE" + self.technique)
@@ -126,7 +125,6 @@ class BipotSettings(object):
         message.append("VH" + str(self.v1_ceiling))
         message.append("VS" + str(self.v1_start))
         message.append("SD" + self.sweep)
-        message.append("VL" + str(self.v1_ceiling))
         message.append("SR" + str(self.scan_rate))
         message.append("SE" + str(self.segments))
         #FIXME Handle gain as string, not number

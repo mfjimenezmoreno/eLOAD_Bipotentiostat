@@ -75,12 +75,11 @@ struct cell_parameters
     int16_t sr = 100;   //WE1 scan rate in milivolts/s
     String sd = Anodic; //Starting sweep direction
     uint8_t se = 3;     //Number of segments
-    String ga = "30k";  //Gain
+    uint8_t ga = POT_GAIN_0;  //Gain
 };
 
-extern cell_parameters cell;
-
 /*Private functions, callbacks*/
+void update_parameters(cell_parameters &cell);
 void set_timer1_frequency(double Frequency);
 void timer1_EN_IntCTC(void);
 void timer1_DIS_IntCTC(void);
