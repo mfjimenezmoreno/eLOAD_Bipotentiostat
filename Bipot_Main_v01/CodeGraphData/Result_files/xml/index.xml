@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.8.6">
+  <compound refid="_a_d_s1255_8cpp" kind="file"><name>ADS1255.cpp</name>
+    <member refid="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" kind="function"><name>SPI_ADS1255</name></member>
+  </compound>
+  <compound refid="_a_d_s1255_8h" kind="file"><name>ADS1255.h</name>
+    <member refid="_a_d_s1255_8h_1a22178300b6938b0d9d760b17651ae331" kind="define"><name>ADS_WAKEUP</name></member>
+    <member refid="_a_d_s1255_8h_1a46365fb03433dac20d3c262625114537" kind="define"><name>ADS_RDATA</name></member>
+    <member refid="_a_d_s1255_8h_1a7ff54559c98b1ba7165e8704331a9470" kind="define"><name>ADS_RDATAC</name></member>
+    <member refid="_a_d_s1255_8h_1a0808108f819dd411f66f7ddf0c983776" kind="define"><name>ADS_SDATAC</name></member>
+    <member refid="_a_d_s1255_8h_1a5127503998d909815568a2d90c98123e" kind="define"><name>ADS_SELFCAL</name></member>
+    <member refid="_a_d_s1255_8h_1abd9fafc58323424c6c8b8437f1f547e6" kind="define"><name>ADS_SELFOCAL</name></member>
+    <member refid="_a_d_s1255_8h_1adbcd89ffe45b0f10eb0dbe11d9343d31" kind="define"><name>ADS_SELFGCAL</name></member>
+    <member refid="_a_d_s1255_8h_1a21728731210d4a9b7a78f5d05a636649" kind="define"><name>ADS_SYSOCAL</name></member>
+    <member refid="_a_d_s1255_8h_1a1bc8881c3eb7ac1b80c8733a927e3f82" kind="define"><name>ADS_SYSGCAL</name></member>
+    <member refid="_a_d_s1255_8h_1a3f02be690738105ee7c7afe0d6ce8605" kind="define"><name>ADS_SYNC</name></member>
+    <member refid="_a_d_s1255_8h_1a9be94acf17c62650837b4ad5cd3f5cee" kind="define"><name>ADS_STANDBY</name></member>
+    <member refid="_a_d_s1255_8h_1a2951287a2d58551cbcab574a44f90c59" kind="define"><name>ADS_RESET</name></member>
+    <member refid="_a_d_s1255_8h_1ad0eafa83992b3dbdcc00888300934ec6" kind="define"><name>ADS_DR_2_5</name></member>
+    <member refid="_a_d_s1255_8h_1a758165b5ef5d906c9b3d4cacfef3dc0c" kind="define"><name>ADS_DR_5</name></member>
+    <member refid="_a_d_s1255_8h_1a5f269dd9b63924228fe926c468e7e183" kind="define"><name>ADS_DR_10</name></member>
+    <member refid="_a_d_s1255_8h_1a90682d3575f68d83075ae381dd761133" kind="define"><name>ADS_DR_15</name></member>
+    <member refid="_a_d_s1255_8h_1afad0966b5188a26cbfddfdd90bb6c7d0" kind="define"><name>ADS_DR_25</name></member>
+    <member refid="_a_d_s1255_8h_1a994991e15efa2cc7f67e4f64cccd0245" kind="define"><name>ADS_DR_30</name></member>
+    <member refid="_a_d_s1255_8h_1a28bd44f8fdf8e853f8557922a23f85f8" kind="define"><name>ADS_DR_50</name></member>
+    <member refid="_a_d_s1255_8h_1a08635e01836dbfe07e23f373667724b6" kind="define"><name>ADS_DR_60</name></member>
+    <member refid="_a_d_s1255_8h_1a73d1edc95ca9538c4427df7be61fc7ba" kind="define"><name>ADS_DR_100</name></member>
+    <member refid="_a_d_s1255_8h_1a62bf29d38b290aa5382af5e9a8fb2e76" kind="define"><name>ADS_DR_500</name></member>
+    <member refid="_a_d_s1255_8h_1acc4d0b6836d6e9613c9db477cd5f001c" kind="define"><name>ADS_DR_1000</name></member>
+    <member refid="_a_d_s1255_8h_1ad8d0a329feaf2fb22c20bf2bf5019c99" kind="define"><name>ADS_DR_2000</name></member>
+    <member refid="_a_d_s1255_8h_1a2024cacca6876a065ca662239c47b14b" kind="define"><name>ADS_DR_3750</name></member>
+    <member refid="_a_d_s1255_8h_1a3a91b580a891aafe01699d7670e044c1" kind="define"><name>ADS_DR_7500</name></member>
+    <member refid="_a_d_s1255_8h_1a8cf3bd25c84e6f93f72bd85cd5ca4b3f" kind="define"><name>ADS_DR_15000</name></member>
+    <member refid="_a_d_s1255_8h_1a051c8eeb11308c639beb7f742c2e57dc" kind="define"><name>ADS_DR_30000</name></member>
+    <member refid="_a_d_s1255_8h_1a850b34e81281ef216df41fa8b892ea99" kind="define"><name>ADS_PGA_1</name></member>
+    <member refid="_a_d_s1255_8h_1ac02091a5a3d4d833c50e739cf0011ca4" kind="define"><name>ADS_PGA_2</name></member>
+    <member refid="_a_d_s1255_8h_1a842d3d65233729e221ac7b3cf0ca50df" kind="define"><name>ADS_PGA_4</name></member>
+    <member refid="_a_d_s1255_8h_1a45b381fae0306c7945f816fabe907a7c" kind="define"><name>ADS_PGA_8</name></member>
+    <member refid="_a_d_s1255_8h_1a1d14bd3097bc065a04a0d83ef4942067" kind="define"><name>ADS_PGA_16</name></member>
+    <member refid="_a_d_s1255_8h_1ab1936172fdffa1857b0a5203feef48d9" kind="define"><name>ADS_PGA_32</name></member>
+    <member refid="_a_d_s1255_8h_1a9aa757e42f5f82b398530b0880962346" kind="define"><name>ADS_PGA_64</name></member>
+    <member refid="_a_d_s1255_8h_1a22aae0a500a3abb827d05ed91fd0eeb9" kind="define"><name>ADS_BUFF_OFF</name></member>
+    <member refid="_a_d_s1255_8h_1a07d56f604bcc997de0cf95d8a5561e9d" kind="define"><name>ADS_BUFF_ON</name></member>
+    <member refid="_a_d_s1255_8h_1a649b50abb824e4cfbe91911b8d8808c7" kind="define"><name>ADS_MUX_VOLT</name></member>
+    <member refid="_a_d_s1255_8h_1ac5b1c8c098fff4f94f0111f1d973c4c0" kind="define"><name>ADS_MUX_POT</name></member>
+  </compound>
+  <compound refid="_experiment_8h" kind="file"><name>Experiment.h</name>
+    <member refid="_experiment_8h_1a45311de3053cd885e0e23db400581213" kind="define"><name>POT_OCP</name></member>
+    <member refid="_experiment_8h_1a115926dd8a73ae93e87b0c8c2f750f72" kind="define"><name>POT_POTENT</name></member>
+    <member refid="_experiment_8h_1a1c0e64f6cd807ec3d6b19338fbd9ebe9" kind="define"><name>POT_LP_OFF</name></member>
+    <member refid="_experiment_8h_1af1307e2a307f4cd36d0a0bae6fd728e9" kind="define"><name>POT_LP_ON</name></member>
+    <member refid="_experiment_8h_1a645864b828ff8bb9abe871f5dc99e387" kind="define"><name>ADS_F_2_5</name></member>
+    <member refid="_experiment_8h_1adfc21f748e41e5bbd1e56f4dc03cbe84" kind="define"><name>ADS_F_5</name></member>
+    <member refid="_experiment_8h_1adecd386526e1d8c089b9160d6b4ebccc" kind="define"><name>ADS_F_10</name></member>
+    <member refid="_experiment_8h_1abd5386547f6bdaf1a329bbe5ae255650" kind="define"><name>ADS_F_15</name></member>
+    <member refid="_experiment_8h_1a7c195f0f2eb8f3d8a00e6fa38e8497b6" kind="define"><name>ADS_F_25</name></member>
+    <member refid="_experiment_8h_1a0d09426d648caf7a126d2b859cc2b98a" kind="define"><name>ADS_F_30</name></member>
+    <member refid="_experiment_8h_1ad4e745ab4318ddb69f57ade5a79bb682" kind="define"><name>ADS_F_50</name></member>
+    <member refid="_experiment_8h_1a710f89d9a92e7809ba3253812c498107" kind="define"><name>ADS_F_60</name></member>
+    <member refid="_experiment_8h_1ab364e66edeb3d4e54af8a2f8762c8bab" kind="define"><name>ADS_F_100</name></member>
+    <member refid="_experiment_8h_1ae5bfde2a97511f3a33eccc1b274876e7" kind="define"><name>ADS_F_500</name></member>
+    <member refid="_experiment_8h_1ad0ef0d8a55c55317d7226a9e37a41a91" kind="define"><name>ADS_F_1000</name></member>
+    <member refid="_experiment_8h_1a612ed75567848515a6ea1ba030ce1b0d" kind="define"><name>ADS_F_2000</name></member>
+    <member refid="_experiment_8h_1abd328378a6f6a651bf9dd5486fdcf656" kind="define"><name>ADS_F_3750</name></member>
+    <member refid="_experiment_8h_1a4854c1ef437320549aeeb67d4242efa3" kind="define"><name>ADS_F_7500</name></member>
+    <member refid="_experiment_8h_1a57e99d7346add4c415183ad748b258a8" kind="define"><name>ADS_F_15000</name></member>
+    <member refid="_experiment_8h_1ac609e712a404fb1ea866f50c12d0b76b" kind="define"><name>ADS_F_30000</name></member>
+    <member refid="_experiment_8h_1a4e9d57a8fde019f51464dfb523a9c7f2" kind="define"><name>SIN_IMP_CYCLEPTS</name></member>
+    <member refid="_experiment_8h_1a7a6f638b14bb3073a08ee707fe280cd4" kind="define"><name>RTC_COMPARE_INT_LEVEL</name></member>
+  </compound>
+  <compound refid="_experiments_8cpp" kind="file"><name>Experiments.cpp</name>
+  </compound>
+  <compound refid="_experiments_8h" kind="file"><name>Experiments.h</name>
+    <member refid="_experiments_8h_1a7c16d4a6f5c3683729bf6319f85d1afe" kind="define"><name>Chronoamperometry</name></member>
+    <member refid="_experiments_8h_1ab56816df175c6e2e864326c5f0f2c322" kind="define"><name>Voltammetry</name></member>
+    <member refid="_experiments_8h_1ad7b4a7f4f99180ddefdb50ff7c6edb75" kind="define"><name>Normal_LSV</name></member>
+    <member refid="_experiments_8h_1a5e395e98baf41160636cf25d87deacde" kind="define"><name>First_LSV</name></member>
+    <member refid="_experiments_8h_1a97ad628f9b38c797a976510688d92136" kind="define"><name>Interrupt_ADC1</name></member>
+    <member refid="_experiments_8h_1a65bed5551540c1d46999c794c65582ec" kind="define"><name>Interrupt_ADC2</name></member>
+    <member refid="_experiments_8h_1a6e04281a45ad659588d8c314721888fb" kind="define"><name>POT_GAIN_0</name></member>
+    <member refid="_experiments_8h_1ae01426fb03eba1ce3a235d224a6823a6" kind="define"><name>POT_GAIN_100</name></member>
+    <member refid="_experiments_8h_1abd120f7d6c6442a41cb4646b93a77945" kind="define"><name>POT_GAIN_3k</name></member>
+    <member refid="_experiments_8h_1aa375e322bdd5b2798d71d1bcc4c2061e" kind="define"><name>POT_GAIN_30k</name></member>
+    <member refid="_experiments_8h_1a1d7bce96d05c59394c197b03f0eb338b" kind="define"><name>POT_GAIN_300k</name></member>
+    <member refid="_experiments_8h_1aec206d956d9ecef1b886c2ebe48efa81" kind="define"><name>POT_GAIN_3M</name></member>
+    <member refid="_experiments_8h_1ab6d8b19b54bc1604f1464595676a9147" kind="define"><name>POT_GAIN_30M</name></member>
+    <member refid="_experiments_8h_1ae91cb6aafedcf7104901e4fd510c9160" kind="define"><name>POT_GAIN_100M</name></member>
+    <member refid="_experiments_8h_1adfb8843c5071b828e89384f85138ed51" kind="define"><name>Analog_Switch_VIN</name></member>
+    <member refid="_experiments_8h_1a1ca0b42fe7412f0e459842b54f8c8bfa" kind="define"><name>Analog_Switch_CERE</name></member>
+    <member refid="_experiments_8h_1a100ca80dbec6d028a7bc43dab9755593" kind="define"><name>Analog_Switch_CE</name></member>
+    <member refid="_experiments_8h_1a615425086889f97b85b452bced98d380" kind="define"><name>Analog_Switch_WE1</name></member>
+    <member refid="_experiments_8h_1a45e196bbe21bc4837d87c56fb82ffb48" kind="define"><name>Analog_Switch_WE2</name></member>
+    <member refid="_experiments_8h_1ad2a53668b918df206c30ec5ba76a2887" kind="define"><name>MUX_A_Gain</name></member>
+    <member refid="_experiments_8h_1a7003210aaa7d91ebd48efa5a0d1f9ae2" kind="define"><name>MUX_B_Gain</name></member>
+    <member refid="_experiments_8h_1aedd331437083f66f7e7bdcc321d909d8" kind="define"><name>MUX_C_Gain</name></member>
+    <member refid="_experiments_8h_1a320d69df41f807e384af9e4ea281f786" kind="define"><name>Chip_Select_ADC1</name></member>
+    <member refid="_experiments_8h_1a246d84139c4137a2e06d42c15e49be42" kind="define"><name>Chip_Select_ADC2</name></member>
+    <member refid="_experiments_8h_1ab13a5f0ccb0807932ef969882b8a5775" kind="define"><name>Chip_Select_DAC1</name></member>
+    <member refid="_experiments_8h_1a6ecda90a1c4623acba6180e701667bf3" kind="define"><name>Chip_Select_DAC2</name></member>
+    <member refid="_experiments_8h_1a1afc94bf1e0e27367537716575c60012" kind="define"><name>Chip_Select_SD</name></member>
+    <member refid="_experiments_8h_1a97ad628f9b38c797a976510688d92136" kind="define"><name>Interrupt_ADC1</name></member>
+    <member refid="_experiments_8h_1a65bed5551540c1d46999c794c65582ec" kind="define"><name>Interrupt_ADC2</name></member>
+    <member refid="_experiments_8h_1ac61e027e97dccef91e5149b6e9a7bf4a" kind="define"><name>Single_Mode</name></member>
+    <member refid="_experiments_8h_1a7a1320f7f0f2f4cd0a68f7bf05ef0558" kind="define"><name>Dual_Mode</name></member>
+    <member refid="_experiments_8h_1a9f711a5272229aaca7afb06a01ceed4e" kind="define"><name>Anodic</name></member>
+    <member refid="_experiments_8h_1a59ca1e9ae63d8afcf73e97975b7a3273" kind="define"><name>Cathodic</name></member>
+  </compound>
+  <compound refid="_m_a_x5443_8cpp" kind="file"><name>MAX5443.cpp</name>
+    <member refid="_m_a_x5443_8cpp_1a597da23f67a99acfca705411de967be2" kind="function"><name>SPI_max5443</name></member>
+  </compound>
+  <compound refid="_m_a_x5443_8h" kind="file"><name>MAX5443.h</name>
+  </compound>
+  <compound refid="dir_bbf5f7f11ebbfa3d8c51393a5905f3b7" kind="dir"><name>C:/Users/Martin/Documents/Arduino</name>
+  </compound>
+  <compound refid="dir_7839454bb0e0a6338ca5eb325661c9c2" kind="dir"><name>C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01</name>
+  </compound>
+  <compound refid="dir_95d3be65e53b4d7260857123dab5beaa" kind="dir"><name>C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2</name>
+  </compound>
+  <compound refid="dir_77463c45b1a1b991a90c3a779a3806e5" kind="dir"><name>C:/Users/Martin/Documents</name>
+  </compound>
+  <compound refid="dir_226baa34999c99db98d5c80e7f320f56" kind="dir"><name>C:/Users/Martin</name>
+  </compound>
+  <compound refid="dir_d522931ffa1371640980b621734a4381" kind="dir"><name>C:/Users</name>
+  </compound>
+</doxygenindex>

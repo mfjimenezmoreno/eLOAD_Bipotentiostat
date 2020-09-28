@@ -26,6 +26,8 @@ def byte2int(handle, bytevalue):
     for i in range(databytes):
         x = int(data[2*i : 2*(i+1)], 16)
         intvalue.append(x)
+    print(bytevalue)
+    print(data)
     print(intvalue)
     return intvalue
 
@@ -37,9 +39,19 @@ characteristics = device.discover_characteristics()
 device.subscribe(SERVICE, callback=byte2int)
 device.unsubscribe(SERVICE)
 
-
-device.char_write(value=hexlify(b"1"), uuid=SERVICE)
-#I really have no clue how to use this properly
 device.char_read(SERVICE)
+
+device.char_write(value=hexlify(b"Martin,"), uuid=SERVICE)
+device.char_write(value=b"123456789,123456789,123456789", uuid=SERVICE)
+device.char_write(value=bytearray("<123>,",'UTF-8'), uuid=SERVICE)
+device.char_write(value=bytearray([1,23]), uuid=SERVICE)
+device.char_write(value=b"<Stop>", uuid=SERVICE)
+device.char_write(value=b"<abcdefghijklmnoprstuvwxyz>", uuid=SERVICE)
+device.char_write(value=b"<El", uuid=SERVICE)
+device.char_write(value=b"Martin", uuid=SERVICE)
+device.char_write(value=b"locochon>", uuid=SERVICE)
+
 device.disconnect()
-adapter.stop()
+
+adapter.stop() 
+

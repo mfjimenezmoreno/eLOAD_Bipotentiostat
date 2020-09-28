@@ -140,18 +140,20 @@ void update_parameters(cell_parameters &cell)
         {
             if (parameter == "0")
                 cell.ga = POT_GAIN_0;
-            if (parameter == "100")
-            cell.ga = POT_GAIN_100;
-            if (parameter == "3k")
-            cell.ga = POT_GAIN_3k;
-            if (parameter == "30k")
+            else if (parameter == "100")
+                cell.ga = POT_GAIN_100;
+            else if (parameter == "3k")
+                cell.ga = POT_GAIN_3k;
+            else if (parameter == "30k")
                 cell.ga = POT_GAIN_30k;
-            if (parameter == "300k")
+            else if (parameter == "300k")
                 cell.ga = POT_GAIN_300k;
-            if (parameter == "3M")
+            else if (parameter == "3M")
                 cell.ga = POT_GAIN_3M;
-            if (parameter == "30M")
+            else if (parameter == "30M")
                 cell.ga = POT_GAIN_30M;
+            else
+                cell.ga = POT_GAIN_0;
         }
     }
 
@@ -362,5 +364,145 @@ void pot_set_gain(uint8_t gain)
         digitalWrite(MUX_B_Gain, HIGH);
         digitalWrite(MUX_C_Gain, HIGH);
         break;
+    }
+}
+
+void toggle_LED(void){
+    digitalWrite(LED_BUILTIN, digitalRead(LED_BUILTIN) ^ 1);
+}
+
+void ON_LED(void){
+    digitalWrite(LED_BUILTIN, HIGH);
+}
+
+void OFF_LED(void){
+    digitalWrite(LED_BUILTIN, LOW);
+}
+
+void analog_switch_init(void){
+    pinMode(Analog_Switch_VIN, OUTPUT);
+    pinMode(Analog_Switch_CERE, OUTPUT);
+    pinMode(Analog_Switch_CE, OUTPUT);
+    pinMode(Analog_Switch_WE1, OUTPUT);
+    pinMode(Analog_Switch_WE2, OUTPUT);
+    digitalWrite(Analog_Switch_VIN, LOW);
+    digitalWrite(Analog_Switch_CERE, LOW);
+    digitalWrite(Analog_Switch_CE, LOW);
+    digitalWrite(Analog_Switch_WE1, LOW);
+    digitalWrite(Analog_Switch_WE2, LOW);
+}
+
+void analog_switch_mode(uint8_t mode){
+    /*This function controls the Analog switches depending on the desired cell state:
+                            _SW_Vin   | _SW_CE| _SW_WE1 | _SW_WE2
+    0 Switch_OFF              0       | 0     | 0       | 0
+    1 Switch_Single_mode      1       | 1     | 1       | 0
+    2 Switch_Dual_mode        1       | 1     | 1       | 1
+    3 Switch_OCP_mode         0       | 0     | 1       | 0
+  */
+    switch (mode){
+        case Switch_OFF:
+            digitalWrite(Analog_Switch_VIN, LOW);
+            //NOTE:CE RE switch might be implemented in future designs
+            //digitalWrite(Analog_Switch_CERE, LOW);
+            digitalWrite(Analog_Switch_CE, LOW);
+            digitalWrite(Analog_Switch_WE1, LOW);
+            digitalWrite(Analog_Switch_WE2, LOW);
+            break;
+        case Switch_Single_mode:
+            digitalWrite(Analog_Switch_VIN, HIGH);
+            //digitalWrite(Analog_Switch_CERE, LOW);
+            digitalWrite(Analog_Switch_CE, HIGH);
+            digitalWrite(Analog_Switch_WE1, HIGH);
+            digitalWrite(Analog_Switch_WE2, LOW);
+            break;
+        case Switch_Dual_mode:
+            digitalWrite(Analog_Switch_VIN, HIGH);
+            //digitalWrite(Analog_Switch_CERE, LOW);
+            digitalWrite(Analog_Switch_CE, HIGH);
+            digitalWrite(Analog_Switch_WE1, HIGH);
+            digitalWrite(Analog_Switch_WE2, HIGH);
+            break;
+        case Switch_OCP_mode:
+            digitalWrite(Analog_Switch_VIN, LOW);
+            //digitalWrite(Analog_Switch_CERE, LOW);
+            digitalWrite(Analog_Switch_CE, LOW);
+            digitalWrite(Analog_Switch_WE1, HIGH);
+            digitalWrite(Analog_Switch_WE2, LOW);
+            break;
+    }
+}
+/*
+char read_serial_char(bool &newdata){
+    //Read a single character from BLE
+    if(Serial1.available() > 0){
+        char receivedChar = Serial.read();
+        newdata = true;
+    }
+    return receivedChar;
+}
+*/
+/*
+char read_serial_characters(bool &newdata, char endmarker = '')
+{
+    //Reads multiple characters from the buffer, until endmarker is found
+    char receivedChars[10];
+    char receivedChar;
+    uint8_t i = 0;
+    
+    while(Serial1.available() > 0){
+        receivedChar = Serial1.read();
+
+        if(receivedChar != endmarker){
+            receivedChars[i] = receivedChar;
+            i++;
+        }
+        
+    }
+}
+*/
+void read_serial_markers(bool &newdata, char *receivedChars, size_t size,  char startmarker = '<', char endmarker = '>')
+{
+    /*Reads characters from buffer, identifies a starting and ending character.
+    This function is non-blocking in nature.
+    How to use: poll for newdata until it is true, then read data. Do not forget
+    that once information is read, make new data false.
+    Implication: requires that parent loop executes continiously as fast 
+    as possible.*/
+    static bool receptionInProgress = false;
+    static uint8_t index = 0;
+    char rc;
+
+    while(Serial1.available() > 0 && newdata == false){
+        rc = Serial1.read();
+
+        if (receptionInProgress == true){
+            
+            //If we don't get the endmarker, then append character to receivedChars
+            if (rc != endmarker){
+                receivedChars[index] = rc;
+                index++;
+                //Avoid overflow, stall the index value to the allowed maximum
+                //This condition should be avoided at all costs
+                if (index >= size){
+                    index = size - 1;
+                }
+            }
+
+            //If we get the endmarker character
+            else {
+                receptionInProgress = false;
+                index = 0;
+                newdata = true;
+            }
+
+        }
+        /*
+        In the case we receive the starter marker, make our reception
+        flag true and "filter out" the marker.
+        */
+        else if (rc == startmarker){
+            receptionInProgress = true;
+        }
     }
 }

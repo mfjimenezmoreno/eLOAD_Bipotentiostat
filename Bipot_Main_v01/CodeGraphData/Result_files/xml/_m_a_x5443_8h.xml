@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_m_a_x5443_8h" kind="file">
+    <compoundname>MAX5443.h</compoundname>
+    <includes local="no">Arduino.h</includes>
+    <includedby refid="_experiments_8h" local="no">C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiments.h</includedby>
+    <includedby refid="_m_a_x5443_8cpp" local="no">C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/MAX5443.cpp</includedby>
+    <incdepgraph>
+      <node id="33">
+        <label>Arduino.h</label>
+      </node>
+      <node id="32">
+        <label>C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/MAX5443.h</label>
+        <link refid="MAX5443.h"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="37">
+        <label>C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/MAX5443.cpp</label>
+        <link refid="_m_a_x5443_8cpp"/>
+      </node>
+      <node id="35">
+        <label>C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiments.h</label>
+        <link refid="_experiments_8h"/>
+        <childnode refid="36" relation="include">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiments.cpp</label>
+        <link refid="_experiments_8cpp"/>
+      </node>
+      <node id="34">
+        <label>C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/MAX5443.h</label>
+        <link refid="MAX5443.h"/>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*///////////////////////////////////////*/</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">/*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DAC<sp/>related<sp/>class<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">/*///////////////////////////////////////*/</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"></highlight></codeline>
+<codeline lineno="5"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*<sp/>Library<sp/>for<sp/>DAC<sp/>pin<sp/>initialization<sp/>and<sp/>voltage<sp/>polarization.<sp/></highlight></codeline>
+<codeline lineno="7"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight></codeline>
+<codeline lineno="9"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>MAX5443_h</highlight></codeline>
+<codeline lineno="10"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>MAX5443_h</highlight></codeline>
+<codeline lineno="11"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#include<sp/>&lt;Arduino.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight></codeline>
+<codeline lineno="13"><highlight class="normal"></highlight><highlight class="keyword">class<sp/></highlight><highlight class="normal">max5443{</highlight></codeline>
+<codeline lineno="14"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">public</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="15"><highlight class="normal"><sp/><sp/><sp/><sp/>max5443(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>Chip_Select);</highlight></codeline>
+<codeline lineno="16"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>pins_init(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>set_voltage(uint16_t<sp/>Voltage_index);</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/></highlight><highlight class="keyword">private</highlight><highlight class="normal">:</highlight></codeline>
+<codeline lineno="19"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>_pin;</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keyword">static</highlight><highlight class="normal"><sp/></highlight><highlight class="keyword">union<sp/></highlight><highlight class="normal">{</highlight></codeline>
+<codeline lineno="21"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>uint8_t<sp/>ui8[2];</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>uint16_t<sp/>ui16;</highlight></codeline>
+<codeline lineno="23"><highlight class="normal"><sp/><sp/><sp/><sp/>}<sp/>_DAC_buffer;</highlight></codeline>
+<codeline lineno="24"><highlight class="normal">};</highlight></codeline>
+<codeline lineno="25"><highlight class="normal"></highlight></codeline>
+<codeline lineno="26"><highlight class="normal"></highlight><highlight class="preprocessor">#endif</highlight></codeline>
+    </programlisting>
+    <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/MAX5443.h"/>
+  </compounddef>
+</doxygen>

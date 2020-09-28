@@ -58,6 +58,11 @@
 #define Anodic      "Anodic"
 #define Cathodic    "Cathodic"
 
+#define Switch_OFF          0
+#define Switch_Single_mode  1
+#define Switch_Dual_mode    2
+#define Switch_OCP_mode     3
+
 /**********************************/
 /*          Declarations          */
 /**********************************/
@@ -85,5 +90,13 @@ void timer1_EN_IntCTC(void);
 void timer1_DIS_IntCTC(void);
 void pot_init(void);
 void pot_set_gain(uint8_t gain);
+void toggle_LED(void);
+void ON_LED(void);
+void OFF_LED(void);
+void analog_switch_init(void);
+void analog_switch(uint8_t mode);
+char read_serial_char(bool &newdata);
+char read_serial_characters(bool &newdata, char endmarker = '\n');
+void read_serial_markers(bool &newdata, char *receivedChars, size_t size, char startmarker = '<', char endmarker = '>');
 
 #endif

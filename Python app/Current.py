@@ -42,6 +42,7 @@ ongoing_exp = False    #Stores if experiment is in process
 #eLoaD.timeout = 1
 BLEdongle = None    #Reserved to BLE dongle
 eLoaD = None        #Reserved to open BLE port
+#FIXME May require change!
 mux_gain = 3E3      #For storing transimpedance gain as chosen by MUX
 pga_value = 2.0     #The gain as specified by ADC's datasheet
 v_ref = 1.5         #The reference voltage

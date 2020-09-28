@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_m_a_x5443_8cpp" kind="file">
+    <compoundname>MAX5443.cpp</compoundname>
+    <includes local="no">Arduino.h</includes>
+    <includes refid="_m_a_x5443_8h" local="no">C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\Bipot_Main_v01\MAX5443.h</includes>
+    <includes local="no">SPI.h</includes>
+    <incdepgraph>
+      <node id="30">
+        <label>SPI.h</label>
+      </node>
+      <node id="27">
+        <label>C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/MAX5443.cpp</label>
+        <link refid="MAX5443.cpp"/>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>Arduino.h</label>
+      </node>
+      <node id="29">
+        <label>C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\Bipot_Main_v01\MAX5443.h</label>
+        <link refid="_m_a_x5443_8h"/>
+        <childnode refid="28" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="_m_a_x5443_8cpp_1a597da23f67a99acfca705411de967be2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>SPISettings</type>
+        <definition>SPISettings SPI_max5443</definition>
+        <argsstring>(25000000, MSBFIRST, SPI_MODE0)</argsstring>
+        <name>SPI_max5443</name>
+        <param>
+          <type>25000000</type>
+        </param>
+        <param>
+          <type>MSBFIRST</type>
+        </param>
+        <param>
+          <type>SPI_MODE0</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/MAX5443.cpp" line="10" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*///////////////////////////////////////*/</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">/*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>DAC<sp/>related<sp/>class<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">/*///////////////////////////////////////*/</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"></highlight></codeline>
+<codeline lineno="5"><highlight class="comment">#include<sp/>&lt;Arduino.h&gt;</highlight></codeline>
+<codeline lineno="6"><highlight class="comment">#include<sp/>&lt;C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\Bipot_Main_v01\MAX5443.h&gt;</highlight></codeline>
+<codeline lineno="7"><highlight class="comment">#include<sp/>&lt;SPI.h&gt;</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"></highlight></codeline>
+<codeline lineno="9"><highlight class="comment">//SPI<sp/>Object,<sp/>24<sp/>MHz,<sp/>MSB,<sp/>Mode<sp/>0</highlight></codeline>
+<codeline lineno="10"><highlight class="comment">SPISettings<sp/>SPI_max5443(25000000,<sp/>MSBFIRST,<sp/>SPI_MODE0);</highlight></codeline>
+<codeline lineno="11"><highlight class="comment"></highlight></codeline>
+<codeline lineno="12"><highlight class="comment">max5443::max5443(int<sp/>Chip_Select){</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/><sp/>_pin<sp/>=<sp/>Chip_Select;</highlight></codeline>
+<codeline lineno="14"><highlight class="comment">}</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"></highlight></codeline>
+<codeline lineno="16"><highlight class="comment">void<sp/>max5443::pins_init(){</highlight></codeline>
+<codeline lineno="17"><highlight class="comment"><sp/><sp/>/*</highlight></codeline>
+<codeline lineno="18"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>Purpose:<sp/>DAC<sp/>Chip<sp/>select<sp/>pin<sp/>is<sp/>set<sp/>as<sp/>output<sp/>and<sp/>turns<sp/>it<sp/>HIGH<sp/>(i.e.<sp/>chip<sp/>is<sp/>not<sp/>selected)</highlight></codeline>
+<codeline lineno="19"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>|----------------------|-------------------------------------------------|</highlight></codeline>
+<codeline lineno="20"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>|Parameter<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|Description<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline lineno="21"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>|----------------------|-------------------------------------------------|</highlight></codeline>
+<codeline lineno="22"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>|Chip_Select<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|Pin<sp/>where<sp/>DAC<sp/>is<sp/>located<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline lineno="23"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>|----------------------|-------------------------------------------------|</highlight></codeline>
+<codeline lineno="24"><highlight class="comment"><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/>pinMode(_pin,<sp/>OUTPUT);</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/>digitalWrite(_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>max5443::set_voltage(uint16_t<sp/>Voltage_index)<sp/>{</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="31"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>Puprpose:<sp/>Sends<sp/>the<sp/>index<sp/>value<sp/>voltage<sp/>to<sp/>selected<sp/>DAC</highlight></codeline>
+<codeline lineno="32"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>|----------------------|-------------------------------------------------|</highlight></codeline>
+<codeline lineno="33"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>|Parameter<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|Description<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|</highlight></codeline>
+<codeline lineno="34"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>|----------------------|-------------------------------------------------|</highlight></codeline>
+<codeline lineno="35"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>|Voltage_index<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>|DAC<sp/>index<sp/>value<sp/>from<sp/>0<sp/>to<sp/>65535<sp/>(0<sp/>to<sp/>~3<sp/>volts)<sp/><sp/>|</highlight></codeline>
+<codeline lineno="36"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>|----------------------|-------------------------------------------------|</highlight></codeline>
+<codeline lineno="37"><highlight class="comment"><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="38"><highlight class="normal"></highlight></codeline>
+<codeline lineno="39"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//Impose<sp/>limits<sp/>to<sp/>Voltage_index<sp/>within<sp/>0<sp/>and<sp/>65535</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(Voltage_index<sp/>&gt;<sp/>0xFFFF)</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/><sp/><sp/>Voltage_index<sp/>=<sp/>0xFFFF;</highlight></codeline>
+<codeline lineno="42"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(Voltage_index<sp/>&lt;<sp/>0)</highlight></codeline>
+<codeline lineno="43"><highlight class="normal"><sp/><sp/><sp/><sp/>Voltage_index<sp/>=<sp/>0;<sp/><sp/></highlight></codeline>
+<codeline lineno="44"><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"><sp/><sp/>_DAC_buffer.ui16<sp/>=<sp/>Voltage_index;</highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//Transfer<sp/>two<sp/>bytes<sp/>to<sp/>selected<sp/>DAC</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/>SPI.beginTransaction(<ref refid="_m_a_x5443_8cpp_1a597da23f67a99acfca705411de967be2" kindref="member">SPI_max5443</ref>);</highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/>digitalWrite(_pin,<sp/>LOW);</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/>SPI.transfer(_DAC_buffer.ui8[1]);</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/>SPI.transfer(_DAC_buffer.ui8[0]);</highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/>digitalWrite(_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/>SPI.endTransaction();</highlight></codeline>
+<codeline lineno="54"><highlight class="normal">}</highlight></codeline>
+    </programlisting>
+    <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/MAX5443.cpp"/>
+  </compounddef>
+</doxygen>

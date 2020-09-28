@@ -1,0 +1,348 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_experiment_8h" kind="file">
+    <compoundname>Experiment.h</compoundname>
+    <includes local="no">Arduino.h</includes>
+    <includes local="no">avr/interrupt.h</includes>
+    <incdepgraph>
+      <node id="13">
+        <label>avr/interrupt.h</label>
+      </node>
+      <node id="11">
+        <label>C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h</label>
+        <link refid="Experiment.h"/>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>Arduino.h</label>
+      </node>
+    </incdepgraph>
+      <sectiondef kind="define">
+      <memberdef kind="define" id="_experiment_8h_1a45311de3053cd885e0e23db400581213" prot="public" static="no">
+        <name>POT_OCP</name>
+        <initializer>0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="17" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1a115926dd8a73ae93e87b0c8c2f750f72" prot="public" static="no">
+        <name>POT_POTENT</name>
+        <initializer>1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="18" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1a1c0e64f6cd807ec3d6b19338fbd9ebe9" prot="public" static="no">
+        <name>POT_LP_OFF</name>
+        <initializer>0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="20" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1af1307e2a307f4cd36d0a0bae6fd728e9" prot="public" static="no">
+        <name>POT_LP_ON</name>
+        <initializer>1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="21" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1a645864b828ff8bb9abe871f5dc99e387" prot="public" static="no">
+        <name>ADS_F_2_5</name>
+        <initializer>0</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="23" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1adfc21f748e41e5bbd1e56f4dc03cbe84" prot="public" static="no">
+        <name>ADS_F_5</name>
+        <initializer>1</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="24" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1adecd386526e1d8c089b9160d6b4ebccc" prot="public" static="no">
+        <name>ADS_F_10</name>
+        <initializer>2</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="25" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1abd5386547f6bdaf1a329bbe5ae255650" prot="public" static="no">
+        <name>ADS_F_15</name>
+        <initializer>3</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="26" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1a7c195f0f2eb8f3d8a00e6fa38e8497b6" prot="public" static="no">
+        <name>ADS_F_25</name>
+        <initializer>4</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="27" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1a0d09426d648caf7a126d2b859cc2b98a" prot="public" static="no">
+        <name>ADS_F_30</name>
+        <initializer>5</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="28" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1ad4e745ab4318ddb69f57ade5a79bb682" prot="public" static="no">
+        <name>ADS_F_50</name>
+        <initializer>6</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="29" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1a710f89d9a92e7809ba3253812c498107" prot="public" static="no">
+        <name>ADS_F_60</name>
+        <initializer>7</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="30" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1ab364e66edeb3d4e54af8a2f8762c8bab" prot="public" static="no">
+        <name>ADS_F_100</name>
+        <initializer>8</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="31" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1ae5bfde2a97511f3a33eccc1b274876e7" prot="public" static="no">
+        <name>ADS_F_500</name>
+        <initializer>9</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="32" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1ad0ef0d8a55c55317d7226a9e37a41a91" prot="public" static="no">
+        <name>ADS_F_1000</name>
+        <initializer>10</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="33" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1a612ed75567848515a6ea1ba030ce1b0d" prot="public" static="no">
+        <name>ADS_F_2000</name>
+        <initializer>11</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="34" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1abd328378a6f6a651bf9dd5486fdcf656" prot="public" static="no">
+        <name>ADS_F_3750</name>
+        <initializer>12</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="35" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1a4854c1ef437320549aeeb67d4242efa3" prot="public" static="no">
+        <name>ADS_F_7500</name>
+        <initializer>13</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="36" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1a57e99d7346add4c415183ad748b258a8" prot="public" static="no">
+        <name>ADS_F_15000</name>
+        <initializer>14</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="37" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1ac609e712a404fb1ea866f50c12d0b76b" prot="public" static="no">
+        <name>ADS_F_30000</name>
+        <initializer>15</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="38" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1a4e9d57a8fde019f51464dfb523a9c7f2" prot="public" static="no">
+        <name>SIN_IMP_CYCLEPTS</name>
+        <initializer>50</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="41" column="9"/>
+      </memberdef>
+      <memberdef kind="define" id="_experiment_8h_1a7a6f638b14bb3073a08ee707fe280cd4" prot="public" static="no">
+        <name>RTC_COMPARE_INT_LEVEL</name>
+        <initializer>RTC_COMPINTLVL_HI_gc</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h" line="43" column="9"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*///////////////////////////////////////////////*/</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">/*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Experiments<sp/>related<sp/>class<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">/*///////////////////////////////////////////////*/</highlight></codeline>
+<codeline lineno="4"><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="5"><highlight class="comment"><sp/>*<sp/>Code<sp/>that<sp/>handles<sp/>characterization<sp/>techniques,<sp/>from<sp/>polarization<sp/>(MAX5443<sp/>class),<sp/>readout(ADS1255<sp/>class),<sp/>and<sp/>analog<sp/>switch<sp/>management.</highlight></codeline>
+<codeline lineno="6"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="7"><highlight class="normal"></highlight></codeline>
+<codeline lineno="8"><highlight class="normal"></highlight><highlight class="preprocessor">#ifndef<sp/>ADS1255_h</highlight></codeline>
+<codeline lineno="9"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS1255_h</highlight></codeline>
+<codeline lineno="10"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#include<sp/>&lt;Arduino.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#include<sp/>&lt;avr/interrupt.h&gt;</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="12"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/>*<sp/>Definitions</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="15"><highlight class="normal"></highlight></codeline>
+<codeline lineno="16"><highlight class="normal"></highlight><highlight class="comment">//???</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>POT_OCP<sp/><sp/><sp/><sp/><sp/><sp/><sp/>0</highlight></codeline>
+<codeline lineno="18"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>POT_POTENT<sp/><sp/><sp/><sp/>1</highlight></codeline>
+<codeline lineno="19"><highlight class="preprocessor"></highlight><highlight class="comment">//???</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>POT_LP_OFF<sp/><sp/><sp/><sp/>0</highlight></codeline>
+<codeline lineno="21"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>POT_LP_ON<sp/><sp/><sp/><sp/><sp/>1</highlight></codeline>
+<codeline lineno="22"><highlight class="preprocessor"></highlight><highlight class="comment">//SPS<sp/>setting</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="23"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_2_5<sp/><sp/><sp/><sp/><sp/>0</highlight></codeline>
+<codeline lineno="24"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_5<sp/><sp/><sp/><sp/><sp/><sp/><sp/>1</highlight></codeline>
+<codeline lineno="25"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_10<sp/><sp/><sp/><sp/><sp/><sp/>2</highlight></codeline>
+<codeline lineno="26"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_15<sp/><sp/><sp/><sp/><sp/><sp/>3</highlight></codeline>
+<codeline lineno="27"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_25<sp/><sp/><sp/><sp/><sp/><sp/>4</highlight></codeline>
+<codeline lineno="28"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_30<sp/><sp/><sp/><sp/><sp/><sp/>5</highlight></codeline>
+<codeline lineno="29"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_50<sp/><sp/><sp/><sp/><sp/><sp/>6</highlight></codeline>
+<codeline lineno="30"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_60<sp/><sp/><sp/><sp/><sp/><sp/>7</highlight></codeline>
+<codeline lineno="31"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_100<sp/><sp/><sp/><sp/><sp/>8</highlight></codeline>
+<codeline lineno="32"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_500<sp/><sp/><sp/><sp/><sp/>9</highlight></codeline>
+<codeline lineno="33"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_1000<sp/><sp/><sp/><sp/>10</highlight></codeline>
+<codeline lineno="34"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_2000<sp/><sp/><sp/><sp/>11</highlight></codeline>
+<codeline lineno="35"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_3750<sp/><sp/><sp/><sp/>12</highlight></codeline>
+<codeline lineno="36"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_7500<sp/><sp/><sp/><sp/>13</highlight></codeline>
+<codeline lineno="37"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_15000<sp/><sp/><sp/>14</highlight></codeline>
+<codeline lineno="38"><highlight class="preprocessor"></highlight><highlight class="preprocessor">#define<sp/>ADS_F_30000<sp/><sp/><sp/>15</highlight></codeline>
+<codeline lineno="39"><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="comment">//???</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="41"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>SIN_IMP_CYCLEPTS<sp/>50</highlight></codeline>
+<codeline lineno="42"><highlight class="preprocessor"></highlight><highlight class="comment">//???</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="43"><highlight class="normal"></highlight><highlight class="preprocessor">#define<sp/>RTC_COMPARE_INT_LEVEL<sp/>RTC_COMPINTLVL_HI_gc</highlight></codeline>
+<codeline lineno="44"><highlight class="preprocessor"></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="45"><highlight class="normal"></highlight></codeline>
+<codeline lineno="46"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/>uint16_t<sp/>g_gain;</highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight><highlight class="keyword">extern</highlight><highlight class="normal"><sp/>uint8_t<sp/>autogain_enable;</highlight></codeline>
+<codeline lineno="48"><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="50"><highlight class="comment"><sp/><sp/>*<sp/>Public<sp/>Functions</highlight></codeline>
+<codeline lineno="51"><highlight class="comment"><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>pot_init(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>pot_set_gain(uint8_t<sp/>Gain);</highlight></codeline>
+<codeline lineno="54"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>volt_exp_start(</highlight><highlight class="keywordtype">boolean</highlight><highlight class="normal"><sp/>mode);</highlight></codeline>
+<codeline lineno="55"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>volt_exp_stop(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>precond(int16_t<sp/>v1,<sp/>uint16_t<sp/>t1,<sp/>int16_t<sp/>v2,<sp/>uint16_t<sp/>t2);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>cv_experiment(int16_t<sp/>v1,<sp/>int16_t<sp/>v2,<sp/>int16_t<sp/>start,<sp/>uint8_t<sp/>scans,<sp/>uint16_t<sp/>slope);</highlight></codeline>
+<codeline lineno="58"><highlight class="normal">uint8_t<sp/>lsv_experiment(int16_t<sp/>start,<sp/>int16_t<sp/>stop,<sp/>uint16_t<sp/>slope,<sp/>int8_t<sp/>first_run);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ocp_exp_start(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>pot_exp_start(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">);</highlight></codeline>
+<codeline lineno="61"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>pot_experiment(uint16_t<sp/>time_seconds,<sp/>uint8_t<sp/>exp_type);</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ca_experiment(uint16_t<sp/>steps,<sp/>uint16_t<sp/>step_dac[],<sp/>uint16_t<sp/>step_seconds[]);</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>swv_experiment(int16_t<sp/>start,<sp/>int16_t<sp/>stop,<sp/>uint16_t<sp/>step,<sp/>uint16_t<sp/>pulse_height,<sp/>uint16_t<sp/>frequency,<sp/>uint16_t<sp/>scans);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>dpv_experiment(int16_t<sp/>start,<sp/>int16_t<sp/>stop,<sp/>uint16_t<sp/>step,<sp/>uint16_t<sp/>pulse_height,<sp/>uint16_t<sp/>pulse_period,<sp/>uint16_t<sp/>pulse_width);</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"></highlight></codeline>
+<codeline lineno="66"><highlight class="normal"></highlight></codeline>
+<codeline lineno="67"><highlight class="normal"></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="68"><highlight class="comment"><sp/>*<sp/>Interrupt<sp/>declarations</highlight></codeline>
+<codeline lineno="69"><highlight class="comment"><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight></codeline>
+<codeline lineno="71"><highlight class="normal"></highlight></codeline>
+<codeline lineno="72"><highlight class="normal"></highlight></codeline>
+<codeline lineno="73"><highlight class="normal"></highlight><highlight class="preprocessor"><sp/>#endif</highlight></codeline>
+    </programlisting>
+    <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/Experiment.h"/>
+  </compounddef>
+</doxygen>

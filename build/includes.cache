@@ -30,6 +30,11 @@
     "Includepath": ""
   },
   {
+    "Sourcefile": "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\build\\sketch\\MAX4617.cpp",
+    "Include": "",
+    "Includepath": ""
+  },
+  {
     "Sourcefile": "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\build\\sketch\\MAX5443.cpp",
     "Include": "",
     "Includepath": ""

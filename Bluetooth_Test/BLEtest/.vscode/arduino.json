@@ -1,0 +1,6 @@
+{
+    "board": "arduino:avr:micro",
+    "sketch": "BLEtest.ino",
+    "port": "COM13",
+    "programmer": "ArduinoISP"
+}

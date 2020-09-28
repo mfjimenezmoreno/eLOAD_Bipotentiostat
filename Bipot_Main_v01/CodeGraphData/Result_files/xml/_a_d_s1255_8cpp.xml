@@ -1,0 +1,435 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="_a_d_s1255_8cpp" kind="file">
+    <compoundname>ADS1255.cpp</compoundname>
+    <includes local="no">Arduino.h</includes>
+    <includes refid="_a_d_s1255_8h" local="no">C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\Bipot_Main_v01\ADS1255.h</includes>
+    <includes local="no">SPI.h</includes>
+    <incdepgraph>
+      <node id="3">
+        <label>SPI.h</label>
+      </node>
+      <node id="2">
+        <label>C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\Bipot_Main_v01\ADS1255.h</label>
+        <link refid="_a_d_s1255_8h"/>
+        <childnode refid="1" relation="include">
+        </childnode>
+      </node>
+      <node id="0">
+        <label>C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/ADS1255.cpp</label>
+        <link refid="ADS1255.cpp"/>
+        <childnode refid="1" relation="include">
+        </childnode>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Arduino.h</label>
+      </node>
+    </incdepgraph>
+      <sectiondef kind="func">
+      <memberdef kind="function" id="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>SPISettings</type>
+        <definition>SPISettings SPI_ADS1255</definition>
+        <argsstring>(19000000, MSBFIRST, SPI_MODE1)</argsstring>
+        <name>SPI_ADS1255</name>
+        <param>
+          <type>19000000</type>
+        </param>
+        <param>
+          <type>MSBFIRST</type>
+        </param>
+        <param>
+          <type>SPI_MODE1</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/ADS1255.cpp" line="9" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <programlisting>
+<codeline lineno="1"><highlight class="comment">/*///////////////////////////////////////*/</highlight></codeline>
+<codeline lineno="2"><highlight class="comment">/*<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>ADC<sp/>related<sp/>methods<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="3"><highlight class="normal"></highlight><highlight class="comment">/*///////////////////////////////////////*/</highlight></codeline>
+<codeline lineno="4"><highlight class="comment"></highlight></codeline>
+<codeline lineno="5"><highlight class="comment">#include<sp/>&lt;Arduino.h&gt;</highlight></codeline>
+<codeline lineno="6"><highlight class="comment">#include<sp/>&lt;C:\Users\Martin\Documents\Arduino\Bipotentiostat_Main_v2\Bipot_Main_v01\ADS1255.h&gt;</highlight></codeline>
+<codeline lineno="7"><highlight class="comment">#include<sp/>&lt;SPI.h&gt;</highlight></codeline>
+<codeline lineno="8"><highlight class="comment"></highlight></codeline>
+<codeline lineno="9"><highlight class="comment">SPISettings<sp/>SPI_ADS1255(19000000,<sp/>MSBFIRST,<sp/>SPI_MODE1);</highlight></codeline>
+<codeline lineno="10"><highlight class="comment"></highlight></codeline>
+<codeline lineno="11"><highlight class="comment">ads1255::ads1255(int<sp/>Chip_Select,<sp/>int<sp/>DRDY){</highlight></codeline>
+<codeline lineno="12"><highlight class="comment"><sp/><sp/>/*</highlight></codeline>
+<codeline lineno="13"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Class<sp/>constructor</highlight></codeline>
+<codeline lineno="14"><highlight class="comment"><sp/><sp/><sp/>*<sp/>@param<sp/>Chip_Select<sp/><sp/><sp/>Pin<sp/>where<sp/>DAC<sp/>chip<sp/>select<sp/>is<sp/>located</highlight></codeline>
+<codeline lineno="15"><highlight class="comment"><sp/><sp/><sp/>*<sp/>@param<sp/>DRDY<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/>Pin<sp/>where<sp/>DRDY<sp/>is<sp/>connected<sp/>to<sp/>(interrupt)</highlight></codeline>
+<codeline lineno="16"><highlight class="comment"><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="17"><highlight class="normal"><sp/><sp/>_CS_pin<sp/>=<sp/>Chip_Select;</highlight></codeline>
+<codeline lineno="18"><highlight class="normal"><sp/><sp/>_DRDY_pin<sp/>=<sp/>DRDY;</highlight></codeline>
+<codeline lineno="19"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="20"><highlight class="normal"></highlight></codeline>
+<codeline lineno="21"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ads1255::pins_init()<sp/>{</highlight></codeline>
+<codeline lineno="22"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="23"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>Purpose:<sp/>ADC<sp/>Chip<sp/>select<sp/>pin<sp/>is<sp/>set<sp/>as<sp/>output<sp/>and<sp/>turns<sp/>it<sp/>HIGH<sp/>(i.e.<sp/>chip<sp/>is<sp/>not<sp/>selected)</highlight></codeline>
+<codeline lineno="24"><highlight class="comment"><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="25"><highlight class="normal"><sp/><sp/>pinMode(_CS_pin,<sp/>OUTPUT);</highlight></codeline>
+<codeline lineno="26"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="27"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="28"><highlight class="normal"></highlight></codeline>
+<codeline lineno="29"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ads1255::sync()<sp/>{</highlight></codeline>
+<codeline lineno="30"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="31"><highlight class="comment"><sp/><sp/><sp/><sp/><sp/>Purpose:<sp/>Synchronizes<sp/>the<sp/>A/D<sp/>conversion.<sp/>Command<sp/>should<sp/>be<sp/>followed<sp/>by<sp/>Wakeup<sp/>command.<sp/>Synchronization<sp/>will<sp/>happen<sp/>on<sp/>the<sp/>first<sp/>CLKIN<sp/>rising<sp/>edge.</highlight></codeline>
+<codeline lineno="32"><highlight class="comment"><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="33"><highlight class="normal"><sp/><sp/>SPI.beginTransaction(<ref refid="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" kindref="member">SPI_ADS1255</ref>);</highlight></codeline>
+<codeline lineno="34"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>LOW);</highlight></codeline>
+<codeline lineno="35"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a3f02be690738105ee7c7afe0d6ce8605" kindref="member">ADS_SYNC</ref>);</highlight></codeline>
+<codeline lineno="36"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="37"><highlight class="normal"><sp/><sp/>SPI.endTransaction();</highlight></codeline>
+<codeline lineno="38"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="39"><highlight class="normal"></highlight></codeline>
+<codeline lineno="40"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ads1255::reg_read(uint8_t<sp/>address)<sp/>{</highlight></codeline>
+<codeline lineno="41"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="42"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Purpose:<sp/>reads<sp/>the<sp/>specified<sp/>register.<sp/>Format<sp/>according<sp/>to<sp/>page<sp/>34.<sp/>Note:<sp/>returns<sp/>five<sp/>readings<sp/>into<sp/>the<sp/>public<sp/>variable<sp/>input_buffer[5].</highlight></codeline>
+<codeline lineno="43"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Format:<sp/></highlight></codeline>
+<codeline lineno="44"><highlight class="comment"><sp/><sp/><sp/>*<sp/>└──&gt;1st<sp/>command<sp/>byte:<sp/>0001<sp/>rrrr<sp/>(starting<sp/>register<sp/>to<sp/>read<sp/>commands)</highlight></codeline>
+<codeline lineno="45"><highlight class="comment"><sp/><sp/><sp/>*<sp/>└──&gt;2nd<sp/>command<sp/>byte:<sp/>0000<sp/>nnnn<sp/>(number<sp/>of<sp/>registers<sp/>to<sp/>be<sp/>read<sp/>+1,<sp/>herein<sp/>it<sp/>is<sp/>fixed<sp/>to<sp/>4,<sp/>requesting<sp/>5<sp/>registers<sp/>starting<sp/>from<sp/>address)</highlight></codeline>
+<codeline lineno="46"><highlight class="comment"><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="47"><highlight class="normal"></highlight></codeline>
+<codeline lineno="48"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//1st<sp/>command<sp/>byte<sp/>definition</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="49"><highlight class="normal"><sp/><sp/>_ADC_buffer.ui8[0]<sp/>=<sp/>address;</highlight></codeline>
+<codeline lineno="50"><highlight class="normal"><sp/><sp/>_ADC_buffer.ui8[0]<sp/>|=<sp/>0x10;</highlight></codeline>
+<codeline lineno="51"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//2nd<sp/>command<sp/>byte<sp/>definition</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="52"><highlight class="normal"><sp/><sp/>_ADC_buffer.ui8[1]<sp/>=<sp/>4;</highlight></codeline>
+<codeline lineno="53"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="54"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//Send<sp/>read<sp/>register<sp/>command<sp/>to<sp/>ADC</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="55"><highlight class="normal"><sp/><sp/>SPI.beginTransaction(<ref refid="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" kindref="member">SPI_ADS1255</ref>);</highlight></codeline>
+<codeline lineno="56"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>LOW);</highlight></codeline>
+<codeline lineno="57"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal">(digitalRead(_DRDY_pin)<sp/>==<sp/>HIGH);<sp/><sp/></highlight><highlight class="comment">//Hold<sp/>on,<sp/>until<sp/>DRDY<sp/>pin<sp/>is<sp/>LOW.<sp/>Note:<sp/>make<sp/>sure<sp/>the<sp/>interrupt<sp/>is<sp/>deactivated.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="58"><highlight class="normal"><sp/><sp/>SPI.transfer(_ADC_buffer.ui8[0]);</highlight></codeline>
+<codeline lineno="59"><highlight class="normal"><sp/><sp/>SPI.transfer(_ADC_buffer.ui8[1]);</highlight></codeline>
+<codeline lineno="60"><highlight class="normal"><sp/><sp/>delayMicroseconds(6.5);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Should<sp/>be<sp/>minimum<sp/>50<sp/>times<sp/>1/CLKin,<sp/>theoretically<sp/>doesn&apos;t<sp/>use<sp/>timer0<sp/>so<sp/>interrupt<sp/>should<sp/>be<sp/>safe</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="61"><highlight class="normal"><sp/><sp/>input_buffer[0]<sp/>=<sp/>SPI.transfer(0x00);</highlight></codeline>
+<codeline lineno="62"><highlight class="normal"><sp/><sp/>input_buffer[1]<sp/>=<sp/>SPI.transfer(0x00);</highlight></codeline>
+<codeline lineno="63"><highlight class="normal"><sp/><sp/>input_buffer[2]<sp/>=<sp/>SPI.transfer(0x00);</highlight></codeline>
+<codeline lineno="64"><highlight class="normal"><sp/><sp/>input_buffer[3]<sp/>=<sp/>SPI.transfer(0x00);</highlight></codeline>
+<codeline lineno="65"><highlight class="normal"><sp/><sp/>input_buffer[4]<sp/>=<sp/>SPI.transfer(0x00);</highlight></codeline>
+<codeline lineno="66"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="67"><highlight class="normal"><sp/><sp/>SPI.endTransaction();</highlight></codeline>
+<codeline lineno="68"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="69"><highlight class="normal"></highlight></codeline>
+<codeline lineno="70"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ads1255::reset()<sp/>{</highlight></codeline>
+<codeline lineno="71"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="72"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Purpose:<sp/>Software<sp/>reset.<sp/>Registers<sp/>are<sp/>initialized<sp/>to<sp/>their<sp/>default<sp/>state<sp/>except<sp/>for<sp/>CLK0<sp/>and<sp/>CLK1<sp/>bits<sp/>in<sp/>ADCON<sp/>register<sp/>(controls</highlight></codeline>
+<codeline lineno="73"><highlight class="comment"><sp/><sp/><sp/>*<sp/>D0/CLKOUT<sp/>pin).<sp/>Self-calibration<sp/>is<sp/>always<sp/>performed<sp/>after<sp/>reset.</highlight></codeline>
+<codeline lineno="74"><highlight class="comment"><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="75"><highlight class="normal"><sp/><sp/>SPI.beginTransaction(<ref refid="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" kindref="member">SPI_ADS1255</ref>);</highlight></codeline>
+<codeline lineno="76"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>LOW);</highlight></codeline>
+<codeline lineno="77"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//while(digitalRead(_DRDY_pin)<sp/>==<sp/>HIGH);<sp/><sp/>//Hold<sp/>on,<sp/>until<sp/>DRDY<sp/>pin<sp/>is<sp/>LOW.<sp/>I<sp/>don&apos;t<sp/>think<sp/>this<sp/>is<sp/>necessary<sp/>at<sp/>all<sp/>from<sp/>original<sp/>source<sp/>code.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="78"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a2951287a2d58551cbcab574a44f90c59" kindref="member">ADS_RESET</ref>);</highlight></codeline>
+<codeline lineno="79"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="80"><highlight class="normal"><sp/><sp/>SPI.endTransaction();</highlight></codeline>
+<codeline lineno="81"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="82"><highlight class="normal"></highlight></codeline>
+<codeline lineno="83"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ads1255::setup_reg(uint8_t<sp/>buff,<sp/>uint8_t<sp/>rate,<sp/>uint8_t<sp/>pga)<sp/>{</highlight></codeline>
+<codeline lineno="84"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="85"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Purpose:<sp/>Setup<sp/>4<sp/>registers,<sp/>user<sp/>inputs<sp/>the<sp/>desired<sp/>STATUS,<sp/>ADCON<sp/>and<sp/>DRATE<sp/>Register.<sp/>The<sp/>method<sp/>firs<sp/>send<sp/>two<sp/>bytes<sp/>that<sp/>commands<sp/>the<sp/>ADS1255</highlight></codeline>
+<codeline lineno="86"><highlight class="comment"><sp/><sp/><sp/>*<sp/>to<sp/>edit<sp/>4<sp/>registers<sp/>starting<sp/>from<sp/>STATUS<sp/>(register<sp/>0x00).<sp/>This<sp/>function<sp/>has<sp/>the<sp/>main<sp/>purpose<sp/>of<sp/>enabling<sp/>or<sp/>disabling<sp/>analog<sp/>input<sp/>buffer<sp/>(buff),</highlight></codeline>
+<codeline lineno="87"><highlight class="comment"><sp/><sp/><sp/>*<sp/>the<sp/>data<sp/>rate<sp/>(rate)<sp/>and<sp/>the<sp/>proggramable<sp/>gain<sp/>amplifier<sp/>(pga).<sp/>Performs<sp/>gain,<sp/>offset<sp/>calibration<sp/>at<sp/>the<sp/>end<sp/>while<sp/>synchronizing<sp/>A/D<sp/>conversion</highlight></codeline>
+<codeline lineno="88"><highlight class="comment"><sp/><sp/><sp/>*<sp/>with<sp/>CLKIN<sp/>as<sp/>well.</highlight></codeline>
+<codeline lineno="89"><highlight class="comment"><sp/><sp/><sp/>*<sp/></highlight></codeline>
+<codeline lineno="90"><highlight class="comment"><sp/><sp/><sp/>*<sp/>NOTE:<sp/>for<sp/>your<sp/>convenience,<sp/>use<sp/>the<sp/>constant<sp/>defines<sp/>from<sp/>the<sp/>header<sp/>file<sp/>as<sp/>arguments.<sp/>(ADCON,<sp/>DRATE<sp/>and<sp/>PGA<sp/>registers).</highlight></codeline>
+<codeline lineno="91"><highlight class="comment"><sp/><sp/><sp/>*<sp/></highlight></codeline>
+<codeline lineno="92"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Registers:</highlight></codeline>
+<codeline lineno="93"><highlight class="comment"><sp/><sp/><sp/>*<sp/>└──&gt;STATUS:<sp/>7-4:<sp/>read<sp/>only,<sp/>3:<sp/>Order:<sp/>MSB(0)<sp/>or<sp/>LSB(1),<sp/>2:ACAL:<sp/>autocal<sp/>disabled<sp/>(0)<sp/>enabled<sp/>(1),<sp/>1:BUFEN<sp/>analog<sp/>input<sp/>buffer<sp/>enable(0)<sp/>or<sp/>disable<sp/>(1),<sp/>0:~DRDY~<sp/>(read<sp/>only)</highlight></codeline>
+<codeline lineno="94"><highlight class="comment"><sp/><sp/><sp/>*<sp/>└──&gt;MUX:<sp/>7-4:<sp/>for<sp/>positive<sp/>Input<sp/>selection<sp/>(only<sp/>two<sp/>options<sp/>in<sp/>ADS1255),<sp/>3-0:<sp/>same,<sp/>but<sp/>for<sp/>negative.</highlight></codeline>
+<codeline lineno="95"><highlight class="comment"><sp/><sp/><sp/>*<sp/>└──&gt;ADCON:<sp/>7:<sp/>Reserved,<sp/>6-5:<sp/>Clkout<sp/>rate<sp/>setting,4-2:<sp/>Sensor<sp/>detect<sp/>currents,<sp/>2-0-:<sp/>programmable<sp/>gain<sp/>amplifier<sp/>setting</highlight></codeline>
+<codeline lineno="96"><highlight class="comment"><sp/><sp/><sp/>*<sp/>└──&gt;DRATE:<sp/>7-0:<sp/>Data<sp/>rate<sp/>setting!</highlight></codeline>
+<codeline lineno="97"><highlight class="comment"><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="98"><highlight class="normal"></highlight></codeline>
+<codeline lineno="99"><highlight class="normal"><sp/><sp/>buff<sp/>&amp;=<sp/>0x02;<sp/><sp/></highlight><highlight class="comment">//Masking<sp/>out<sp/>the<sp/>possibility<sp/>that<sp/>user<sp/>makes<sp/>anything<sp/>funny<sp/>with<sp/>byte<sp/>order<sp/>transfer,<sp/>only<sp/>BUFEN<sp/>bit<sp/>can<sp/>be<sp/>edited.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="100"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="101"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//Create<sp/>command<sp/>buffer:<sp/>Write<sp/>from<sp/>register<sp/>0<sp/>(STATUS),<sp/>3+1<sp/>commands<sp/>(until<sp/>DRATE),<sp/>STATUS,<sp/>MUX(choose<sp/>AIN0<sp/>and<sp/>AINCOM),<sp/>ADCON(PGA),<sp/>DRATE(RATE)<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="102"><highlight class="normal"><sp/><sp/>_command_buffer[0]<sp/>=<sp/>0x50;</highlight></codeline>
+<codeline lineno="103"><highlight class="normal"><sp/><sp/>_command_buffer[1]<sp/>=<sp/>0x30;</highlight></codeline>
+<codeline lineno="104"><highlight class="normal"><sp/><sp/>_command_buffer[2]<sp/>=<sp/>buff;</highlight></codeline>
+<codeline lineno="105"><highlight class="normal"><sp/><sp/>_command_buffer[3]<sp/>=<sp/>0x08;</highlight></codeline>
+<codeline lineno="106"><highlight class="normal"><sp/><sp/>_command_buffer[4]<sp/>=<sp/>pga;</highlight></codeline>
+<codeline lineno="107"><highlight class="normal"><sp/><sp/>_command_buffer[5]<sp/>=<sp/>rate;</highlight></codeline>
+<codeline lineno="108"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//Setup<sp/>the<sp/>read<sp/>only<sp/>sample_delay_ms_100div<sp/>register<sp/>according<sp/>to<sp/>specified<sp/>rate</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="109"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">switch</highlight><highlight class="normal"><sp/>(rate)<sp/>{</highlight></codeline>
+<codeline lineno="110"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1ad0eafa83992b3dbdcc00888300934ec6" kindref="member">ADS_DR_2_5</ref>:</highlight></codeline>
+<codeline lineno="111"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>40022;</highlight></codeline>
+<codeline lineno="112"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="113"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1a758165b5ef5d906c9b3d4cacfef3dc0c" kindref="member">ADS_DR_5</ref>:</highlight></codeline>
+<codeline lineno="114"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>20022;</highlight></codeline>
+<codeline lineno="115"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="116"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1a5f269dd9b63924228fe926c468e7e183" kindref="member">ADS_DR_10</ref>:</highlight></codeline>
+<codeline lineno="117"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>10022;</highlight></codeline>
+<codeline lineno="118"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="119"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1a90682d3575f68d83075ae381dd761133" kindref="member">ADS_DR_15</ref>:</highlight></codeline>
+<codeline lineno="120"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>6688;</highlight></codeline>
+<codeline lineno="121"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="122"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1afad0966b5188a26cbfddfdd90bb6c7d0" kindref="member">ADS_DR_25</ref>:</highlight></codeline>
+<codeline lineno="123"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>4022;</highlight></codeline>
+<codeline lineno="124"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="125"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1a994991e15efa2cc7f67e4f64cccd0245" kindref="member">ADS_DR_30</ref>:</highlight></codeline>
+<codeline lineno="126"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>3355;</highlight></codeline>
+<codeline lineno="127"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="128"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1a28bd44f8fdf8e853f8557922a23f85f8" kindref="member">ADS_DR_50</ref>:</highlight></codeline>
+<codeline lineno="129"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>2022;</highlight></codeline>
+<codeline lineno="130"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="131"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1a08635e01836dbfe07e23f373667724b6" kindref="member">ADS_DR_60</ref>:</highlight></codeline>
+<codeline lineno="132"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>1688;</highlight></codeline>
+<codeline lineno="133"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="134"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1a73d1edc95ca9538c4427df7be61fc7ba" kindref="member">ADS_DR_100</ref>:</highlight></codeline>
+<codeline lineno="135"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>1022;</highlight></codeline>
+<codeline lineno="136"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="137"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1a62bf29d38b290aa5382af5e9a8fb2e76" kindref="member">ADS_DR_500</ref>:</highlight></codeline>
+<codeline lineno="138"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>222;</highlight></codeline>
+<codeline lineno="139"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="140"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1acc4d0b6836d6e9613c9db477cd5f001c" kindref="member">ADS_DR_1000</ref>:</highlight></codeline>
+<codeline lineno="141"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>122;</highlight></codeline>
+<codeline lineno="142"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="143"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1ad8d0a329feaf2fb22c20bf2bf5019c99" kindref="member">ADS_DR_2000</ref>:</highlight></codeline>
+<codeline lineno="144"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>72;</highlight></codeline>
+<codeline lineno="145"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="146"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1a2024cacca6876a065ca662239c47b14b" kindref="member">ADS_DR_3750</ref>:</highlight></codeline>
+<codeline lineno="147"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>48;</highlight></codeline>
+<codeline lineno="148"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="149"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1a3a91b580a891aafe01699d7670e044c1" kindref="member">ADS_DR_7500</ref>:</highlight></codeline>
+<codeline lineno="150"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>35;</highlight></codeline>
+<codeline lineno="151"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="152"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1a8cf3bd25c84e6f93f72bd85cd5ca4b3f" kindref="member">ADS_DR_15000</ref>:</highlight></codeline>
+<codeline lineno="153"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>29;</highlight></codeline>
+<codeline lineno="154"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="155"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">case</highlight><highlight class="normal"><sp/><ref refid="_a_d_s1255_8h_1a051c8eeb11308c639beb7f742c2e57dc" kindref="member">ADS_DR_30000</ref>:</highlight></codeline>
+<codeline lineno="156"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/>sample_delay_ms_100div<sp/>=<sp/>25;</highlight></codeline>
+<codeline lineno="157"><highlight class="normal"><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">break</highlight><highlight class="normal">;</highlight></codeline>
+<codeline lineno="158"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="159"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="160"><highlight class="normal"><sp/><sp/>SPI.beginTransaction(<ref refid="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" kindref="member">SPI_ADS1255</ref>);</highlight></codeline>
+<codeline lineno="161"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>LOW);</highlight></codeline>
+<codeline lineno="162"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//while(digitalRead(_DRDY_pin)<sp/>==<sp/>HIGH);<sp/><sp/>//Hold<sp/>on,<sp/>until<sp/>DRDY<sp/>pin<sp/>is<sp/>LOW.<sp/>I<sp/>don&apos;t<sp/>think<sp/>this<sp/>is<sp/>necessary<sp/>at<sp/>all<sp/>from<sp/>original<sp/>source<sp/>code.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="163"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(uint8_t<sp/>n=0;<sp/>n&lt;=5;<sp/>n++)<sp/>{</highlight></codeline>
+<codeline lineno="164"><highlight class="normal"><sp/><sp/><sp/><sp/>SPI.transfer(_command_buffer[n]);<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Send<sp/>the<sp/>2<sp/>write<sp/>command<sp/>packets<sp/>and<sp/>4<sp/>registers.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="165"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="166"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a3f02be690738105ee7c7afe0d6ce8605" kindref="member">ADS_SYNC</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Synchronize<sp/>A/D<sp/>conversion<sp/>with<sp/>CLKIN<sp/>rising<sp/>edge<sp/>from<sp/>WAKEUP<sp/>command.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="167"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a22178300b6938b0d9d760b17651ae331" kindref="member">ADS_WAKEUP</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//NOT<sp/>IN<sp/>Mr.<sp/>Dryden&apos;s<sp/>code:<sp/>Completes<sp/>synchronization</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="168"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a5127503998d909815568a2d90c98123e" kindref="member">ADS_SELFCAL</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Perform<sp/>a<sp/>self<sp/>offset<sp/>and<sp/>self<sp/>gain<sp/>calbiration.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="169"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal">(digitalRead(_DRDY_pin)<sp/>==<sp/>HIGH);<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Hold<sp/>on.<sp/>Calibration<sp/>is<sp/>complete<sp/>until<sp/>DRDY<sp/>goes<sp/>low.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="170"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="171"><highlight class="normal"><sp/><sp/>SPI.endTransaction();</highlight></codeline>
+<codeline lineno="172"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="173"><highlight class="normal"></highlight></codeline>
+<codeline lineno="174"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ads1255::mux(uint8_t<sp/>channel)<sp/>{</highlight></codeline>
+<codeline lineno="175"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="176"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Purpose:<sp/>Edit<sp/>the<sp/>mux<sp/>register:</highlight></codeline>
+<codeline lineno="177"><highlight class="comment"><sp/><sp/><sp/>*<sp/>BITS:<sp/>7-4<sp/>PSEL<sp/>3-0<sp/>NSEL</highlight></codeline>
+<codeline lineno="178"><highlight class="comment"><sp/><sp/><sp/>*<sp/>PSEL<sp/>=<sp/>Positive<sp/>input<sp/>channel<sp/>select<sp/>AIN0(0000)(default),<sp/>AIN1(0001)<sp/>and<sp/>AINCOM(1XXX)</highlight></codeline>
+<codeline lineno="179"><highlight class="comment"><sp/><sp/><sp/>*<sp/>NSEL<sp/>=<sp/>Negative<sp/>input<sp/>channel<sp/>select<sp/>AIN0(0000),<sp/>AIN1(0001)(default)<sp/>and<sp/>AINCOM(1XXX)</highlight></codeline>
+<codeline lineno="180"><highlight class="comment"><sp/><sp/><sp/>*<sp/></highlight></codeline>
+<codeline lineno="181"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Expected<sp/>channel<sp/>values<sp/>from<sp/>Bipotentiostat<sp/>application:</highlight></codeline>
+<codeline lineno="182"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>If<sp/>ADC<sp/>from<sp/>WE1:</highlight></codeline>
+<codeline lineno="183"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>Voltammetry<sp/><sp/><sp/>0x08<sp/>(AIN0<sp/>-<sp/>AINCOM<sp/>or<sp/>V_IWE1<sp/>node<sp/>vs.<sp/>1.5<sp/>volts<sp/>reference)</highlight></codeline>
+<codeline lineno="184"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>Potentiometry<sp/>0x18<sp/>(AIN1<sp/>-<sp/>AINCOM<sp/>or<sp/>Ref_V<sp/><sp/>node<sp/>vs.<sp/>1.5<sp/>volts<sp/>reference)</highlight></codeline>
+<codeline lineno="185"><highlight class="comment"><sp/><sp/><sp/>*<sp/></highlight></codeline>
+<codeline lineno="186"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>If<sp/>ADC<sp/>from<sp/>WE2:</highlight></codeline>
+<codeline lineno="187"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>Voltammetry<sp/><sp/><sp/>0x08<sp/>(AIN0<sp/>-<sp/>AINCOM<sp/>or<sp/>V_IWE2<sp/>node<sp/>vs.<sp/>1.5<sp/>volts<sp/>reference)</highlight></codeline>
+<codeline lineno="188"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>Potentiometry<sp/>N/A<sp/></highlight></codeline>
+<codeline lineno="189"><highlight class="comment"><sp/><sp/><sp/>*<sp/></highlight></codeline>
+<codeline lineno="190"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Note:<sp/>Use<sp/>the<sp/>header<sp/>definitions!<sp/>Two<sp/>options<sp/>available<sp/>depending<sp/>if<sp/>it<sp/>works<sp/>in<sp/>potentiometric<sp/>or<sp/>voltammetric<sp/>mode.</highlight></codeline>
+<codeline lineno="191"><highlight class="comment"><sp/><sp/><sp/>*<sp/></highlight></codeline>
+<codeline lineno="192"><highlight class="comment"><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="193"><highlight class="normal"></highlight></codeline>
+<codeline lineno="194"><highlight class="normal"><sp/><sp/>_command_buffer[0]<sp/>=<sp/>0x51;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Write<sp/>only<sp/>the<sp/>MUX<sp/>register,</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="195"><highlight class="normal"><sp/><sp/>_command_buffer[1]<sp/>=<sp/>0x00;</highlight></codeline>
+<codeline lineno="196"><highlight class="normal"><sp/><sp/>_command_buffer[2]<sp/>=<sp/>channel;</highlight></codeline>
+<codeline lineno="197"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="198"><highlight class="normal"><sp/><sp/>SPI.beginTransaction(<ref refid="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" kindref="member">SPI_ADS1255</ref>);</highlight></codeline>
+<codeline lineno="199"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>LOW);</highlight></codeline>
+<codeline lineno="200"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a0808108f819dd411f66f7ddf0c983776" kindref="member">ADS_SDATAC</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Stop<sp/>read<sp/>data<sp/>continously</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="201"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(uint8_t<sp/>n=0;<sp/>n&lt;=2;<sp/>n++)<sp/>{</highlight></codeline>
+<codeline lineno="202"><highlight class="normal"><sp/><sp/><sp/><sp/>SPI.transfer(_command_buffer[n]);<sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Send<sp/>the<sp/>2<sp/>write<sp/>command<sp/>packets<sp/>and<sp/>4<sp/>registers.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="203"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="204"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a3f02be690738105ee7c7afe0d6ce8605" kindref="member">ADS_SYNC</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Synchronize<sp/>A/D<sp/>conversion<sp/>with<sp/>CLKIN<sp/>rising<sp/>edge<sp/>from<sp/>WAKEUP<sp/>command.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="205"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a22178300b6938b0d9d760b17651ae331" kindref="member">ADS_WAKEUP</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//NOT<sp/>IN<sp/>Mr.<sp/>Dryden&apos;s<sp/>code:<sp/>Completes<sp/>synchronization</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="206"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a5127503998d909815568a2d90c98123e" kindref="member">ADS_SELFCAL</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Perform<sp/>a<sp/>self<sp/>offset<sp/>and<sp/>self<sp/>gain<sp/>calbiration.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="207"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal">(digitalRead(_DRDY_pin)<sp/>==<sp/>HIGH);<sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Hold<sp/>on.<sp/>Until<sp/>it<sp/>is<sp/>ready.<sp/>(Page<sp/>36)</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="208"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="209"><highlight class="normal"><sp/><sp/>SPI.endTransaction();</highlight></codeline>
+<codeline lineno="210"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="211"><highlight class="normal"></highlight></codeline>
+<codeline lineno="212"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ads1255::standby(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">){</highlight></codeline>
+<codeline lineno="213"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="214"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Purpose:<sp/>Puts<sp/>device<sp/>into<sp/>low<sp/>power<sp/>mode.<sp/>Make<sp/>sure<sp/>not<sp/>to<sp/>send<sp/>clock<sp/>cycles<sp/>if<sp/>CS<sp/>pin<sp/>is<sp/>low.<sp/>Use<sp/>WAKEUP<sp/>command<sp/>to<sp/>exit<sp/>mode.</highlight></codeline>
+<codeline lineno="215"><highlight class="comment"><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="216"><highlight class="normal"><sp/><sp/>SPI.beginTransaction(<ref refid="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" kindref="member">SPI_ADS1255</ref>);</highlight></codeline>
+<codeline lineno="217"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>LOW);</highlight></codeline>
+<codeline lineno="218"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a9be94acf17c62650837b4ad5cd3f5cee" kindref="member">ADS_STANDBY</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Commands<sp/>ADS1255<sp/>into<sp/>Standby<sp/>mode</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="219"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="220"><highlight class="normal"><sp/><sp/>SPI.endTransaction();</highlight></codeline>
+<codeline lineno="221"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="222"><highlight class="normal"></highlight></codeline>
+<codeline lineno="223"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ads1255::wakeup(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">){</highlight></codeline>
+<codeline lineno="224"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="225"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Purpose:<sp/>Command<sp/>to<sp/>exit<sp/>Standby<sp/>mode.</highlight></codeline>
+<codeline lineno="226"><highlight class="comment"><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="227"><highlight class="normal"><sp/><sp/>SPI.beginTransaction(<ref refid="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" kindref="member">SPI_ADS1255</ref>);</highlight></codeline>
+<codeline lineno="228"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>LOW);</highlight></codeline>
+<codeline lineno="229"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a22178300b6938b0d9d760b17651ae331" kindref="member">ADS_WAKEUP</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Commands<sp/>ADS1255<sp/>to<sp/>exit<sp/>Standby<sp/>mode</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="230"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="231"><highlight class="normal"><sp/><sp/>SPI.endTransaction();</highlight></codeline>
+<codeline lineno="232"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="233"><highlight class="normal"></highlight></codeline>
+<codeline lineno="234"><highlight class="normal"></highlight><highlight class="keywordtype">void</highlight><highlight class="normal"><sp/>ads1255::rdatac(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">){</highlight></codeline>
+<codeline lineno="235"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="236"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Purpose:<sp/>Enables<sp/>continous<sp/>output<sp/>of<sp/>data.<sp/>After<sp/>24<sp/>bits<sp/>have<sp/>been<sp/>read,<sp/>~DRDY~<sp/>goes<sp/>low.<sp/>It<sp/>is<sp/>not<sp/>necessary<sp/>to<sp/>read<sp/>the<sp/>24<sp/>bits.</highlight></codeline>
+<codeline lineno="237"><highlight class="comment"><sp/><sp/><sp/>*<sp/>~DRDY~<sp/>will<sp/>not<sp/>go<sp/>high<sp/>unless<sp/>there<sp/>is<sp/>new<sp/>data<sp/>being<sp/>updated.<sp/>This<sp/>mode<sp/>can<sp/>be<sp/>stopped<sp/>by<sp/>SDATAC<sp/>or<sp/>RESET<sp/>commands</highlight></codeline>
+<codeline lineno="238"><highlight class="comment"><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="239"><highlight class="normal"><sp/><sp/>SPI.beginTransaction(<ref refid="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" kindref="member">SPI_ADS1255</ref>);</highlight></codeline>
+<codeline lineno="240"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>LOW);</highlight></codeline>
+<codeline lineno="241"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a7ff54559c98b1ba7165e8704331a9470" kindref="member">ADS_RDATAC</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Enter<sp/>into<sp/>continous<sp/>data<sp/>generation<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="242"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">//while(digitalRead(_DRDY_pin)<sp/>==<sp/>HIGH);<sp/><sp/><sp/><sp/>//Hold<sp/>on.<sp/>Until<sp/>it<sp/>is<sp/>ready.<sp/>I<sp/>don&apos;t<sp/>think<sp/>it&apos;s<sp/>necessary<sp/>to<sp/>add<sp/>this.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="243"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="244"><highlight class="normal"><sp/><sp/>SPI.endTransaction();</highlight></codeline>
+<codeline lineno="245"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="246"><highlight class="normal"></highlight></codeline>
+<codeline lineno="247"><highlight class="normal">int16_t<sp/>ads1255::read_fast(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">){</highlight></codeline>
+<codeline lineno="248"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="249"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Purpose:<sp/>Reads<sp/>a<sp/>single<sp/>conversion<sp/>from<sp/>ADS1255.<sp/>Returns<sp/>a<sp/>16<sp/>byte<sp/>int<sp/>value<sp/>and<sp/>enter<sp/>standby<sp/>mode.</highlight></codeline>
+<codeline lineno="250"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Warning:<sp/>only<sp/>2<sp/>bytes<sp/>out<sp/>of<sp/>3<sp/>are<sp/>being<sp/>read<sp/>and<sp/>no<sp/>RDATA<sp/>or<sp/>RDATAC<sp/>is<sp/>being<sp/>requiested.</highlight></codeline>
+<codeline lineno="251"><highlight class="comment"><sp/><sp/><sp/>*<sp/></highlight></codeline>
+<codeline lineno="252"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Reference<sp/>of<sp/>Arduino&apos;s<sp/>SPI<sp/>registers<sp/>if<sp/>built-in<sp/>library<sp/>is<sp/>not<sp/>clear<sp/>enough:</highlight></codeline>
+<codeline lineno="253"><highlight class="comment"><sp/><sp/><sp/>*<sp/></highlight></codeline>
+<codeline lineno="254"><highlight class="comment"><sp/><sp/><sp/>*<sp/>SPDR<sp/>(0x2E):<sp/>SPI<sp/>Data<sp/>Register.<sp/>Read/Write<sp/>register<sp/>for<sp/>data<sp/>transfer<sp/>to<sp/>the<sp/>SPI<sp/>shift<sp/>register.</highlight></codeline>
+<codeline lineno="255"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>Note:<sp/>one<sp/>buffer<sp/>for<sp/>transmission,<sp/>use<sp/>SPIF<sp/>to<sp/>know<sp/>when<sp/>to<sp/>transmit.</highlight></codeline>
+<codeline lineno="256"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>Note:<sp/>two<sp/>buffers<sp/>for<sp/>reception<sp/>(but<sp/>only<sp/>one<sp/>is<sp/>accessed),<sp/>reading<sp/>clears<sp/>the<sp/>buffer.<sp/>If<sp/>reading<sp/>is<sp/>not<sp/>performed,<sp/>a<sp/>byte<sp/>will<sp/>be<sp/>shifted<sp/>out/lost.</highlight></codeline>
+<codeline lineno="257"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>Note:<sp/>Writing<sp/>to<sp/>SPDR<sp/>initiates<sp/>transmission.<sp/>Reading<sp/>it<sp/>causes<sp/>the<sp/>shift<sp/>register<sp/>to<sp/>be<sp/>read.</highlight></codeline>
+<codeline lineno="258"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/></highlight></codeline>
+<codeline lineno="259"><highlight class="comment"><sp/><sp/><sp/>*<sp/>SPCR<sp/>(0x2C):<sp/>SPI<sp/>Control<sp/>Register<sp/>(I<sp/>suggest<sp/>not<sp/>this<sp/>register,<sp/>it<sp/>is<sp/>handled<sp/>by<sp/>Arduino<sp/>code!)</highlight></codeline>
+<codeline lineno="260"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>SPIE<sp/>(bit<sp/>7):<sp/>SPI<sp/>Interrupt<sp/>Enable</highlight></codeline>
+<codeline lineno="261"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>SPE<sp/><sp/>(bit<sp/>6):<sp/>SPI<sp/>Enable</highlight></codeline>
+<codeline lineno="262"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>DORD<sp/>(bit<sp/>5):<sp/>0<sp/>=<sp/>LSB<sp/>1<sp/>=<sp/>MSB</highlight></codeline>
+<codeline lineno="263"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>MSTR<sp/>(bit<sp/>4):<sp/>Master/Slave<sp/>Select</highlight></codeline>
+<codeline lineno="264"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>CPOL<sp/>(bit<sp/>3):<sp/>Clock<sp/>Polarity<sp/>0<sp/>=<sp/>Rising<sp/>leading<sp/>edge,<sp/>Falling<sp/><sp/>trailing<sp/>edge</highlight></codeline>
+<codeline lineno="265"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>CPHA<sp/>(bit<sp/>2):<sp/>Clock<sp/>Phase,<sp/>is<sp/>data<sp/>sampled<sp/>or<sp/>setup<sp/>in<sp/>the<sp/>trailing<sp/>or<sp/>rising<sp/>edge?</highlight></codeline>
+<codeline lineno="266"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>SPR1<sp/>(bit<sp/>1):<sp/>SPI<sp/>Clock<sp/>rate<sp/>select</highlight></codeline>
+<codeline lineno="267"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>SPR0<sp/>(bit<sp/>0):<sp/>SPI<sp/>Clock<sp/>rate<sp/>select</highlight></codeline>
+<codeline lineno="268"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/></highlight></codeline>
+<codeline lineno="269"><highlight class="comment"><sp/><sp/><sp/>*<sp/>SPSR<sp/>(0x2D):<sp/>SPI<sp/>Status<sp/>Register</highlight></codeline>
+<codeline lineno="270"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>SPIF<sp/>(bit<sp/>7):<sp/>end<sp/>of<sp/>transmission<sp/>or<sp/>reception<sp/>flag.<sp/>Cleared<sp/>by<sp/>either<sp/>interrupt<sp/>handler<sp/>or<sp/>**by<sp/>reading<sp/>SPIF<sp/>set<sp/>and<sp/>then<sp/>accesing<sp/>SPDR**!</highlight></codeline>
+<codeline lineno="271"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>WCOL<sp/>(bit<sp/>6):<sp/>write<sp/>collision<sp/>flag.<sp/>Set<sp/>if<sp/>SPDR<sp/>is<sp/>written<sp/>during<sp/>a<sp/>data<sp/>transfer.<sp/>WCOL<sp/>and<sp/>SPIF<sp/>are<sp/>cleared<sp/>after<sp/>reading<sp/>WCOL<sp/>set<sp/>and<sp/>then<sp/>accessing<sp/>SPDR</highlight></codeline>
+<codeline lineno="272"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>|----&gt;<sp/>SPI2X(bit<sp/>0):<sp/>Double<sp/>SPI<sp/>Speed<sp/>bit.<sp/>I<sp/>suggest<sp/>not<sp/>touching<sp/>this.</highlight></codeline>
+<codeline lineno="273"><highlight class="comment"><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="274"><highlight class="normal"><sp/><sp/>_Input_buffer.ui16<sp/>=<sp/>0;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Initialize<sp/>the<sp/>data<sp/>that<sp/>shall<sp/>be<sp/>returned</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="275"><highlight class="normal"><sp/><sp/>SPI.beginTransaction(<ref refid="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" kindref="member">SPI_ADS1255</ref>);</highlight></codeline>
+<codeline lineno="276"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>LOW);</highlight></codeline>
+<codeline lineno="277"><highlight class="normal"></highlight></codeline>
+<codeline lineno="278"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>1;<sp/>i<sp/>&gt;=<sp/>0;<sp/>--i)<sp/>{</highlight></codeline>
+<codeline lineno="279"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(!(SPSR<sp/>&amp;<sp/>(1<sp/>&lt;&lt;<sp/>SPIF)));<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Wait<sp/>for<sp/>any<sp/>pending<sp/>transmission/reception<sp/>to<sp/>complete<sp/>(Stops<sp/>only<sp/>if<sp/>SPIF<sp/>is<sp/>set),<sp/>maybe<sp/>not<sp/>required<sp/>with<sp/>the<sp/>SPI<sp/>library,<sp/>Mr.Dryden<sp/>seem<sp/>to<sp/>use<sp/>USART</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="280"><highlight class="normal"><sp/><sp/><sp/><sp/>_Input_buffer.ui8[i]<sp/>=<sp/>SPI.transfer(0x00);<sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Read<sp/>SPDR<sp/>register,<sp/>start<sp/>from<sp/>MSB,<sp/>consider<sp/>changing<sp/>to<sp/>assembly<sp/>code<sp/>if<sp/>this<sp/>doesn&apos;t<sp/>work.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="281"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="282"><highlight class="normal"></highlight></codeline>
+<codeline lineno="283"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="284"><highlight class="normal"><sp/><sp/>SPI.endTransaction();</highlight></codeline>
+<codeline lineno="285"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="286"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>_Input_buffer.ui16;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Regresar<sp/>dato<sp/>en<sp/>entero<sp/>de<sp/>16<sp/>bits</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="287"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="288"><highlight class="normal"></highlight></codeline>
+<codeline lineno="289"><highlight class="normal">int16_t<sp/>ads1255::read_fast_single(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">){</highlight></codeline>
+<codeline lineno="290"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="291"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Purpose:<sp/>Reads<sp/>a<sp/>single<sp/>conversion<sp/>result.<sp/>This<sp/>one<sp/>sends<sp/>ADS_RDATA.<sp/>Returns<sp/>a<sp/>16<sp/>byte<sp/>int<sp/>value.<sp/>Warning:<sp/>only<sp/>2<sp/>bytes<sp/>out<sp/>of<sp/>3<sp/>are<sp/>being<sp/>read.</highlight></codeline>
+<codeline lineno="292"><highlight class="comment"><sp/><sp/><sp/>*<sp/></highlight></codeline>
+<codeline lineno="293"><highlight class="comment"><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="294"><highlight class="normal"><sp/><sp/>_Input_buffer.ui16<sp/>=<sp/>0;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Initialize<sp/>the<sp/>data<sp/>that<sp/>shall<sp/>be<sp/>returned</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="295"><highlight class="normal"><sp/><sp/>SPI.beginTransaction(<ref refid="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" kindref="member">SPI_ADS1255</ref>);</highlight></codeline>
+<codeline lineno="296"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>LOW);</highlight></codeline>
+<codeline lineno="297"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a46365fb03433dac20d3c262625114537" kindref="member">ADS_RDATA</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Read<sp/>a<sp/>single<sp/>conversion<sp/>result</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="298"><highlight class="normal"><sp/><sp/>delayMicroseconds(6.5);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Mandatory<sp/>to<sp/>wait<sp/>50<sp/>times<sp/>1/CLKin,<sp/>theoretically<sp/>doesn&apos;t<sp/>use<sp/>timer0<sp/>so<sp/>interrupt<sp/>should<sp/>be<sp/>safe</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="299"><highlight class="normal"></highlight></codeline>
+<codeline lineno="300"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>1;<sp/>i<sp/>&gt;=<sp/>0;<sp/>--i)<sp/>{</highlight></codeline>
+<codeline lineno="301"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(!(SPSR<sp/>&amp;<sp/>(1<sp/>&lt;&lt;<sp/>SPIF)));<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Wait<sp/>for<sp/>any<sp/>pending<sp/>transmission/reception<sp/>to<sp/>complete<sp/>(Stops<sp/>only<sp/>if<sp/>SPIF<sp/>is<sp/>set),<sp/>maybe<sp/>not<sp/>required<sp/>with<sp/>the<sp/>SPI<sp/>library,<sp/>Mr.Dryden<sp/>seem<sp/>to<sp/>use<sp/>USART</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="302"><highlight class="normal"><sp/><sp/><sp/><sp/>_Input_buffer.ui8[i]<sp/>=<sp/>SPI.transfer(0x00);<sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Read<sp/>SPDR<sp/>register,<sp/>consider<sp/>changing<sp/>to<sp/>assembly<sp/>code<sp/>if<sp/>this<sp/>doesn&apos;t<sp/>work.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="303"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="304"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="305"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="306"><highlight class="normal"><sp/><sp/>SPI.endTransaction();</highlight></codeline>
+<codeline lineno="307"><highlight class="normal"><sp/><sp/>ads1255::standby();<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Issue<sp/>a<sp/>standby<sp/>mode.<sp/></highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="308"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>_Input_buffer.ui16;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Return<sp/>a<sp/>16<sp/>bit<sp/>data.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="309"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="310"><highlight class="normal"></highlight></codeline>
+<codeline lineno="311"><highlight class="normal">int32_t<sp/>ads1255::read_fast24(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">){</highlight></codeline>
+<codeline lineno="312"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="313"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Purpose:<sp/>Performs<sp/>an<sp/>ADC<sp/>readout<sp/>of<sp/>24<sp/>bits<sp/>while<sp/>halting<sp/>and<sp/>reactivating<sp/>interrupts.</highlight></codeline>
+<codeline lineno="314"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Returns:<sp/>4<sp/>bytes<sp/>buffer</highlight></codeline>
+<codeline lineno="315"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>[3]<sp/>=<sp/>Exceeding<sp/>full<sp/>scale<sp/>flag<sp/>(FF<sp/>if<sp/>true,<sp/>00<sp/>if<sp/>clear).<sp/>ADS1255<sp/>positive<sp/>full<sp/>scale<sp/>is<sp/>0x7FFFFF.<sp/>In<sp/>two<sp/>complementary<sp/>format.</highlight></codeline>
+<codeline lineno="316"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>[2]<sp/>=<sp/>MSB<sp/>from<sp/>readout<sp/>(up<sp/>to<sp/>7F)</highlight></codeline>
+<codeline lineno="317"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>[1]<sp/>=<sp/>Middle<sp/>significance<sp/>byte</highlight></codeline>
+<codeline lineno="318"><highlight class="comment"><sp/><sp/><sp/>*<sp/><sp/>[0]<sp/>=<sp/>LSB<sp/>from<sp/>readout.<sp/>LSB<sp/>value<sp/>is<sp/>2*Vref/(PGA(2^23-1)).</highlight></codeline>
+<codeline lineno="319"><highlight class="comment"><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="320"><highlight class="normal"></highlight></codeline>
+<codeline lineno="321"><highlight class="normal"><sp/><sp/>_Input_buffer_24.ui32<sp/>=<sp/>0;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Initialize<sp/>variable.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="322"><highlight class="normal"><sp/><sp/>noInterrupts();<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Time<sp/>critical<sp/>operation</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="323"><highlight class="normal"><sp/><sp/>SPI.beginTransaction(<ref refid="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" kindref="member">SPI_ADS1255</ref>);</highlight></codeline>
+<codeline lineno="324"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>LOW);</highlight></codeline>
+<codeline lineno="325"><highlight class="normal"></highlight></codeline>
+<codeline lineno="326"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>2;<sp/>i<sp/>&gt;=<sp/>0;<sp/>--i)<sp/>{</highlight></codeline>
+<codeline lineno="327"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(!(SPSR<sp/>&amp;<sp/>(1<sp/>&lt;&lt;<sp/>SPIF)));<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Wait<sp/>for<sp/>any<sp/>pending<sp/>transmission/reception<sp/>to<sp/>complete<sp/>(Stops<sp/>only<sp/>if<sp/>SPIF<sp/>is<sp/>set),<sp/>maybe<sp/>not<sp/>required<sp/>with<sp/>the<sp/>SPI<sp/>library,<sp/>Mr.Dryden<sp/>seem<sp/>to<sp/>use<sp/>USART</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="328"><highlight class="normal"><sp/><sp/><sp/><sp/>_Input_buffer_24.ui8[i]<sp/>=<sp/>SPI.transfer(0x00);<sp/><sp/><sp/></highlight><highlight class="comment">//Read<sp/>SPDR<sp/>register,<sp/>consider<sp/>changing<sp/>to<sp/>assembly<sp/>code<sp/>if<sp/>this<sp/>doesn&apos;t<sp/>work.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="329"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="330"><highlight class="normal"></highlight></codeline>
+<codeline lineno="331"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="332"><highlight class="normal"><sp/><sp/>SPI.endTransaction();</highlight></codeline>
+<codeline lineno="333"><highlight class="normal"></highlight></codeline>
+<codeline lineno="334"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(_Input_buffer_24.ui8[2]<sp/>&gt;<sp/>0x7F)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//ADS1255<sp/>Positive<sp/>full<sp/>scale<sp/>is<sp/>0x7FFFFF,<sp/>LSB=2*Vref/(PGA(2^23-1)),<sp/>Binary<sp/>Two<sp/>Complement<sp/>format</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="335"><highlight class="normal"><sp/><sp/><sp/><sp/>_Input_buffer_24.ui8[3]<sp/>=<sp/>0xFF;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//This<sp/>byte<sp/>is<sp/>only<sp/>used<sp/>to<sp/>signal<sp/>exceeding<sp/>full<sp/>scale...</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="336"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="337"><highlight class="normal"><sp/><sp/><sp/><sp/>_Input_buffer_24.ui8[3]<sp/>=<sp/>0x00;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//...<sp/>and<sp/>when<sp/>it<sp/>doesn&apos;t<sp/>exceed<sp/>full<sp/>scale</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="338"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="339"><highlight class="normal"><sp/><sp/>interrupts();</highlight></codeline>
+<codeline lineno="340"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>_Input_buffer_24.ui32;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Buffer<sp/>Format<sp/>=<sp/>Exceeding<sp/>Full<sp/>scale<sp/>flag<sp/>(either<sp/>00<sp/>or<sp/>FF)|MSB<sp/>(up<sp/>to<sp/>7F)|Middle<sp/>Byte|LSB<sp/>Data</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="341"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="342"><highlight class="normal"></highlight></codeline>
+<codeline lineno="343"><highlight class="normal">int32_t<sp/>ads1255::read_single24(</highlight><highlight class="keywordtype">void</highlight><highlight class="normal">){</highlight></codeline>
+<codeline lineno="344"><highlight class="normal"><sp/><sp/></highlight><highlight class="comment">/*</highlight></codeline>
+<codeline lineno="345"><highlight class="comment"><sp/><sp/><sp/>*<sp/>Purpose:<sp/>Same<sp/>as<sp/><sp/>read_fast24,<sp/>but<sp/>sends<sp/>an<sp/>RDATA<sp/>request<sp/>for<sp/>non-continous<sp/>on-demand<sp/>operation.</highlight></codeline>
+<codeline lineno="346"><highlight class="comment"><sp/><sp/><sp/>*/</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="347"><highlight class="normal"></highlight></codeline>
+<codeline lineno="348"><highlight class="normal"><sp/><sp/><sp/>_Input_buffer_24.ui32<sp/>=<sp/>0;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Initialize<sp/>variable.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="349"><highlight class="normal"><sp/><sp/>noInterrupts();<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Time<sp/>critical<sp/>operation</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="350"><highlight class="normal"><sp/><sp/>SPI.beginTransaction(<ref refid="_a_d_s1255_8cpp_1a257477344d9c88cabbc8a68b07572584" kindref="member">SPI_ADS1255</ref>);</highlight></codeline>
+<codeline lineno="351"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>LOW);</highlight></codeline>
+<codeline lineno="352"><highlight class="normal"><sp/><sp/>SPI.transfer(<ref refid="_a_d_s1255_8h_1a46365fb03433dac20d3c262625114537" kindref="member">ADS_RDATA</ref>);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Read<sp/>a<sp/>single<sp/>conversion<sp/>result</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="353"><highlight class="normal"><sp/><sp/>delayMicroseconds(6.5);<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Mandatory<sp/>to<sp/>wait<sp/>50<sp/>times<sp/>1/CLKin,<sp/>theoretically<sp/>doesn&apos;t<sp/>use<sp/>timer0<sp/>so<sp/>interrupt<sp/>should<sp/>be<sp/>safe</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="354"><highlight class="normal"></highlight></codeline>
+<codeline lineno="355"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">for</highlight><highlight class="normal">(</highlight><highlight class="keywordtype">int</highlight><highlight class="normal"><sp/>i<sp/>=<sp/>2;<sp/>i<sp/>&gt;=<sp/>0;<sp/>--i)<sp/>{</highlight></codeline>
+<codeline lineno="356"><highlight class="normal"><sp/><sp/><sp/><sp/></highlight><highlight class="keywordflow">while</highlight><highlight class="normal"><sp/>(!(SPSR<sp/>&amp;<sp/>(1<sp/>&lt;&lt;<sp/>SPIF)));<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Wait<sp/>for<sp/>any<sp/>pending<sp/>transmission/reception<sp/>to<sp/>complete<sp/>(Stops<sp/>only<sp/>if<sp/>SPIF<sp/>is<sp/>set),<sp/>maybe<sp/>not<sp/>required<sp/>with<sp/>the<sp/>SPI<sp/>library,<sp/>Mr.Dryden<sp/>seem<sp/>to<sp/>use<sp/>USART</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="357"><highlight class="normal"><sp/><sp/><sp/><sp/>_Input_buffer_24.ui8[i]<sp/>=<sp/>SPI.transfer(0x00);<sp/><sp/><sp/></highlight><highlight class="comment">//Read<sp/>SPDR<sp/>register,<sp/>consider<sp/>changing<sp/>to<sp/>assembly<sp/>code<sp/>if<sp/>this<sp/>doesn&apos;t<sp/>work.</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="358"><highlight class="normal"><sp/><sp/>}</highlight></codeline>
+<codeline lineno="359"><highlight class="normal"></highlight></codeline>
+<codeline lineno="360"><highlight class="normal"><sp/><sp/>digitalWrite(_CS_pin,<sp/>HIGH);</highlight></codeline>
+<codeline lineno="361"><highlight class="normal"><sp/><sp/>SPI.endTransaction();</highlight></codeline>
+<codeline lineno="362"><highlight class="normal"></highlight></codeline>
+<codeline lineno="363"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">if</highlight><highlight class="normal">(_Input_buffer_24.ui8[2]<sp/>&gt;<sp/>0x7F)<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//ADS1255<sp/>Positive<sp/>full<sp/>scale<sp/>is<sp/>0x7FFFFF,<sp/>LSB=2*Vref/(PGA(2^23-1)),<sp/>Binary<sp/>Two<sp/>Complement<sp/>format</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="364"><highlight class="normal"><sp/><sp/><sp/><sp/>_Input_buffer_24.ui8[3]<sp/>=<sp/>0xFF;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//This<sp/>byte<sp/>is<sp/>only<sp/>used<sp/>to<sp/>signal<sp/>exceeding<sp/>full<sp/>scale...</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="365"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">else</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="366"><highlight class="normal"><sp/><sp/><sp/><sp/>_Input_buffer_24.ui8[3]<sp/>=<sp/>0x00;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//...<sp/>and<sp/>when<sp/>it<sp/>doesn&apos;t<sp/>exceed<sp/>full<sp/>scale</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="367"><highlight class="normal"><sp/><sp/></highlight></codeline>
+<codeline lineno="368"><highlight class="normal"><sp/><sp/>interrupts();</highlight></codeline>
+<codeline lineno="369"><highlight class="normal"><sp/><sp/></highlight><highlight class="keywordflow">return</highlight><highlight class="normal"><sp/>_Input_buffer_24.ui32;<sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/><sp/></highlight><highlight class="comment">//Buffer<sp/>Format<sp/>=<sp/>Exceeding<sp/>Full<sp/>scale<sp/>flag<sp/>(either<sp/>00<sp/>or<sp/>FF)|MSB<sp/>(up<sp/>to<sp/>7F)|Middle<sp/>Byte|LSB<sp/>Data</highlight><highlight class="normal"></highlight></codeline>
+<codeline lineno="370"><highlight class="normal">}</highlight></codeline>
+<codeline lineno="371"><highlight class="normal"></highlight></codeline>
+    </programlisting>
+    <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/ADS1255.cpp"/>
+  </compounddef>
+</doxygen>

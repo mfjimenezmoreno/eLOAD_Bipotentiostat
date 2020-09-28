@@ -116,15 +116,6 @@ void ads1255::setup_reg(uint8_t buff, uint8_t rate, uint8_t pga) {
       sample_delay_ms_100div = 20022;
       break;
     case ADS_DR_10:
-#line 117 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
-void interrupt_ADC1_rdy();
-#line 121 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
-void interrupt_ADC2_rdy();
-#line 125 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
-void setup();
-#line 159 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
-void loop();
-#line 117 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
       sample_delay_ms_100div = 10022;
       break;
     case ADS_DR_15:
@@ -133,6 +124,15 @@ void loop();
     case ADS_DR_25:
       sample_delay_ms_100div = 4022;
       break;
+#line 125 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
+void interrupt_ADC1_rdy();
+#line 130 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
+void interrupt_ADC2_rdy();
+#line 134 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
+void setup();
+#line 215 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
+void loop();
+#line 125 "c:\\Users\\Martin\\Documents\\Arduino\\Bipotentiostat_Main_v2\\Bipot_Main_v01\\Bipotentiostat_Main_v2.ino"
     case ADS_DR_30:
       sample_delay_ms_100div = 3355;
       break;
@@ -407,7 +407,7 @@ int32_t ads1255::read_single24(void){
  *  |      |== GND  ~   ~~~~~~~~~
  *  |      |-- A4   ~   Analog_Switch_1(MAX4737)  -Vin switch
  *  |      |-- A3   ~   Analog_Switch_2(MAX4737)  CE-RE short 
- *  |      |-- A2   ~   Analog_Switch_3(MAX4737)  CE swtch
+ *  |      |-- A2   ~   Analog_Switch_3(MAX4737)  CE switch
  *  |      |-- A1   ~   Analog_Switch_4(MAX4737)  WE1
  *  |      |-- A0   ~   Analog_Switch_5(MAX4737)  WE2
  *  |  Up  |-- D4   ~   MUX_A_Gain (MAX4617)
@@ -482,7 +482,11 @@ int32_t ads1255::read_single24(void){
 /*////////////////////////////////////////*/
 volatile boolean WE1_ADC_SPI_rdy = false;
 volatile boolean WE2_ADC_SPI_rdy = false;
-volatile String buffer, option, number;
+//WARNING why did I wrote down option and number again?
+const double DAC_frequency = 100E3; //in Hz
+bool receivedDataRdy = false;
+char serialData[12];
+
 
 /*////////////////////////////////////////////*/
 /*            Function declarations           */
@@ -492,13 +496,18 @@ max5443 DAC1(Chip_Select_DAC1);
 max5443 DAC2(Chip_Select_DAC2);
 ads1255 ADC1(Chip_Select_ADC1, Interrupt_ADC1);
 ads1255 ADC2(Chip_Select_ADC2, Interrupt_ADC2);
-cell_parameters sensor;
+
+cell_parameters sensor;   //Stores experimental parameters
+void (*timer1_callback)(void);
+void CV_SM_experiment(void);
+void timer1_DAC_callback(void);
 
 /*////////////////////////////////////////////*/
 /*                    Main                    */
 /*////////////////////////////////////////////*/
 
-void interrupt_ADC1_rdy() {
+void interrupt_ADC1_rdy()
+{
   WE1_ADC_SPI_rdy = true;
 }
 
@@ -509,53 +518,152 @@ void interrupt_ADC2_rdy() {
 void setup() {
   /*BLE HM-11*/
   Serial1.begin(9600);
-
   /*Initializes bus MOSI, SCK, SS as output and pulling SCK, MOSI low and SS high*/
   SPI.begin();
-  
-  /*Setting up SPI related pins*/
+  //FIXME Might remve obbject, in favor of a simpler function
+  /*Set MUX pins as outputs and initial state*/
+  //Gain.pins_init();
+  /*Setting up SPI related CS pins as outputs and HIGH(i.e. unselected)*/
   DAC1.pins_init();
   DAC2.pins_init();
   ADC1.pins_init();
   ADC2.pins_init();
+  /*SPI chip selects a soutputs and high state*/
   pinMode(Chip_Select_SD, OUTPUT);
-  pot_init();       //Initialize multiplexer and analog switch related pins
-  digitalWrite(Chip_Select_ADC1, HIGH);
-  digitalWrite(Chip_Select_ADC2, HIGH);
   digitalWrite(Chip_Select_SD, HIGH);
+  /*LED Pin*/
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
+  /*Set analog switches & multiplexer as outputs */
+  analog_switch_init(); //Initialize analog switches with switches off
+  pot_init();
   
   /*Setting up ADC interrupts
   Configuration:
     1. Timer1 CTC compare: 100 kHz interrupt, changes values of DAC
     2. External Interrupt pins: ADC reports when it is ready for transmission
   */
-  set_timer1_frequency(100E3);
+  noInterrupts();
+  //TODO remove the following comments
+  //set_timer1_frequency(100E3);
   attachInterrupt(digitalPinToInterrupt(Interrupt_ADC1), &interrupt_ADC1_rdy, FALLING);
   attachInterrupt(digitalPinToInterrupt(Interrupt_ADC2), &interrupt_ADC2_rdy, FALLING);
-  
+  //timer1_EN_IntCTC();
+  interrupts();
+  ON_LED();
 }
 
 
 ISR(TIMER1_COMPA_vect) {
+  /*
+  Timer 1 interrupt handle triggers the moment that DAC will update
+  its output voltage.
+  */
 
+  //Pointer to the appropiate function, changes according to chosen
+  //technique and single or dual potentiostatic mode.
+  timer1_callback();
+}
+
+void CV_SM_experiment(void)
+{
+  /*
+        Parameters required for CV experiment 
+        @cell struct
+            Voltages: start, floor, ceiling.
+            Initial scanning direction, Scan rate,
+            Segment numbers, Gain.
+            Not required: WE2 voltage.
+        @t1_callback:
+    */
+
+  //DAC acquisition: Setup timer1 (std. @100 kHz)
+  set_timer1_frequency(DAC_frequency);
+  timer1_callback = timer1_DAC_callback;
+  pot_set_gain(sensor.ga);
+
+}
+
+void timer1_DAC_callback(void)
+{
+  //Interrupt callback for CV
+  if (sensor.mode == Single_Mode)
+  {
+    DAC1.set_voltage(0);
+  }
+  else if (sensor.mode == Dual_Mode)
+  {
+  }
 }
 
 void loop() {
   //Look for BLE commands from PC (e.g. parameters, experiments)
-  while(Serial1.available()){
-    //This doesn't seem to work?
-    /*buffer = Serial1.readStringUntil(",");
-    //Serial1.write("Martin");
-    if(buffer.substring(0,2) == "TX") {
-      Serial1.print(buffer.substring(2));
+  static uint32_t oldtime = millis();
+  /*eLOAD waits for two types of instructions:
+  1. Update cell parameters.
+  2. Start experiment.
+  */
+  /*
+  if (receivedDataRdy == false)
+  {
+    Serial1.print(Serial1.available());
+  }
+  */
+  while (millis() - oldtime < 1000){
+    
+  }
+  toggle_LED();
+  oldtime = millis();
+  read_serial_markers(receivedDataRdy, serialData, sizeof(serialData));
+
+  if (receivedDataRdy)
+  {
+
+    Serial1.print(serialData);
+    receivedDataRdy = false;
+    //Empty char variable serialData
+    for (int i = 0; i < sizeof(serialData); i++)
+    {
+      serialData[i] = '\0'; //This is the same as '\0'
     }
-    else {
-      Serial1.print("Nothing but garbage");
-    }
-    delay(500);*/
-  update_parameters(sensor);
   }
 
-}
+    //Update experiment parameters
+    /*
+  if (buffer[0] == "U")
+  {
+    //If we receive update, then proceed to change parameters
+    /*Format of serialData:
+      - Update,
+      - XX (two letter command per cell parameter)
+      - #, or ?, (a number related to the parameter, or question
+        mark to ask for a parameter).
+      
+      Example:
+      Update,V2500, --> Updates WE2 voltage to 500 mV
+      Update,VS?    --> Asks for Voltage Start potential
+    */
+    /*
 
+
+   
+    update_parameters(sensor);
+    }
+
+    //Begin experiment
+    else if (buffer == "B")
+    {
+      //If we receive start, we execute the experiment
+      Serial1.print("Understood");
+    }
+
+    //Stop experiment
+    else if (buffer == "S")
+    {
+      //Emergency stop
+      //NOTE: might be changed?
+      Serial1.print("Entendido");
+    }
+  */
+  }
 

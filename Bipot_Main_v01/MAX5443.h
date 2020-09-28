@@ -18,7 +18,7 @@ class max5443{
   private:
     int _pin;
     static union {
-      uint8_t ui8[2];
+    uint8_t ui8[2];
       uint16_t ui16;
     } _DAC_buffer;
 };

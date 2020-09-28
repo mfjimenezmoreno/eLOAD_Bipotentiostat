@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.6">
+  <compounddef id="dir_7839454bb0e0a6338ca5eb325661c9c2" kind="dir">
+    <compoundname>C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01</compoundname>
+    <innerfile refid="_a_d_s1255_8cpp">ADS1255.cpp</innerfile>
+    <innerfile refid="_a_d_s1255_8h">ADS1255.h</innerfile>
+    <innerfile refid="_experiment_8h">Experiment.h</innerfile>
+    <innerfile refid="_experiments_8cpp">Experiments.cpp</innerfile>
+    <innerfile refid="_experiments_8h">Experiments.h</innerfile>
+    <innerfile refid="_m_a_x5443_8cpp">MAX5443.cpp</innerfile>
+    <innerfile refid="_m_a_x5443_8h">MAX5443.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="C:/Users/Martin/Documents/Arduino/Bipotentiostat_Main_v2/Bipot_Main_v01/"/>
+  </compounddef>
+</doxygen>
