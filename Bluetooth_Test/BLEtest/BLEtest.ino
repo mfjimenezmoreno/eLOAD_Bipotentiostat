@@ -1,9 +1,11 @@
 #include <Arduino.h>
 
 void read_serial_markers(bool &newdata, char *receivedChars, size_t size, char startmarker = '<', char endmarker = '>');
+void read_number(char *value, size_t size, int16_t *output);
 
 bool readyflag = false;
-char message[10];
+char message[20];
+int16_t number;
 
 void setup() {
     Serial1.begin(9600);
@@ -18,7 +20,11 @@ void loop(){
 
     if (readyflag) {
         
+        read_number(message, sizeof(message), number);
+
         Serial1.print(message);
+        Serial1.print(number);
+        
         readyflag = false;
         //Empty char variable message
         for (int i = 0; i < sizeof(message); i++) {
@@ -77,4 +83,16 @@ void read_serial_markers(bool &newdata, char *receivedChars, size_t size, char s
             receptionInProgress = true;
         }
     }
+}
+
+void read_number(char *value, size_t size, int16_t *output)
+{
+    char number[20];
+    //Return the transformation of char array to signed integer.
+    for (int i = 2; i < size; i++){
+        number[i-2] = value[i];
+    }
+
+    output = int16_t(number);
+
 }
