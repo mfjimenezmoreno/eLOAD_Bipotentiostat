@@ -46,10 +46,10 @@ device.char_write(value=b"123456789,123456789,123456789", uuid=SERVICE)
 device.char_write(value=bytearray("<123>,",'UTF-8'), uuid=SERVICE)
 device.char_write(value=bytearray([1,23]), uuid=SERVICE)
 device.char_write(value=b"<Stop>", uuid=SERVICE)
-device.char_write(value=b"<abcdefghijklmnoprstuvwxyz>", uuid=SERVICE)
+device.char_write(value=b"<abcdef>", uuid=SERVICE)
 device.char_write(value=b"<El", uuid=SERVICE)
 device.char_write(value=b"Martin", uuid=SERVICE)
-device.char_write(value=b"locochon>", uuid=SERVICE)
+device.char_write(value=b"loco>", uuid=SERVICE)
 
 device.disconnect()
 
