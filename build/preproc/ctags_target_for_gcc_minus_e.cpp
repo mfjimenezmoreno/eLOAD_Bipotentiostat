@@ -587,9 +587,12 @@ void loop() {
   oldtime = millis();
   read_serial_markers(receivedDataRdy, serialData, sizeof(serialData));
 
+  //When the arduino receives ">", receivedDataRdy is true
+  /**Debug code, reflect information as received by PC*/
+  /*
   if (receivedDataRdy)
   {
-
+    
     Serial1.print(serialData);
     receivedDataRdy = false;
     //Empty char variable serialData
@@ -598,10 +601,28 @@ void loop() {
       serialData[i] = '\0'; //This is the same as '\0'
     }
   }
+  */
+  //Update experiment parameters
 
-    //Update experiment parameters
-    /*
-  if (buffer[0] == "U")
+  //When flag is ready...
+  if (receivedDataRdy) {
+    /*The following proceedure is the protocol to change cell parameters.
+    - If setting is acknowledged, then return OK.
+    - If not acknowledged, then return ?.
+    - If parameter is requested, return parameter. */
+
+    char command[2] = serialData[0:1];
+    char
+
+    //Reset flag and empty serialData
+    receivedDataRdy = false;
+    for (int i = 0; i < sizeof(serialData); i++) {
+      serialData[i] = '\0';
+    }
+
+  }
+/*
+  if (serialData[0:1] == "U")
   {
     //If we receive update, then proceed to change parameters
     /*Format of serialData:
@@ -613,11 +634,10 @@ void loop() {
       Example:
       Update,V2500, --> Updates WE2 voltage to 500 mV
       Update,VS?    --> Asks for Voltage Start potential
-    */
-    /*
+    
+    
 
 
-   
     update_parameters(sensor);
     }
 
@@ -636,4 +656,4 @@ void loop() {
       Serial1.print("Entendido");
     }
   */
-  }
+}
